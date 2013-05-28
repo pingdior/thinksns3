@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/User
+END
+category.html
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/User/category.html
+END
+editUserCategory.html
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/User/editUserCategory.html
+END
+moveGroup.html
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/User/moveGroup.html
+END
+editVerifyInfo.html
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/User/editVerifyInfo.html
+END
+editVerifyCategory.html
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/User/editVerifyCategory.html
+END
+moveDepartment.html
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/User/moveDepartment.html
+END

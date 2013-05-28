@@ -1,0 +1,10 @@
+<?php
+foreach( list as type)
+{
+swich(type)
+case '1':
+echo '</br>'
+case '2':
+echo '</br>'
+}
+?>

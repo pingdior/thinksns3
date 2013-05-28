@@ -1,0 +1,139 @@
+<include file="__THEME__/public_header" />
+    <div id="page-wrap">
+        <div id="feedback" class="feedback-fixed"><a href="{:U('public/Index/feedback')}" target="_blank">{:L('PUBLIC_FEEDBACK')}</a></div>
+        <div id="main-wrap" class="indexActivity">
+            <div id="st-index-grid" class="st-grid">
+                <!--撌西器 -->
+                <include file="__THEME__/public_left" />
+                <div id="col8" class="st-section boxShadow content-bg">
+                    <div id="slide">
+                        <!--<div><img src="http://placehold.it/960/290" alt=""></div>-->
+<!--<div id="ad_1" class="flashNews" style="width:960px;">
+		<div>
+			<p><a target="_blank" href="344"><img width="960" src="http://127.0.0.1/~mmc/thinksns3/thinksns_v3/data/upload/2013/0527/16/51a316fba7156.jpg"></a></p>
+		</div>
+</div>
+-->
+    <!-- 主页广告 -->
+    <div style="width:960px;overflow:hidden;">
+    {:Addons::hook('show_ad_space', array('place'=>'profile_right'))}    
+    </div>
+
+                        <span class="control">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </div>
+                    <div id="col3" class="st-index-right">
+                        <div id="follow-us" class="face_name_list">
+                            <p class="title">关注我们</p>
+                            <a href="#" class="weixin"><img width="65" height="65" src="http://ww3.sinaimg.cn/mw690/bfbcd910jw1e2i9gwd5w5j.jpg" alt=""></a>
+                            <a href="http://www.weibo.com/u/3216824592" class="weibo"><img width="65" height="65" src="http://tp1.sinaimg.cn/3216824592/180/5657610080/0" alt=""></a>
+                            <a href="" class="tengxun"><img src="http://placehold.it/65/65" alt=""></a>
+
+                        </div>
+                        <div id="new-comer">
+                            <p class="title">最新用户<a href="" class="more">更多</a></p>
+                            <a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
+                            <a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
+                            <a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
+                            <a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
+                            <a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
+                            <a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
+                            <a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
+                            <a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
+                            <a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
+                            <a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
+                            <a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
+                            <a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
+                        </div>
+                        <div id="Partners">
+                            <p class="title">合作机构</p>
+                            <a href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                        </div>
+
+                    </div>
+                    <div id="col5" class="st-index-main">
+                        <h2>欢迎, <span>{$currentName}</span></h2>
+<?php 
+$keyList = array_keys($orderList);
+?>
+<volist name='keyList' id='oo'>
+<div class="main-container-wrap" style="display:<?php echo($oo=='event'?'block':'none') ?>" >
+		   	<volist name=\'resultList\' id=\'vo\' >
+                            <div class="main-container", style="height: 100px;" >
+                                <div class="module-title" style="display:<?php echo($i==1?'block':'none')  ?>">活动</div>
+                                <div class="content">
+                                <div class="lineD_btm" id="event_{$vo["id"]}">
+                                  <div class="left"><span><a href="{:U(\'event/Index/eventDetail\')}&amp;id=<?php echo($vo["id"]) ?>&amp;uid=<?php echo($vo["uid"]) ?>" ><img src="data/upload/{$vo["attachPath"]}" width="70" height="70" ></a></span></div>
+                                  <div class="right rmenu" style="width: 60px;">
+                                      <span class="list_joinIn_1">
+                                      </span>
+                                  </div>
+                                  <div style="margin:0 80px 0 115px;">
+                                    <h3><a href="{:U(\'event/Index/eventDetail\')}&amp; id=<?php echo($vo["id"]) ?>&amp;uid=<?php echo($vo["uid"]) ?>">{$vo["title"]}</a> <span class="cGray2">{$vo["typeName"]}</span></h3>
+                                    <p><span class="cGray2">活动时间：</span>[{$vo["sTime"]|date="Y-m-d G:i",### } 至 {$vo["eTime"]|date="Y-m-d G:i", ### } ] </p>
+                                    <p><span class="cGray2">活动地点：</span>{$vo["address"]}</p>
+                                    <p><span class="cGray2">发起人：</span><a href="{:U(\'public/Profile/index\')}&amp;uid=<?php echo($vo["uid"]) ?>" event-node="face_card">{$vo["userName"]}</a></p>
+                                  <a href="{:U(\'event/Index/member\')}&amp;id=<?php echo($vo["id"]) ?>&amp;action=join" class="fake-btn"><span>{$vo["joinCount"]}</span>人参加</a>
+                                  </div>
+                                </div>
+                                </div>
+                            </div>
+			 </volist>
+                        </div>
+ <div class="main-container-wrap" >
+		   	<volist name='weibaList' id='vo' >
+                            <div class="main-container" style="display:<?php echo($oo=='weiba'?'block':'none') ?>" >
+                                <div class="module-title"  style="display:<?php echo($i==1?'block':'none')  ?>">微吧</div>
+                                <div class="content">
+                                    <h3><a href="{:U(\'weiba/Index/postDetail\')}&amp;post_id=<?php echo($vo["id"]) ?>" >{$vo["title"]}</a></h3>
+                                    <p class="author"><a href="{:U(\'public/Profile/index\')}&amp;uid=<?php echo($vo["uid"]) ?>" >{$vo["uname"]}</a></p>
+                                    <p class="summary">{$vo["content"]}</p>
+                                </div>
+                                <a href="{:U(\'weiba/Index/postDetail\')}&amp;post_id=<?php echo($vo["id"]) ?>" class="fake-btn"><span>{$vo["replyCount"]}</span>人回复</a>
+                            </div>
+                        </volist>
+                      </div>
+<div class="main-container-wrap" style="display:<?php echo($oo=='topic'?'block':'none') ?>">
+		   	<volist name='topicList' id='vo' >
+                            <div class="main-container"  style="height:70px;">
+                                <div class="module-title"  style="display:<?php echo($i==1?'block':'none')  ?>">话题</div>
+                                <div class="content"> 
+                                    <p class="hot"><a href="{:U(\'public/Topic/index\')}&amp;k=<?php echo($vo["name"]) ?>" >#{$vo["name"]}#</a></p>
+                                    <a href="{:U(\'public/Topic/index\')}&amp;k=<?php echo($vo["name"]) ?>" class="fake-btn"><span>{$vo["count"]}</span>条相关</a>
+                                </div>
+                            </div>
+			</volist>
+                    </div>
+</volist>
+                </div>
+            </div>
+        </div>
+    </div>    
+<include file="__THEME__/public_footer" />
+</div>
+
+<script>
+
+$('ul.feed_file_list').each(function() {
+    
+    $(this).find('li').each(function(i) {
+        if(i % 2 == 0) {
+            $(this).css("background","#fafafa");
+        }
+    });
+});
+</script>
+<script type="text/javascript" src="__THEME__/js/home/module.home.js"></script>
+<script type="text/javascript" src="__THEME__/js/module.weibo.js"></script>

@@ -76,7 +76,11 @@ var LANG = new Array();
                 <?php if($user['is_init'] == 1): ?>
                 <div class="nav">
                     <ul>
-                        <?php if(is_array($site_top_nav)): ?><?php $i = 0;?><?php $__LIST__ = $site_top_nav?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$st): ?><?php ++$i;?><?php $mod = ($i % 2 )?><li <?php if(APP_NAME == $st['app_name'] || $_GET['page'] == $st['app_name']): ?> class="current" <?php endif; ?> ><a href="<?php echo ($st["url"]); ?>" target="<?php echo ($st["target"]); ?>" class="app"><?php echo ($st["navi_name"]); ?></a>
+                        <?php $flag=0 ?>
+                        <?php if(is_array($site_top_nav)): ?><?php $i = 0;?><?php $__LIST__ = $site_top_nav?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$st): ?><?php ++$i;?><?php $mod = ($i % 2 )?><li  <?php if((APP_NAME == 'public') AND ($st['app_name'] == 'head') AND ($actionName != 'indexPage') ): ?>class="current" 
+                          <?php $flag=1 ?>
+                          <?php elseif( $flag != 1 AND ((APP_NAME == $st['app_name'] ) OR ( $_GET['page'] == $st['app_name'] )) ): ?>class="current"<?php endif; ?> 
+                              ><a href="<?php echo ($st["url"]); ?>" target="<?php echo ($st["target"]); ?>" class="app"><?php echo ($st["navi_name"]); ?></a>
                             <?php if(isset($st['child'])): ?><div model-node="drop_menu_list" class="dropmenu" style="width:100px;display:none;">
                                 <dl class="acc-list" >
                                     <?php if(is_array($st["child"])): ?><?php $i = 0;?><?php $__LIST__ = $st["child"]?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$stc): ?><?php ++$i;?><?php $mod = ($i % 2 )?><dd><a href="<?php echo ($stc["url"]); ?>" target="<?php echo ($stc["target"]); ?>"><?php echo (getShort($stc["navi_name"],6)); ?></a></dd><?php endforeach; ?><?php endif; ?><?php else: echo "" ;?><?php endif; ?>
@@ -314,9 +318,9 @@ if(!$mid && in_array(APP_NAME.'/'.MODULE_NAME,$show_register_tips)){ ?>
                     <div id="col3" class="st-index-right">
                         <div id="follow-us" class="face_name_list">
                             <p class="title">关注我们</p>
-                            <a href="#" class="weixin"><img width="65" height="65" src="http://ww3.sinaimg.cn/mw690/bfbcd910jw1e2i9gwd5w5j.jpg" alt=""></a>
-                            <a href="http://www.weibo.com/u/3216824592" class="weibo"><img width="65" height="65" src="http://tp1.sinaimg.cn/3216824592/180/5657610080/0" alt=""></a>
-                            <a href="" class="tengxun"><img src="http://placehold.it/65/65" alt=""></a>
+                            <a href="#" class="weixin"><img width="65" height="65" src="data/upload/2013/0528/19/51a4997d1cb5c_550_auto.jpg" alt=""></a>
+                            <a href="http://www.weibo.com/u/3216824592" class="weibo"><img width="65" height="65" src="data/upload/2013/0528/19/51a4996dd358a_550_auto.jpeg" alt=""></a>
+                            <a href="" class="tengxun"><img  width="65" height="65" src="data/upload/2013/0528/20/51a49cdf66fb1_550_auto.jpg" alt=""></a>
 
                         </div>
                         <div id="new-comer">
@@ -334,8 +338,19 @@ if(!$mid && in_array(APP_NAME.'/'.MODULE_NAME,$show_register_tips)){ ?>
                             <a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
                             <a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
                         </div>
+                        <div id="HotPersons">
+							<p class="title">乐DO红人<aa href="" class="more">更多</aa></p>
+                            <a href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+						</div>
                         <div id="Partners">
-                            <p class="title">合作机构</p>
+							<p class="title">合作机构<aa href="" class="more">更多</aa></p>
                             <a href="" ><img src="http://placehold.it/48/48" alt=""></a>
                             <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
                             <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
@@ -354,7 +369,7 @@ $keyList = array_keys($orderList);
 ?>
 <?php if(is_array($keyList)): ?><?php $i = 0;?><?php $__LIST__ = $keyList?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$oo): ?><?php ++$i;?><?php $mod = ($i % 2 )?><div class="main-container-wrap" style="display:<?php echo($oo=='event'?'block':'none') ?>" >
 		   	<?php if(is_array($resultList)): ?><?php $i = 0;?><?php $__LIST__ = $resultList?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$vo): ?><?php ++$i;?><?php $mod = ($i % 2 )?><div class="main-container", style="height: 100px;" >
-                                <div class="module-title" style="display:<?php echo($i==1?'block':'none')  ?>">活动</div>
+                                <div class="module-title" style="display:<?php echo($i==1?'block':'none')  ?>">活 动</div>
                                 <div class="content">
                                 <div class="lineD_btm" id="event_<?php echo ($vo["id"]); ?>">
                                   <div class="left"><span><a href="<?php echo U('event/Index/eventDetail');?>&amp;id=<?php echo($vo["id"]) ?>&amp;uid=<?php echo($vo["uid"]) ?>" ><img src="data/upload/<?php echo ($vo["attachPath"]); ?>" width="70" height="70" ></a></span></div>
@@ -375,7 +390,7 @@ $keyList = array_keys($orderList);
                         </div>
  <div class="main-container-wrap" >
 		   	<?php if(is_array($weibaList)): ?><?php $i = 0;?><?php $__LIST__ = $weibaList?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$vo): ?><?php ++$i;?><?php $mod = ($i % 2 )?><div class="main-container" style="display:<?php echo($oo=='weiba'?'block':'none') ?>" >
-                                <div class="module-title"  style="display:<?php echo($i==1?'block':'none')  ?>">微吧</div>
+                                <div class="module-title"  style="display:<?php echo($i==1?'block':'none')  ?>">微 吧</div>
                                 <div class="content">
                                     <h3><a href="<?php echo U('weiba/Index/postDetail');?>&amp;post_id=<?php echo($vo["id"]) ?>" ><?php echo ($vo["title"]); ?></a></h3>
                                     <p class="author"><a href="<?php echo U('public/Profile/index');?>&amp;uid=<?php echo($vo["uid"]) ?>" ><?php echo ($vo["uname"]); ?></a></p>
@@ -383,16 +398,18 @@ $keyList = array_keys($orderList);
                                 </div>
                                 <a href="<?php echo U('weiba/Index/postDetail');?>&amp;post_id=<?php echo($vo["id"]) ?>" class="fake-btn"><span><?php echo ($vo["replyCount"]); ?></span>人回复</a>
                             </div><?php endforeach; ?><?php endif; ?><?php else: echo "" ;?><?php endif; ?>
-                      </div>
-<div class="main-container-wrap" style="display:<?php echo($oo=='topic'?'block':'none') ?>">
-		   	<?php if(is_array($topicList)): ?><?php $i = 0;?><?php $__LIST__ = $topicList?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$vo): ?><?php ++$i;?><?php $mod = ($i % 2 )?><div class="main-container"  style="height:70px;">
+                      </div><?php endforeach; ?><?php endif; ?><?php else: echo "" ;?><?php endif; ?>
+<!--<div class="main-container-wrap" style="display:<?php echo($oo=='topic'?'block':'none') ?>">-->
+<div class="main-container-wrap">
+		   	<?php if(is_array($topicList)): ?><?php $i = 0;?><?php $__LIST__ = array_slice($topicList,0,6) ?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$vo): ?><?php ++$i;?><?php $mod = ($i % 2 )?><div class="main-container"  style="height:70px;">
                                 <div class="module-title"  style="display:<?php echo($i==1?'block':'none')  ?>">话题</div>
                                 <div class="content"> 
                                     <p class="hot"><a href="<?php echo U('public/Topic/index');?>&amp;k=<?php echo($vo["name"]) ?>" >#<?php echo ($vo["name"]); ?>#</a></p>
+                                    <p class="summary"><?php echo ($vo["note"]); ?></p>
                                     <a href="<?php echo U('public/Topic/index');?>&amp;k=<?php echo($vo["name"]) ?>" class="fake-btn"><span><?php echo ($vo["count"]); ?></span>条相关</a>
                                 </div>
                             </div><?php endforeach; ?><?php endif; ?><?php else: echo "" ;?><?php endif; ?>
-                    </div><?php endforeach; ?><?php endif; ?><?php else: echo "" ;?><?php endif; ?>
+</div>
                 </div>
             </div>
         </div>

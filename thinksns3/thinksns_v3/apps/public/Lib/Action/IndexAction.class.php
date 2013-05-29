@@ -1,11 +1,11 @@
 <?php
 /**
  * 首页控制器
- * @author jason <yangjs17@yeah.net> 
+ * @author jason <yangjs17@yeah.net>
  * @version TS3.0
  */
 class IndexAction extends Action {
-	
+
 	/**
 	 * 我的首页 - 微博页面
 	 * @return void
@@ -70,111 +70,112 @@ class IndexAction extends Action {
 
 		$this->display();
 	}
-    
+
 	/**
 	 * 首页数据装载，按用户各个项目的推荐栏目，装载数据，固定顺序如下：活动、微吧、话题，项目可以为空，
 	 * 且推荐时间最新的放各个项目前头
 	 * created by m@@
 	 */
-    public function index() {
-        // 得到各推荐数据
-        //活动
-            $map['isHot']= 1;
-            $eventOpt = D('Eventopts','event');
-            $optsKeys = $eventOpt->field('id,rTime')->where($map)->order('rTime DESC')->findAll();
-            $eventCount = count($optsKeys);
-            $weibaCount = 0;
-            $wordCount = 0;
-            $userInfo = model ( 'User' )->getUserInfo ( $this->mid );
-            $currentName = $userInfo ['uname'];
-            $this->assign('currentName',$currentName);
-           if( $eventCount>0 )
-           {
-           	$this->assign('eventCount',$eventCount);  
-        	$eventObj =  D( 'Event' );   // 上面包含了项目分组，因此这里就不写，否则会报BASEMODEL REDECLASS 的错误  	        	        	
-        	$resultList = $eventObj->table('ts_event event , ts_event_opts eOpts, ts_event_type eType, ts_user eUser' )
-        	->where('event.optsId = eOpts.id and eOpts.isHot = 1 and event.type = eType.id and event.uid = eUser.uid')
-        	->order('eOpts.rTime desc')
-        	->field('event.id as id,event.uid as uid,event.joinCount as joinCount,
-        			event.sTime as sTime,event.eTime as eTime, event.address as address,
-        			event.title as title,eOpts.rTime as rTime,eType.name as typeName,
-        			event.coverId as coverId, eUser.uname as userName')
-        	->findAll();
-        	// { @@
-        	//var_dump($resultList);
-        	//echo "result---------".'<br />';  
-        	//exit();
-            // }
-            if(count($resultList))
-            {
-            	$orderList['event']=$resultList[0]['rTime'];
-        		foreach($resultList as $v) {
-        		if(intval($v['coverId'])==0) continue;
-        		// echo $v['coverId'].'------<br />';
-        		$in_arr[] = $v['coverId'];
-        		//echo $in_arr[$i-1].'----2--<br />';
-        	}
-        	$mapAttach['attach_id'] = array('in',$in_arr);      	
-        	$resultCoverId = D('Attach')
-        	->where($mapAttach)
-        	->field('attach_id as eAttachId, save_path as eAttachPath, save_name as eAttachName')
-        	->findAll();
-	       foreach ($resultList as &$r)
-	       {
-	       	$r['attachPath']='';
-	       	if($r['coverId']==0) continue;
-	        	foreach($resultCoverId as &$p) {
-	        		if($p['eAttachId']==0) continue;
-	        		if($r['coverId']==$p['eAttachId'])
-	        		{
-	        			$r['attachPath']=$p['eAttachPath'].$p['eAttachName'];
-	        			$p['eAttachId']=0;
-	        		}
-	        	}
-	       }	
-        		$this->assign('resultList',$resultList);
-        		//var_dump($resultList);
-        		//exit();
-        	}
-           }
-           
-         // 微吧
-		 $weibaList = D('User')->table('ts_weiba_post weibaPost,ts_user eUser')
-		      ->where('weibaPost.recommend = 1 and weibaPost.post_uid = eUser.uid')        	
-		      ->order('weibaPost.recommend_time desc')
-		      ->field('weibaPost.recommend_time as rTime, weibaPost.title as title,
-		      		 weibaPost.content as content,weibaPost.reply_all_count as replyCount, 
-		      		 weibaPost.post_id as id,eUser.uname as uname, eUser.uid as uid')
-		      ->findAll();
-		if ( count($weibaList)>0 )  
-		{    
-			$orderList['weiba']=$weibaList[0]['rTime'];
-	        $this->assign('weibaList',$weibaList);
-	        //var_dump($weibaList);
-	        //var_dump($orderList);
-	        //exit();
+	public function index() {
+		// 得到各推荐数据
+		//活动
+		$map['isHot']= 1;
+		$eventOpt = D('Eventopts','event');
+		$optsKeys = $eventOpt->field('id,rTime')->where($map)->order('rTime DESC')->findAll();
+		$eventCount = count($optsKeys);
+		$weibaCount = 0;
+		$wordCount = 0;
+		$userInfo = model ( 'User' )->getUserInfo ( $this->mid );
+		$currentName = $userInfo ['uname'];
+		$this->assign('currentName',$currentName);
+		if( $eventCount>0 )
+		{
+			$this->assign('eventCount',$eventCount);
+			$eventObj =  D( 'Event' );   // 上面包含了项目分组，因此这里就不写，否则会报BASEMODEL REDECLASS 的错误
+			$resultList = $eventObj->table('ts_event event , ts_event_opts eOpts, ts_event_type eType, ts_user eUser' )
+			->where('event.optsId = eOpts.id and eOpts.isHot = 1 and event.type = eType.id and event.uid = eUser.uid')
+			->order('eOpts.rTime desc')
+			->field('event.id as id,event.uid as uid,event.joinCount as joinCount,
+					event.sTime as sTime,event.eTime as eTime, event.address as address,
+					event.title as title,eOpts.rTime as rTime,eType.name as typeName,
+					event.coverId as coverId, eUser.uname as userName')
+					->findAll();
+			// { @@
+			//var_dump($resultList);
+			//echo "result---------".'<br />';
+			//exit();
+			// }
+			if(count($resultList))
+			{
+				$orderList['event']=$resultList[0]['rTime'];
+				foreach($resultList as $v) {
+					if(intval($v['coverId'])==0) continue;
+					// echo $v['coverId'].'------<br />';
+					$in_arr[] = $v['coverId'];
+					//echo $in_arr[$i-1].'----2--<br />';
+				}
+				$mapAttach['attach_id'] = array('in',$in_arr);
+				$resultCoverId = D('Attach')
+				->where($mapAttach)
+				->field('attach_id as eAttachId, save_path as eAttachPath, save_name as eAttachName')
+				->findAll();
+				foreach ($resultList as &$r)
+				{
+					$r['attachPath']='';
+					if($r['coverId']==0) continue;
+					foreach($resultCoverId as &$p) {
+						if($p['eAttachId']==0) continue;
+						if($r['coverId']==$p['eAttachId'])
+						{
+							$r['attachPath']=$p['eAttachPath'].$p['eAttachName'];
+							$p['eAttachId']=0;
+						}
+					}
+				}
+				$this->assign('resultList',$resultList);
+				//var_dump($resultList);
+				//exit();
+			}
 		}
-		
+		 
+		// 微吧
+		$weibaList = D('User')->table('ts_weiba_post weibaPost,ts_user eUser')
+		->where('weibaPost.recommend = 1 and weibaPost.post_uid = eUser.uid')
+		->order('weibaPost.recommend_time desc')
+		->field('weibaPost.recommend_time as rTime, weibaPost.title as title,
+				weibaPost.content as content,weibaPost.reply_all_count as replyCount,
+				weibaPost.post_id as id,eUser.uname as uname, eUser.uid as uid')
+				->findAll();
+		if ( count($weibaList)>0 )
+		{
+			$orderList['weiba']=$weibaList[0]['rTime'];
+			$this->assign('weibaList',$weibaList);
+			//var_dump($weibaList);
+			//var_dump($orderList);
+			//exit();
+		}
+
 		// 话题
 		$topicList = D('Topic')->table('ts_feed_topic as topic')
 		->where('topic.recommend = 1')
 		->order('topic.recommend_time desc')
-		->field('topic.topic_name as name, topic.count as count, topic.recommend_time as rTime')
+		->field('topic.topic_name as name, topic.count as count,
+				 topic.recommend_time as rTime, topic.note as note')
 		->findAll();
-        if(count($topicList)>0) 
-        {
-        	$orderList['topic']=$topicList[0]['rTime'];
-        	$this->assign('topicList',$topicList);
-        	//var_dump($topicList);       	
-        	//exit();
-        }
-        
-        // 设置顺序数组
-        arsort($orderList);
-        $this->assign('orderList',$orderList);
-        $this->display();
-    }
-                    	
+		if(count($topicList)>0)
+		{
+			//$orderList['topic']=$topicList[0]['rTime'];
+			$this->assign('topicList',$topicList);
+			//var_dump($topicList);
+			//exit();
+		}
+
+		// 设置顺序数组
+		arsort($orderList);
+		$this->assign('orderList',$orderList);
+		$this->display();
+	}
+	 
 	public function loginWithoutInit(){
 		$this->index();
 	}
@@ -191,11 +192,11 @@ class IndexAction extends Action {
 		$this->assign('feedType', $feedType);
 		// 是否有返回按钮
 		$this->assign('isReturn', 1);
-		$this->setTitle('我的微博');	
+		$this->setTitle('我的微博');
 		$this->setKeywords('我的微博');
 		$this->display();
 	}
-	
+
 
 	/**
 	 * 发起活动
@@ -213,15 +214,15 @@ class IndexAction extends Action {
 		// {m@@ 模块跳转
 		$this->redirect('',array('app'=>'event','mod'=>'Index','act'=>'personal','action'=>'launch'));
 		$this->display();
-        // }	
+		// }
 	}
-	
+
 	/**
 	 * 参与活动
 	 */
 	public function joinCount() {
 		$joinCount = model('UserData')->getJoinCountById($this->mid);
-		
+
 		$map_join['action'] = 'join';
 		$map_join['status'] = 1;
 		$map_join['uid']    = $this->uid;
@@ -318,11 +319,11 @@ class IndexAction extends Action {
 		$this->assign('groupNums', 3);
 		// 是否有返回按钮
 		$this->assign('isReturn', 1);
-		
+
 		$userInfo = model('User')->getUserInfo($this->mid);
 		$lastFeed = model('Feed')->getLastFeed(array($fids[0]));
 		$this->setTitle('我的关注');
-        $this->setKeywords($userInfo['uname'].'的关注');
+		$this->setKeywords($userInfo['uname'].'的关注');
 		$this->display();
 	}
 
@@ -333,7 +334,7 @@ class IndexAction extends Action {
 		// 清空新粉丝提醒数字
 		if($this->uid == $this->mid){
 			$udata = model('UserData')->getUserData($this->mid);
-			$udata['new_folower_count'] > 0 && model('UserData')->setKeyValue($this->mid,'new_folower_count',0);	
+			$udata['new_folower_count'] > 0 && model('UserData')->setKeyValue($this->mid,'new_folower_count',0);
 		}
 		// 获取用户的粉丝列表
 		$followerList = model('Follow')->getFollowerList($this->mid, 20);
@@ -368,10 +369,10 @@ class IndexAction extends Action {
 		$userInfo = model('User')->getUserInfo($this->mid);
 		$lastFeed = model('Feed')->getLastFeed(array($fids[0]));
 		$this->setTitle('我的粉丝');
-        $this->setKeywords($userInfo['uname'].'的粉丝');
+		$this->setKeywords($userInfo['uname'].'的粉丝');
 		$this->display();
 	}
-	
+
 	/**
 	 * 意见反馈页面
 	 */
@@ -380,7 +381,7 @@ class IndexAction extends Action {
 		$this->assign('type', $feedbacktype);
 		$this->display();
 	}
-	
+
 	/**
 	 * 获取验证码图片操作
 	 */
@@ -398,26 +399,26 @@ class IndexAction extends Action {
 		if(empty($_REQUEST['uid'])) {
 			exit(L('PUBLIC_WRONG_USER_INFO'));			// 错误的用户信息
 		}
-		
+
 		$this->assign('follow_group_status', model('FollowGroup')->getGroupStatus($GLOBALS['ts']['mid'], $GLOBALS['ts']['uid']));
 		$this->assign('remarkHash', model('Follow')->getRemarkHash($GLOBALS['ts']['mid']));
-		
+
 		$uid = intval($_REQUEST['uid']);
 		$data['userInfo'] = model('User')->getUserInfo($uid);
 		$data['userInfo']['groupData'] = model('UserGroupLink')->getUserGroupData($uid);   //获取用户组信息
 		$data['user_tag'] = model('Tag')->setAppName('User')->setAppTable('user')->getAppTags($uid);
 		$data['user_tag'] = empty($data['user_tag']) ? '' : implode('、',$data['user_tag']);
 		$data['follow_state'] = model('Follow')->getFollowState($this->mid, $uid);
-		
+
 		$depart = model('Department')->getAllHash();
 		$data['department'] = isset($depart[$data['userInfo']['department_id']]) ? $depart[$data['userInfo']['department_id']] : '';
-		
+
 		$count = model('UserData')->getUserData($uid);
 		if(empty($count)) {
 			$count = array('following_count'=>0,'follower_count'=>0,'feed_count'=>0,'favorite_count'=>0,'unread_atme'=>0,'weibo_count'=>0);
 		}
 		$data['count_info'] = $count;
-		
+
 		// 用户字段信息
 		$profileSetting = D('UserProfileSetting')->where('type=2')->getHashList('field_id');
 		$profile = model('UserProfile')->getUserProfile($uid);

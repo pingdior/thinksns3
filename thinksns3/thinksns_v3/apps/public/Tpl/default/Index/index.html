@@ -30,9 +30,9 @@
                     <div id="col3" class="st-index-right">
                         <div id="follow-us" class="face_name_list">
                             <p class="title">关注我们</p>
-                            <a href="#" class="weixin"><img width="65" height="65" src="http://ww3.sinaimg.cn/mw690/bfbcd910jw1e2i9gwd5w5j.jpg" alt=""></a>
-                            <a href="http://www.weibo.com/u/3216824592" class="weibo"><img width="65" height="65" src="http://tp1.sinaimg.cn/3216824592/180/5657610080/0" alt=""></a>
-                            <a href="" class="tengxun"><img src="http://placehold.it/65/65" alt=""></a>
+                            <a href="#" class="weixin"><img width="65" height="65" src="data/upload/2013/0528/19/51a4997d1cb5c_550_auto.jpg" alt=""></a>
+                            <a href="http://www.weibo.com/u/3216824592" class="weibo"><img width="65" height="65" src="data/upload/2013/0528/19/51a4996dd358a_550_auto.jpeg" alt=""></a>
+                            <a href="" class="tengxun"><img  width="65" height="65" src="data/upload/2013/0528/20/51a49cdf66fb1_550_auto.jpg" alt=""></a>
 
                         </div>
                         <div id="new-comer">
@@ -50,8 +50,19 @@
                             <a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
                             <a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
                         </div>
+                        <div id="HotPersons">
+							<p class="title">乐DO红人<aa href="" class="more">更多</aa></p>
+                            <a href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+                            <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
+						</div>
                         <div id="Partners">
-                            <p class="title">合作机构</p>
+							<p class="title">合作机构<aa href="" class="more">更多</aa></p>
                             <a href="" ><img src="http://placehold.it/48/48" alt=""></a>
                             <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
                             <a  href="" ><img src="http://placehold.it/48/48" alt=""></a>
@@ -72,7 +83,7 @@ $keyList = array_keys($orderList);
 <div class="main-container-wrap" style="display:<?php echo($oo=='event'?'block':'none') ?>" >
 		   	<volist name=\'resultList\' id=\'vo\' >
                             <div class="main-container", style="height: 100px;" >
-                                <div class="module-title" style="display:<?php echo($i==1?'block':'none')  ?>">活动</div>
+                                <div class="module-title" style="display:<?php echo($i==1?'block':'none')  ?>">活 动</div>
                                 <div class="content">
                                 <div class="lineD_btm" id="event_{$vo["id"]}">
                                   <div class="left"><span><a href="{:U(\'event/Index/eventDetail\')}&amp;id=<?php echo($vo["id"]) ?>&amp;uid=<?php echo($vo["uid"]) ?>" ><img src="data/upload/{$vo["attachPath"]}" width="70" height="70" ></a></span></div>
@@ -95,7 +106,7 @@ $keyList = array_keys($orderList);
  <div class="main-container-wrap" >
 		   	<volist name='weibaList' id='vo' >
                             <div class="main-container" style="display:<?php echo($oo=='weiba'?'block':'none') ?>" >
-                                <div class="module-title"  style="display:<?php echo($i==1?'block':'none')  ?>">微吧</div>
+                                <div class="module-title"  style="display:<?php echo($i==1?'block':'none')  ?>">微 吧</div>
                                 <div class="content">
                                     <h3><a href="{:U(\'weiba/Index/postDetail\')}&amp;post_id=<?php echo($vo["id"]) ?>" >{$vo["title"]}</a></h3>
                                     <p class="author"><a href="{:U(\'public/Profile/index\')}&amp;uid=<?php echo($vo["uid"]) ?>" >{$vo["uname"]}</a></p>
@@ -105,18 +116,20 @@ $keyList = array_keys($orderList);
                             </div>
                         </volist>
                       </div>
-<div class="main-container-wrap" style="display:<?php echo($oo=='topic'?'block':'none') ?>">
-		   	<volist name='topicList' id='vo' >
+</volist>
+<!--<div class="main-container-wrap" style="display:<?php echo($oo=='topic'?'block':'none') ?>">-->
+<div class="main-container-wrap">
+		   	<volist name='topicList' id='vo' offset='0' length='6' >
                             <div class="main-container"  style="height:70px;">
                                 <div class="module-title"  style="display:<?php echo($i==1?'block':'none')  ?>">话题</div>
                                 <div class="content"> 
                                     <p class="hot"><a href="{:U(\'public/Topic/index\')}&amp;k=<?php echo($vo["name"]) ?>" >#{$vo["name"]}#</a></p>
+                                    <p class="summary">{$vo["note"]}</p>
                                     <a href="{:U(\'public/Topic/index\')}&amp;k=<?php echo($vo["name"]) ?>" class="fake-btn"><span>{$vo["count"]}</span>条相关</a>
                                 </div>
                             </div>
 			</volist>
-                    </div>
-</volist>
+</div>
                 </div>
             </div>
         </div>

@@ -98,7 +98,11 @@ abstract class Action
         $this->assign('site_bottom_child_nav',$GLOBALS['ts']['site_bottom_child_nav']);
         $this->assign('site_nav_apps', $GLOBALS['ts']['site_nav_apps']);
         $this->assign('menuList', $searchSelect);
-
+        // m@@
+        $this->assign('actionName', $GLOBALS['ts']['_define']['ACTION_NAME']);
+        //echo $this->site;
+        //var_dump($GLOBALS['ts']['_define']['ACTION_NAME']);
+        //exit();
         return true;
 	}
 

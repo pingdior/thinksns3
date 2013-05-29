@@ -200,7 +200,7 @@ body{background:url(../image/body-b.jpg) repeat-x center 0 #e4f3f7;}
 
 /*图标*/
 .head-bd .nav .ico-header{background-color:#2d2d2d;overflow:hidden}
-#header .head-bd .nav a{color:#fff;float:left}
+#header .head-bd .nav a{color: #fff;float:left}
 .head-bd .nav .current .ico-header{display:block;height:2px;background-color:#DB4A37;overflow:hidden}
 .head-bd .arrow-down{margin:-2px 0 0 3px;background-position:0 -101px;}
 
@@ -1536,12 +1536,15 @@ a.btn-account:hover{background-position:-164px 0;}
     position: relative;
 }
 .indexActivity .module-title{
-    height: 50px;
-    width: 40px;
+    height: 20px;
+    width: 33px;
     background: #e9ecee;
     position: absolute;
     left: -20px;
     top: 20px;
+    color: #ff8800;
+    font-weight: bold;
+    font-size: 14px;
 }
 /*微吧 module*/
 .indexActivity .content{
@@ -1599,7 +1602,7 @@ a.btn-account:hover{background-position:-164px 0;}
     padding: 0;
     margin-bottom: 0;
 }
-#follow-us,#new-comer,#Partners{
+#follow-us,#new-comer,#Partners,#HotPersons{
     width: 231px;
     text-align: justify;
     margin-left: 20px;
@@ -1617,7 +1620,7 @@ a.btn-account:hover{background-position:-164px 0;}
     *margin: 0 -1px 10px 0;
 }
 /*合作机构*/
-#Partners a{
+#Partners a,#HotPersons a{
     display: inline-block;
     margin: 0 7px 10px 0;
     *margin: 0 4px 10px 0;

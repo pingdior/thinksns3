@@ -72,20 +72,6 @@ class IndexAction extends Action {
 	}
 
 	/**
-	 * 比较函数，递减
-	 * @param unknown_type $a
-	 * @param unknown_type $b
-	 */
-	public function my_compare($a, $b) {
-		if ($a['rTime'] < $b['rTime'])
-			return 1;
-		else if ($a['rTime'] == $b['rTime'])
-			return 0;
-		else
-			return -1;
-	}
-	
-	/**
 	 * 首页数据装载，按用户各个项目的推荐栏目，装载数据，固定顺序如下：活动、微吧、话题，项目可以为空，
 	 * 且推荐时间最新的放各个项目前头
 	 * created by m@@
@@ -112,8 +98,7 @@ class IndexAction extends Action {
 			->field('event.id as id,event.uid as uid,event.joinCount as joinCount,
 					event.sTime as sTime,event.eTime as eTime, event.address as address,
 					event.title as title,eOpts.rTime as rTime,eType.name as typeName,
-					event.coverId as coverId, eUser.uname as userName,
-					eOpts.city as cityName')
+					event.coverId as coverId, eUser.uname as userName')
 					->findAll();
 			// { @@
 			//var_dump($resultList);
@@ -122,6 +107,7 @@ class IndexAction extends Action {
 			// }
 			if(count($resultList))
 			{
+				$orderList['event']=$resultList[0]['rTime'];
 				foreach($resultList as $v) {
 					if(intval($v['coverId'])==0) continue;
 					// echo $v['coverId'].'------<br />';
@@ -133,12 +119,8 @@ class IndexAction extends Action {
 				->where($mapAttach)
 				->field('attach_id as eAttachId, save_path as eAttachPath, save_name as eAttachName')
 				->findAll();
-				$i=0;
 				foreach ($resultList as &$r)
 				{
-					$orderList['event'.$i]=$r['rTime'];
-					$i++;
-					$r['cityName']=$r['cityName']==NULL?'全国':$r['cityName'];
 					$r['attachPath']='';
 					if($r['coverId']==0) continue;
 					foreach($resultCoverId as &$p) {
@@ -152,7 +134,7 @@ class IndexAction extends Action {
 				}
 				$this->assign('resultList',$resultList);
 				//var_dump($resultList);
-				//echo '-----------';
+				//exit();
 			}
 		}
 		 
@@ -162,17 +144,11 @@ class IndexAction extends Action {
 		->order('weibaPost.recommend_time desc')
 		->field('weibaPost.recommend_time as rTime, weibaPost.title as title,
 				weibaPost.content as content,weibaPost.reply_all_count as replyCount,
-				weibaPost.post_id as id,eUser.uname as uname, 
-				eUser.uid as uid')
+				weibaPost.post_id as id,eUser.uname as uname, eUser.uid as uid')
 				->findAll();
 		if ( count($weibaList)>0 )
 		{
-			$i=0;
-			foreach ($weibaList as $er)
-			{
-				$orderList['weiba'.$i]=$er['rTime'];
-				$i++;
-			}
+			$orderList['weiba']=$weibaList[0]['rTime'];
 			$this->assign('weibaList',$weibaList);
 			//var_dump($weibaList);
 			//var_dump($orderList);
@@ -185,16 +161,10 @@ class IndexAction extends Action {
 		->order('topic.recommend_time desc')
 		->field('topic.topic_name as name, topic.count as count,
 				 topic.recommend_time as rTime, topic.note as note')
-		->limit('0,6')  // 限制最多六条
 		->findAll();
 		if(count($topicList)>0)
 		{
-			$i=0;
-			foreach ($topicList as $tr)
-			{
-				$orderList['topic'.$i]=$tr['rTime'];
-				$i++;
-			}
+			//$orderList['topic']=$topicList[0]['rTime'];
 			$this->assign('topicList',$topicList);
 			//var_dump($topicList);
 			//exit();
@@ -202,9 +172,6 @@ class IndexAction extends Action {
 
 		// 设置顺序数组
 		arsort($orderList);
-		//var_dump($orderList);
-		//var_dump($resultList);
-		//exit();
 		$this->assign('orderList',$orderList);
 		$this->display();
 	}

@@ -1542,9 +1542,6 @@ a.btn-account:hover{background-position:-164px 0;}
     position: absolute;
     left: -20px;
     top: 20px;
-    color: #ff8800;
-    font-weight: bold;
-    font-size: 14px;
 }
 /*微吧 module*/
 .indexActivity .content{
@@ -1620,7 +1617,7 @@ a.btn-account:hover{background-position:-164px 0;}
     *margin: 0 -1px 10px 0;
 }
 /*合作机构*/
-#Partners a,#HotPersons a{
+#Partners .hotPerson-icon,#HotPersons .hotPerson-icon{
     display: inline-block;
     margin: 0 7px 10px 0;
     *margin: 0 4px 10px 0;

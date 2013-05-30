@@ -82,12 +82,12 @@ class RegisterAction extends Action
 		$inviteCode = t($_POST['invate_key']);
 		$email = t($_POST['email']);
 		$uname = t($_POST['uname']);
-		$sex = $_POST['sex'];
+		//$sex = $_POST['sex'];
 		$password = trim($_POST['password']);
 		$repassword = trim($_POST['repassword']);
 		// {m@@
-		$profession = trim($_POST['profession']);
-		$age = trim($_POST['age']);
+		//$profession = trim($_POST['profession']);
+		//$age = trim($_POST['age']);
 		// echo $profession."age_".$age;exit();
 		// }
 		if(!$this->_register_model->isValidEmail($email)) {
@@ -102,10 +102,10 @@ class RegisterAction extends Action
 		}*/
 		$login_salt = rand(11111, 99999);
 		$map['uname'] = $uname;
-		$map['sex'] = $sex;
+		//$map['sex'] = $sex;
 		// {m@@
-		$map['profession'] = $profession;
-		$map['age'] = $age;
+		//$map['profession'] = $profession;
+		//$map['age'] = $age;
 		// ｝
 		$map['login_salt'] = $login_salt;
 		$map['password'] = md5(md5($password).$login_salt);

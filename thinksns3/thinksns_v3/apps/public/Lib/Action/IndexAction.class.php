@@ -241,7 +241,8 @@ class IndexAction extends Action {
 				weibaPost.content as content,weibaPost.reply_all_count as replyCount,
 				weibaPost.post_id as id,eUser.uname as uname,
 				eUser.uid as uid')
-				->findAll();
+		->limit('0,6')  // 限制最多六条
+		->findAll();
 		if ( count($weibaList)>0 )
 		{
 			$i=0;
@@ -262,7 +263,6 @@ class IndexAction extends Action {
 		->order('topic.recommend_time desc')
 		->field('topic.topic_name as name, topic.count as count,
 				topic.recommend_time as rTime, topic.note as note')
-				->limit('0,6')  // 限制最多六条
 				->findAll();
 		if(count($topicList)>0)
 		{

@@ -3,14 +3,15 @@
 </style>
 <div class="profession-title">请选择或手动输入您的个人标签，每个人最多可拥有<em>{$tag_num}</em>个个人标签，已选择<em id="selected_nums">{$nums}</em>个</div>
 <input type="hidden" name="tag_num" id="tag_num" value="{$tag_num}">
+<input type="hidden" name="tag_only" id="tag_only">
 <div class="profession-type clarfix">
-<volist name="categoryTree" id="vo">
+<volist name="categoryTree" id="vo" key="k">
 	<dl>
 		<dt>{$vo.title}：</dt>
 		<dd>
 		<volist name="vo.child" id="v">
 			<php>if(!in_array($v['id'], $selectedIds)) {</php>
-			<a id="user_category_{$v['id']}" href="javascript:;" onclick="return tagsTs.add(\'{$v['title']}\');" class="btn-cancel"><span>{$v.title}</span></a>
+			<a id="user_category_{$v['id']}" href="javascript:;" onclick="return tagsTs.add(\'{$v['title']}\',\'{$k}\');" class="btn-cancel"><span>{$v.title}</span></a>
 			<php>}</php>
 		</volist>
 		</dd>
@@ -69,13 +70,13 @@ tagsTs.init = function()
 			value != "" && _this.add(value);
 			$(this).val('');
 		}
-		if(e.which == 8) {
-			var value = $(this).val();
-			if(value.length == 0) {
-				var rel = $('#post_tag_list li').last().attr('rel');
-				_this.deleteTag(rel);
-			}
-		}
+//		if(e.which == 8) {
+//			var value = $(this).val();
+//			if(value.length == 0) {
+//				var rel = $('#post_tag_list li').last().attr('rel');
+//				_this.deleteTag(rel);
+//			}
+//		}
 	});
 	// 按键抬起效果
 	$('#post_tag_input').keyup(function(e) {
@@ -98,7 +99,7 @@ tagsTs.init = function()
  * @param string tagName 标签名称
  * @return void
  */
-tagsTs.add = function(tagName)
+tagsTs.add = function(tagName,tag_only)
 {
 	// 判断标签长度，控制为10个汉字
 	var tagLimit = 10;
@@ -112,23 +113,48 @@ tagsTs.add = function(tagName)
 		ui.error('最多只能设置'+tagNums+'个标签');
 		return false;
 	}
+
+	
 	var _this = this;
 	if(row_id) {
 		$.post(U('widget/Tag/getTagId'), {'appname':appname, 'apptable':apptable, 'name':tagName}, function(res) {
 			if(res.status == 1) {
 				var tagId = parseInt(res.data);
-				// 验证是否重复加入标签
-				var tagArr = $('#ts_tag_search_value').val().split(',');
-				for(var i in tagArr) {
-					if(tagArr[i] == tagId) {
-						ui.error('标签已存在');
+				var tagonly_page = $('#tag_only').val();
+				if(tagonly_page==null || ""==tagonly_page){
+					$('#tag_only').val(tag_only);
+					// 添加标签操作
+					var html = '<li rel="'+tagId+'" ><a class="tag btn-cancel" href="javascript:;" style="float:left;"><span>'+tagName+'<i class="ico-close1" title="删除" onclick="return tagsTs.deleteTag('+tagId+','+tag_only+')" href="javascript:;"></i></span></a></li>';
+					$('#post_tag_list').append(html);	
+					_this.setSelectedNums();
+				}else{
+					var flag=false;
+					var array =tagonly_page.split(",");
+					for (var i=0 ; i< array.length ; i++)
+					{	
+						if(parseInt(array[i])==tag_only){
+							flag=true;
+						}
+					}
+					if(flag==true){
+						ui.error('您好酷，每类只允许选择一种标签哦！');
 						return false;
+					}else{
+						$('#tag_only').val(tagonly_page+","+tag_only);
+						// 添加标签操作
+						var html = '<li rel="'+tagId+'"><a class="tag btn-cancel" href="javascript:;" style="float:left;"><span>'+tagName+'<i class="ico-close1" title="删除" onclick="return tagsTs.deleteTag('+tagId+','+tag_only+')" href="javascript:;"></i></span></a></li>';
+						$('#post_tag_list').append(html);	
+						_this.setSelectedNums();
 					}
 				}
-				// 添加标签操作
-				var html = '<li rel="'+tagId+'"><a class="tag btn-cancel" href="javascript:;" style="float:left;"><span>'+tagName+'<i class="ico-close1" title="删除" onclick="return tagsTs.deleteTag('+tagId+')" href="javascript:;"></i></span></a></li>';
-				$('#post_tag_list').append(html);	
-				_this.setSelectedNums();
+				// 验证是否重复加入标签
+				//var tagArr = $('#ts_tag_search_value').val().split(',');
+				//for(var i in tagArr) {
+				//	if(tagArr[i] == tagId) {
+				//		ui.error('标签已存在');
+				//		return false;
+				//	}
+				//}	
 			} else {
 				ui.error(res.info);
 				return false;
@@ -152,9 +178,27 @@ tagsTs.updateValue = function()
 /**
  * 移除已添加标签
  */
-tagsTs.deleteTag = function(tagId)
+tagsTs.deleteTag = function(tagId,only)
 {
 	$('li[rel='+tagId+']').remove();
+	var tagonly_page = $('#tag_only').val();
+	if(tagonly_page!=null){
+		var array =tagonly_page.split(",");
+		for (var i=0 ; i< array.length ; i++)
+		{	
+			if(parseInt(array[i])==only){
+				if(i==0){
+					tagonly_page=tagonly_page.replace(only+",","");
+					$('#tag_only').val(tagonly_page);
+					continue;
+				}else{
+					tagonly_page=tagonly_page.replace(","+only,"");
+					$('#tag_only').val(tagonly_page);
+					continue;
+				}
+			}
+		}
+	}
 	this.updateValue();
 	this.setSelectedNums();
 	return false;

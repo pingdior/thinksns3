@@ -84,7 +84,8 @@
 					<div class="main-container-wrap" style="display:<?php echo( strstr($oo,'event')?'block':'none') ?>" >
 						<?php $vo=$resultList[$curListIndex]; ?>
 						<div class="main-container", style="height: 100px;" >
-							<div class="module-title" >{$vo["cityName"]}</div>
+							<div class="e1module-title" >{$vo["chinaDate"]}</div>
+							<div class="e2module-title" >{$vo["cityName"]}</div>
 							<div class="content">
 								<div class="lineD_btm" id="event_{$vo["id"]}">
 									<div class="left"><span><a href="{:U(\'event/Index/eventDetail\')}&amp;id=<?php echo($vo["id"]) ?>&amp;uid=<?php echo( $vo["uid"]) ?>" ><img src="data/upload/{$vo["attachPath"]}" width="70" height="70" ></a></span></div>
@@ -93,10 +94,10 @@
 										</span>
 									</div>
 									<div style="margin:0 80px 0 115px;">
-										<h3><a href="{:U(\'event/Index/eventDetail\')}&amp; id={$vo['id']}&amp;uid={$vo['uid']}">{$vo["title"]}</a> <span class="cGray2">{$vo["typeName"]}</span></h3>
-										<p><span class="cGray2">活动时间：</span>[{$vo["sTime"]|date="Y-m-d G:i",### } 至 {$vo["eTime"]|date="Y-m-d G:i", ### } ] </p>
-										<p><span class="cGray2">活动地点：</span>{$vo["address"]}</p>
-										<p><span class="cGray2">发起人：</span><a href="{:U(\'public/Profile/index\')}&amp;uid=<?php echo($vo["uid"]) ?>" event-node="face_card">{$vo["userName"]}</a></p>
+										<h3> <span class="cGray2" ><a href="{:U(\'event/Index/eventDetail\')}&amp; id={$vo['id']}&amp;uid={$vo['uid']}">{$vo["title"]}</a>{$vo["typeName"]}</span></h3>
+										<p><span class="cGray2">活动时间：{$vo["sTime"]|date="Y-m-d G:i",### } 至 {$vo["eTime"]|date="Y-m-d G:i", ### } ] </span></p>
+										<p><span class="cGray2">活动地点：{$vo["address"]}</span></p>
+										<p><span class="cGray2">发起人：<a href="{:U(\'public/Profile/index\')}&amp;uid=<?php echo($vo["uid"]) ?>" event-node="face_card">{$vo["userName"]}</span></a></p>
 										<a href="{:U(\'event/Index/member\')}&amp;id=<?php echo($vo["id"]) ?>&amp;action=join" class="fake-btn"><span>{$vo["joinCount"]}</span>人参加</a>
 									</div>
 								</div>

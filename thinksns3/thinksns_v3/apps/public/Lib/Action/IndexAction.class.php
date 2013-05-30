@@ -84,7 +84,77 @@ class IndexAction extends Action {
 		else
 			return -1;
 	}
-	
+
+	// 把日期改成大写，如：七月四日
+	public function ConvertDate($date)
+	{
+		// 首先验证日期是否正确
+		if(!preg_match('/^((\d{1,2})\-(\d{1,2}))$/',$date))
+		{
+			echo 1;
+			die('对不起日期不合法');
+		}
+		// echo $date.'------';
+		$d=explode('-',$date);
+		if($d[0][0]=='0')
+			$m=$d[0][1];
+		else
+			$m=$d[0];
+		
+		if($d[1][0]=='0')
+			$dd=$d[1][1];
+		else
+			$dd=$d[1];
+		
+		// echo $dd.'---'.$m;
+		// 简单的日期验证
+		if($m<1 || $m>12 || $dd<1 || $dd>31 )
+		{
+			echo 2;
+			die('对不起日期不合法');
+		}
+			
+		$array = array('零','一','二','三','四','五','六','七','八','九','十');
+			
+		//  月
+		$month='';
+		if($m<9)
+		{
+			$month=$array[intval($m)].'月 ';
+		}
+		else if($m==10)
+		{
+			$month=' 十月 ';
+		}
+		else
+		{
+			$month=' 十'.$array[$m[1]].'月 ';
+		}
+
+		// 日
+		$day='';
+
+		if($dd<9)
+		{
+			$day=$array[intval($dd)].'日 ';
+		}
+		else if(intval($dd)==10)
+		{
+			$day=' 十日 ';
+		}
+		else if($dd[0]==1)
+		{
+			$day= ' 十 '.$array[$dd[1]].'日';
+		}
+		else
+		{
+			$day= $array[$dd[0]].'十'.$array[$dd[1]].'日';
+		}
+        //echo '-----------'.$month.$day;
+        //exit();
+		return  $month.$day;
+	}
+
 	/**
 	 * 首页数据装载，按用户各个项目的推荐栏目，装载数据，固定顺序如下：活动、微吧、话题，项目可以为空，
 	 * 且推荐时间最新的放各个项目前头
@@ -138,7 +208,14 @@ class IndexAction extends Action {
 				{
 					$orderList['event'.$i]=$r['rTime'];
 					$i++;
+						
 					$r['cityName']=$r['cityName']==NULL?'全国':$r['cityName'];
+						
+					$dateMD = date('m-d',$r['sTime']);
+					//echo $dateMD;
+					$r['chinaDate'] = $this->ConvertDate($dateMD);
+					//echo $r['chinaDate'];
+						
 					$r['attachPath']='';
 					if($r['coverId']==0) continue;
 					foreach($resultCoverId as &$p) {
@@ -155,14 +232,14 @@ class IndexAction extends Action {
 				//echo '-----------';
 			}
 		}
-		 
+			
 		// 微吧
 		$weibaList = D('User')->table('ts_weiba_post weibaPost,ts_user eUser')
 		->where('weibaPost.recommend = 1 and weibaPost.post_uid = eUser.uid')
 		->order('weibaPost.recommend_time desc')
 		->field('weibaPost.recommend_time as rTime, weibaPost.title as title,
 				weibaPost.content as content,weibaPost.reply_all_count as replyCount,
-				weibaPost.post_id as id,eUser.uname as uname, 
+				weibaPost.post_id as id,eUser.uname as uname,
 				eUser.uid as uid')
 				->findAll();
 		if ( count($weibaList)>0 )
@@ -184,9 +261,9 @@ class IndexAction extends Action {
 		->where('topic.recommend = 1')
 		->order('topic.recommend_time desc')
 		->field('topic.topic_name as name, topic.count as count,
-				 topic.recommend_time as rTime, topic.note as note')
-		->limit('0,6')  // 限制最多六条
-		->findAll();
+				topic.recommend_time as rTime, topic.note as note')
+				->limit('0,6')  // 限制最多六条
+				->findAll();
 		if(count($topicList)>0)
 		{
 			$i=0;
@@ -208,7 +285,7 @@ class IndexAction extends Action {
 		$this->assign('orderList',$orderList);
 		$this->display();
 	}
-	 
+
 	public function loginWithoutInit(){
 		$this->index();
 	}

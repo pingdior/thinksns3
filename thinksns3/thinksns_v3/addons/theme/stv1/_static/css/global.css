@@ -1536,12 +1536,34 @@ a.btn-account:hover{background-position:-164px 0;}
     position: relative;
 }
 .indexActivity .module-title{
-    height: 20px;
+    height: 15px;
     width: 33px;
     background: #e9ecee;
     position: absolute;
     left: -20px;
     top: 20px;
+	text-align: center;
+}
+.indexActivity .e1module-title{
+    height: 35px;
+    width: 33px;
+    background: #e9ecee;
+    position: absolute;
+    left: -20px;
+    top: 20px;
+	color: #ff8800;
+	font-weight:bold;
+	font-size:12px;
+	text-align: center;
+}
+.indexActivity .e2module-title{
+    height: 15px;
+    width: 40px;
+    background: #e9ecee;
+    position: absolute;
+    left: -20px;
+    top: 57px;
+	text-align: center;
 }
 /*微吧 module*/
 .indexActivity .content{

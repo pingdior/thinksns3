@@ -207,6 +207,7 @@ a:hover .contribute{background-position:0 -207px;}
 }
 .cGray2, .cGray2:visited, a.cGray2 {
     color: #999999;
+	line-height: 120%;
 }
 
 /*文件列表*/

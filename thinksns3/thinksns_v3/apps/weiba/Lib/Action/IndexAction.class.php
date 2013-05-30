@@ -651,7 +651,9 @@ class IndexAction extends Action {
 							$config['typename'] = "推荐";
 							model('Notify')->sendNotify($post_detail['post_uid'], 'weiba_post_set', $config); 
 							D('log')->writeLog($post_detail['weiba_id'],$this->mid,'将帖子“<a href="'.U('weiba/Index/postDetail',array('post_id'=>$post_id)).'" target="_blank">'.$post_detail['title'].'</a>”设为了推荐','posts');
-						
+							// {m@@
+							D('weiba_post')->where('post_id='.$post_id)->setField('recommend_time',time());
+							// }				
 						//添加积分
 						model('Credit')->setUserCredit($post_detail['post_uid'],'dist_topic');
 

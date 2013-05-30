@@ -136,19 +136,19 @@ class IndexAction extends Action {
 
 		if($dd<9)
 		{
-			$day=$array[intval($dd)].'日 ';
+			$day=$array[intval($dd)];
 		}
 		else if(intval($dd)==10)
 		{
-			$day=' 十日 ';
+			$day=' 十 ';
 		}
 		else if($dd[0]==1)
 		{
-			$day= ' 十 '.$array[$dd[1]].'日';
+			$day= ' 十 '.$array[$dd[1]];
 		}
 		else
 		{
-			$day= $array[$dd[0]].'十'.$array[$dd[1]].'日';
+			$day= $array[$dd[0]].'十'.$array[$dd[1]];
 		}
         //echo '-----------'.$month.$day;
         //exit();

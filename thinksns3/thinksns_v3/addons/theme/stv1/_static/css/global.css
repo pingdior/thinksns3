@@ -1547,14 +1547,15 @@ a.btn-account:hover{background-position:-164px 0;}
 .indexActivity .e1module-title{
     height: 35px;
     width: 33px;
-    background: #e9ecee;
+    background: rgb(160,218,121);
     position: absolute;
     left: -20px;
     top: 20px;
-	color: #ff8800;
+	color: #fff;
 	font-weight:bold;
 	font-size:12px;
 	text-align: center;
+	line-height:150%;
 }
 .indexActivity .e2module-title{
     height: 15px;

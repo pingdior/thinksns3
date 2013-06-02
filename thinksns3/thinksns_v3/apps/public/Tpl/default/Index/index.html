@@ -36,19 +36,10 @@
 
 					</div>
 					<div id="new-comer">
-						<p class="title">最新用户<a href="" class="more">更多</a></p>
-						<a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
-						<a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
-						<a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
-						<a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
-						<a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
-						<a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
-						<a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
-						<a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
-						<a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
-						<a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
-						<a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
-						<a class="user-icon" href="" ><img src="http://placehold.it/33/33" alt=""></a>
+						<p class="title">最新用户<a href="{:U('people/Index/index')}" class="more">更多</a></p>
+						<volist name='newUserImages' id='vo'>
+							<a class="user-icon" href="{:U('public/Profile/index')}&amp;uid={$vo['uid']}" ><img width=33px height=33px src={$vo['imageUrl']} alt=""></a>
+						</volist>
 					</div>
 					<div id="HotPersons">
 						<p class="title">乐DO红人<a href="" class="more">更多</a></p>
@@ -81,51 +72,66 @@
 					?>
 					<volist name='keyList' id='oo'>
 					<?php  $curListIndex = intVal(substr($oo,5));    ?>
-					<div class="main-container-wrap" style="display:<?php echo( strstr($oo,'event')?'block':'none') ?>" >
+					<div class="main-container-wrap" style="display:<?php echo( strstr($oo,'event')?'block':'none') ?> ; height:110px" >
 						<?php $vo=$resultList[$curListIndex]; ?>
-						<div class="main-container", style="height: 100px;" >
-							<div class="e1module-title" >{$vo["chinaDate"]}</div>
-							<div class="e2module-title" >{$vo["cityName"]}</div>
-							<div class="content">
-								<div class="lineD_btm" id="event_{$vo["id"]}">
+						<div class="lineD_btm" >
+							<div class="e1module-title" >{$vo["chinaDateM"]}<p style="font-size: 16px" >{$vo["dateD"]} </p></div>
+							<div class="e2module-title" >{$vo["province"]}</div>
+							<!--<div class="content">
+								<div class="lineD_btm" id="event_{$vo["id"]}">-->
 									<div class="left"><span><a href="{:U(\'event/Index/eventDetail\')}&amp;id=<?php echo($vo["id"]) ?>&amp;uid=<?php echo( $vo["uid"]) ?>" ><img src="data/upload/{$vo["attachPath"]}" width="70" height="70" ></a></span></div>
 									<div class="right rmenu" style="width: 60px;">
 										<span class="list_joinIn_1">
 										</span>
 									</div>
-									<div style="margin:0 80px 0 115px;">
-										<h3> <span class="cGray2" ><a href="{:U(\'event/Index/eventDetail\')}&amp; id={$vo['id']}&amp;uid={$vo['uid']}">{$vo["title"]}</a>{$vo["typeName"]}</span></h3>
+									<div style="margin:0 80px 0 80px;">
+										<h3> <span class="title-fasion" ><a href="{:U(\'event/Index/eventDetail\')}&amp; id={$vo['id']}&amp;uid={$vo['uid']}">{$vo["title"]}</a>&nbsp;{$vo["typeName"]}</span></h3>
 										<p><span class="cGray2">活动时间：{$vo["sTime"]|date="Y-m-d G:i",### } 至 {$vo["eTime"]|date="Y-m-d G:i", ### } ] </span></p>
 										<p><span class="cGray2">活动地点：{$vo["address"]}</span></p>
 										<p><span class="cGray2">发起人：<a href="{:U(\'public/Profile/index\')}&amp;uid=<?php echo($vo["uid"]) ?>" event-node="face_card">{$vo["userName"]}</span></a></p>
-										<a href="{:U(\'event/Index/member\')}&amp;id=<?php echo($vo["id"]) ?>&amp;action=join" class="fake-btn"><span>{$vo["joinCount"]}</span>人参加</a>
 									</div>
-								</div>
-							</div>
-						</div>
+							<!--	</div>
 					</div>
-					<div class="main-container-wrap" style="display:<?php echo( strstr($oo,'weiba')?'block':'none') ?>" >
+				-->
+				</div>
+										<a href="{:U(\'event/Index/member\')}&amp;id=<?php echo($vo["id"]) ?>&amp;action=join" class="fake-btn"><span>{$vo["joinCount"]}</span>人参加</a>
+					</div>
+					<div class="main-container-wrap" style="display:<?php echo( strstr($oo,'weiba')?'block':'none') ?> ; height:110px" >
 						<?php $vo=$weibaList[$curListIndex]; ?>
-						<div class="main-container" >
-							<div class="module-title" >微 吧</div>
-							<div class="content">
-								<h3><a href="{:U(\'weiba/Index/postDetail\')}&amp;post_id=<?php echo($vo["id"]) ?>" >{$vo["title"]}</a></h3>
+						<div class="lineD_btm" >
+							<div class="module-title" >微吧</div>
+						<!--	<div class="content">
+							<div class="lineD_btm" >-->
+									<div class="left"><span><a href="{:U(\'weiba/Index/detail\')}&amp;weiba_id=<?php echo($vo["wId"]) ?>" ><img src={$vo['wPicUrl']} width="70" height="70" ></a></span></div>
+									<div class="right rmenu" style="width: 60px;">
+										<span class="list_joinIn_1">
+										</span>
+									</div>
+									<div style="margin:0 80px 0 80px;">
+										<h3> <span class="title-fasion" ><a href="{:U(\'weiba/Index/postDetail\')}&amp;post_id=<?php echo($vo["id"]) ?>">{$vo["title"]}</a>&nbsp;{$vo["wName"]}</span></h3>
+										<p><span class="cGray2">{$vo["content"]}</span></p>
+										<p><span class="cGray2">发贴人：<a href="{:U(\'public/Profile/index\')}&amp;uid=<?php echo($vo["uid"]) ?>" event-node="face_card">{$vo["uname"]}</span></a></p>
+									</div>
+							<!--	</div>
+							<h3><a href="{:U(\'weiba/Index/postDetail\')}&amp;post_id=<?php echo($vo["id"]) ?>" >{$vo["title"]}</a></h3>
 								<p class="author"><a href="{:U(\'public/Profile/index\')}&amp;uid=<?php echo($vo["uid"]) ?>" >{$vo["uname"]}</a></p>
 								<p class="summary">{$vo["content"]}</p>
+							<a href="{:U(\'weiba/Index/postDetail\')}&amp;post_id=<?php echo($vo["id"]) ?>" class="fake-btn"><span>{$vo["readCount"]}</span>人浏览</a>
 							</div>
-							<a href="{:U(\'weiba/Index/postDetail\')}&amp;post_id=<?php echo($vo["id"]) ?>" class="fake-btn"><span>{$vo["replyCount"]}</span>人回复</a>
+							-->
 						</div>
+										<a href="{:U(\'weiba/Index/postDetail\')}&amp;post_id=<?php echo($vo["id"]) ?>" class="fake-btn"><span>{$vo["readCount"]}</span>人浏览</a>
 					</div>
-					<div class="main-container-wrap" style="display:<?php echo( strstr($oo,'topic')?'block':'none') ?>">
-						    <?php $vo=$topicList[$curListIndex]; ?>
-							<div class="main-container"  style="height:80px;">
+					<div class="main-container-wrap" style="display:<?php echo( strstr($oo,'topic')?'block':'none') ?>; height:80px">
+						<?php $vo=$topicList[$curListIndex]; ?>
+						<div class="main-container">
 								<div class="module-title"  >话题</div>
 								<div class="content"> 
-									<p class="hot"><a href="{:U(\'public/Topic/index\')}&amp;k=<?php echo($vo["name"]) ?>" >#{$vo["name"]}#</a></p>
+									<p class="title-fasion"><a href="{:U(\'public/Topic/index\')}&amp;k=<?php echo($vo["name"]) ?>" >#{$vo["name"]}#</a></p>
 									<p class="summary">{$vo["note"]}</p>
-									<a href="{:U(\'public/Topic/index\')}&amp;k=<?php echo($vo["name"]) ?>" class="fake-btn"><span>{$vo["count"]}</span>条相关</a>
 								</div>
 							</div>
+						<a href="{:U(\'public/Topic/index\')}&amp;k=<?php echo($vo["name"]) ?>" class="fake-btn"><span>{$vo["count"]}</span>条相关</a>
 					</div>
 					</volist>
 					</div>

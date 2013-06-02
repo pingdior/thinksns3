@@ -58,6 +58,7 @@ class RegisterAction extends Action
 				}
 			}
 		}
+		
 		// 若是邀请注册，获取邀请人相关信息
 		if($this->_invite) {
 			$inviteInfo = model('Invite')->getInviterInfoByCode($this->_invite_code);

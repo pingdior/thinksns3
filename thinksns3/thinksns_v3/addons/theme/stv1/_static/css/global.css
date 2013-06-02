@@ -1521,6 +1521,15 @@ a.btn-account:hover{background-position:-164px 0;}
 }
 
 /*左侧==============*/
+div.lineD_btm{
+    margin-left: 40px;
+    border-left: 1px solid #e9ecee;
+	padding-left:30px;
+	padding-top:20px;
+	padding-bottom:20px;
+	position:absolute;
+}
+
 .indexActivity .st-index-main h2{
     font-size: 25px;
     line-height: 30px;
@@ -1532,21 +1541,29 @@ a.btn-account:hover{background-position:-164px 0;}
 }
 .indexActivity .main-container{
     margin-left: 40px;
-    border-left: 2px solid #e9ecee;
-    position: relative;
+    border-left: 1px solid #e9ecee;
+    position: absolute;
+	height: 80px;
 }
 .indexActivity .module-title{
     height: 15px;
-    width: 33px;
+    width: 40px;
     background: #e9ecee;
     position: absolute;
     left: -20px;
     top: 20px;
 	text-align: center;
+    padding-top: 4px;
 }
+
+.title-fasion{
+ font-size:16px;   
+ line-height:120%;
+}
+
 .indexActivity .e1module-title{
-    height: 35px;
-    width: 33px;
+    height: 28px;
+    width: 40px;
     background: rgb(160,218,121);
     position: absolute;
     left: -20px;
@@ -1555,7 +1572,9 @@ a.btn-account:hover{background-position:-164px 0;}
 	font-weight:bold;
 	font-size:12px;
 	text-align: center;
-	line-height:150%;
+	line-height:110%;
+    padding-top: 4px;
+    padding-bottom: 2px;
 }
 .indexActivity .e2module-title{
     height: 15px;
@@ -1563,8 +1582,9 @@ a.btn-account:hover{background-position:-164px 0;}
     background: #e9ecee;
     position: absolute;
     left: -20px;
-    top: 57px;
+    top: 55px;
 	text-align: center;
+    padding-top: 4px;
 }
 /*微吧 module*/
 .indexActivity .content{
@@ -1586,7 +1606,7 @@ a.btn-account:hover{background-position:-164px 0;}
 }
 .indexActivity .content .summary{
     line-height: 1.5em;
-    color: #666;
+    font-size: 14px;
 }
 .indexActivity .content .hot{
     line-height: 1.5em;
@@ -1599,8 +1619,8 @@ a.btn-account:hover{background-position:-164px 0;}
     border: 1px solid #dfe3ed;
     text-align: center;
     display: block;
-    position: absolute;
-    right: 30px;
+    position: relative;
+    left: 593px;
     top: 20px;
     color: #666;
 }

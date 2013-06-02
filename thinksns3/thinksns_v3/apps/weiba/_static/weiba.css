@@ -76,7 +76,7 @@
 .weiba-list dl{border-bottom:1px dotted #ddd;padding:25px 0;overflow:hidden;*zoom:1;}
 .weiba-list dt{float:left;width:100px;height:100px;}
 .weiba-list dd{margin:0 0 0 115px;}
-.weiba-list dd .f3{line-height:20px}
+.weiba-list dd .f3{line-height: 14px;}
 
 /*.Posts-content dl{overflow:hidden;*zoom:1;}*/
 .weiba-post-title{ border-bottom:1px dotted #DDDDDD;}
@@ -131,4 +131,4 @@
 
 /*微吧列表*/
 .weiba_name { margin-bottom:15px;}
-.weiba_name a{ font-size:18px; font-family:"微软雅黑";}
+.weiba_name a{ font-size: 16px; font-family:"微软雅黑";}

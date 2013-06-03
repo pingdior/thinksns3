@@ -10,6 +10,7 @@ class IndexAction extends Action {
 	 * 我的首页 - 微博页面
 	 * @return void
 	 */
+	static $_IMAGELEXIT='original';
 	public function indexPage()
 	{
 		// 安全过滤
@@ -205,6 +206,18 @@ class IndexAction extends Action {
 	}
 
 	/**
+	 * 得到官方推荐的乐DO红人和合作机构
+	 * 	 created by m@@
+	 */
+	public function loadRecommendPersons()
+	{
+	    $resultList = model('UserOfficial')->getUserOfficialList();
+	    // var_dump($resultList);
+	    // exit();
+	    return $resultList;	
+	}
+	
+	/**
 	 * 首页右侧最新用户数据装载
 	 * created by m@@
 	 */
@@ -226,7 +239,7 @@ class IndexAction extends Action {
 			foreach($uidList as $u)
 			{
 				$avatarArray = model('Avatar')->init($u['uid'])->getUserAvatar();
-				if(strpos($avatarArray['avatar_small'],'original')>0){
+				if(strpos($avatarArray['avatar_small'],self::$_IMAGELEXIT)>0){
 				//if(strstr('original',$avatarArray['avatar_small'])!=NULL){
 					$result[$j]['imageUrl']=$avatarArray['avatar_small'];
 					$result[$j]['uid']= $u['uid'];
@@ -246,7 +259,6 @@ class IndexAction extends Action {
 		 * created by m@@
 		 */
 		public function index() {
-			// 得到各推荐数据
 			//活动
 			$map['isHot']= 1;
 			$eventOpt = D('Eventopts','event');
@@ -379,18 +391,65 @@ class IndexAction extends Action {
 				//var_dump($topicList);
 				//exit();
 			}
+			// 设置顺序数组
+			arsort($orderList);
+			$this->assign('orderList',$orderList);
+			
             // 加载右侧数据
             $newUserImages = $this->loadRightData();
             if(count($newUserImages)>0)
             {
             	$this->assign("newUserImages",$newUserImages);
             }
-			// 设置顺序数组
-			arsort($orderList);
-			//var_dump($orderList);
-			//var_dump($resultList);
-			//exit();
-			$this->assign('orderList',$orderList);
+            // 得到各推荐数据
+            $recommendList = $this->loadRecommendPersons();
+            if(count($recommendList)>0 && count($recommendList['data'])>0)
+            {
+            	$recDataList = $recommendList['data'];
+            	//var_dump($recDataList);
+            	//exit();
+            	$count = count($recDataList);
+            	$count_2 = 0; // 合作机构个数至多8个，user_official_category_id = 2
+            	$recOg =array();
+            	$count_3 = 0; // 乐DO红人个数至多8个，user_official_category_id = 3
+            	$recHot = array();
+            	for($i=$count-1;$i>=0;$i--)
+            	{
+            		if(!strpos($recDataList[$i]['avatar_small'],self::$_IMAGELEXIT)) continue;
+            		
+            		if($count_2<9 && $recDataList[$i]['user_official_category_id']==2)
+            		{
+            			$recOg[$count_2]['imageUrl'] = $recDataList[$i]['avatar_small']; 
+            			$recOg[$count_2]['user_official_category_id'] = $recDataList[$i]['user_official_category_id'];
+            			$recOg[$count_2]['official_id'] = $recDataList[$i]['official_id'];
+            			$recOg[$count_2]['uname'] = $recDataList[$i]['uname']; 
+            			$recOg[$count_2]['uid'] = $recDataList[$i]['uid'];
+            			$count_2++;
+            		}
+            		else if($count_3<9 && $recDataList[$i]['user_official_category_id']==3)
+            		{
+            			$recHot[$count_3]['imageUrl'] = $recDataList[$i]['avatar_small'];
+            			$recHot[$count_3]['user_official_category_id'] = $recDataList[$i]['user_official_category_id'];
+            			$recHot[$count_3]['official_id'] = $recDataList[$i]['official_id'];
+            			$recHot[$count_3]['uname'] = $recDataList[$i]['uname'];
+            			$recHot[$count_3]['uid'] = $recDataList[$i]['uid'];
+            			$count_3++;
+            		}
+            		else if($count_2>8 && $count_3 >8 )
+            		{
+            			break;
+            		}
+            	}
+            	if($count_2>0)
+            	{
+            		$this->assign('recOg',$recOg);
+            	}
+            	if($count_3>0)
+            	{
+            		$this->assign('recHot',$recHot);
+            	}
+            }
+			
 			$this->display();
 		}
 

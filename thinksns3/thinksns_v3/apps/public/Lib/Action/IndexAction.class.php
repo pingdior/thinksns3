@@ -227,14 +227,15 @@ class IndexAction extends Action {
 		$j=0;
 		$playCount = 12; // 首页要呈现的最新用户个数
 		$result = array();
-		while(true)
+		$flag = true;
+		while($flag)
 		{
 			$uidList = D('User')->field('uid')
 			->order('ctime desc')
 			->limit($i.','.$playCount)
 			->select();
 			//var_dump($uidList);
-            echo '-------------';
+            //echo '-------------';
 			if($uidList==null) break;
 			foreach($uidList as $u)
 			{
@@ -244,10 +245,14 @@ class IndexAction extends Action {
 					$result[$j]['imageUrl']=$avatarArray['avatar_small'];
 					$result[$j]['uid']= $u['uid'];
 					$j++;
+					if($j==$playCount)
+					{
+						$flag = false;
+						break;
+					}
 				}
-				$i=$i+$playCount;
-				if($j==$playCount) break;
 			}
+			$i=$i+$playCount;
 		}
 		//var_dump($result);
 		//exit;
@@ -298,7 +303,8 @@ class IndexAction extends Action {
 					$mapAttach['attach_id'] = array('in',$in_arr);
 					$resultCoverId = D('Attach')
 					->where($mapAttach)
-					->field('attach_id as eAttachId, save_path as eAttachPath, save_name as eAttachName')
+					->field('attach_id as eAttachId, save_path as eAttachPath, 
+							save_name as eAttachName')
 					->findAll();
 					$i=0;
 					foreach ($resultList as &$r)
@@ -331,7 +337,8 @@ class IndexAction extends Action {
 					//echo '-----------';
 				}
 			}
-				
+			$lengInPara=27;
+			$lengInTotal=54;	
 			// 微吧
 			$weibaList = D('User')->table('ts_weiba_post weibaPost,ts_user eUser')
 			->where('weibaPost.recommend = 1 and weibaPost.post_uid = eUser.uid')
@@ -349,11 +356,13 @@ class IndexAction extends Action {
 				{
 					$orderList['weiba'.$i]=$er['rTime'];
 					$i++;
-					if(strlen($er['content'])>99)
+					if(mb_strlen($er['content'],'utf8')>$lengInPara)
 					{
-						$temp = substr($er['content'],0,99).'...';
+						$maxCount = mb_strlen($er['content'],'utf8');
+						$maxCount = $maxCount>$lengInTotal?$lengInTotal:$maxCount;
+						$temp = mb_substr($er['content'],0,$maxCount,'utf8').'...';
 						$er['content']='';
-						$er['content']=substr($temp,0,72).'<br />'.substr($temp,72);
+						$er['content']=mb_substr($temp,0,$lengInPara,'utf8').'<br />'.mb_substr($temp,$lengInPara,$maxCount,'utf8');
 					}
 					$Weiba = D('Weiba','weiba')->getWeibaById($er['wId']);
 					$er['wName'] = $Weiba['weiba_name'];
@@ -380,11 +389,13 @@ class IndexAction extends Action {
 					$orderList['topic'.$i]=$tr['rTime'];
 					$i++;
 
-					if(strlen($tr['content'])>99)
+					if(mb_strlen($tr['note'],'utf8')>$lengInPara)
 					{
-						$temp = substr($tr['content'],0,99).'...';
-						$tr['content']='';
-						$tr['content']=substr($temp,0,72).'<br />'.substr($temp,72);;
+						//$maxCount = mb_strlen($tr['note'],'utf8');
+						//$maxCount = $maxCount>$lengInTotal?$lengInTotal:$maxCount;
+						$temp = mb_substr($tr['note'],0,$lengInPara,'utf8').'...';
+						$tr['note']=$temp;
+						//$tr['note']=mb_substr($temp,0,$lengInPara,'utf8').'<br />'.mb_substr($temp,$lengInPara,$maxCount,'utf8');
 					}
 				}
 				$this->assign('topicList',$topicList);

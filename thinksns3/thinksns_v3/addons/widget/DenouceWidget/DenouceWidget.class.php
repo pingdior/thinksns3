@@ -88,8 +88,8 @@ class DenouceWidget extends Widget
 		if($isDenounce = model('Denounce')->where($map)->count()) {
 			$return = array('status'=>0,'data'=>L('PUBLIC_REPORTING_INFO'));
 		}else{
-			$map['content'] = trim( $_POST['content'] );
-			$map['reason'] = trim( $_POST['reason'] );
+			$map['content'] = h( $_POST['content'] );
+			$map['reason'] = t( $_POST['reason'] );
 			$map['source_url'] = str_replace(SITE_URL,'[SITE_URL]',t($_POST['source_url']));
 			$map['ctime'] = time();
 			if( $id = model( 'Denounce' )->add( $map ) ){

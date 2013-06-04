@@ -991,7 +991,7 @@ class UserAction extends AdministratorAction {
 			  unset($a);
 			}
 			$listData['data'][$k]['category'] = $categoryHash[$v['user_verified_category_id']];
-			$listData['data'][$k]['reason'] = str_replace(array("\n", "\r"), array('', ''), $listData['data'][$k]['reason']);
+			$listData['data'][$k]['reason'] = str_replace(array("\n", "\r"), array('', ''), t($listData['data'][$k]['reason']));
 			$listData['data'][$k]['DOACTION'] = '<a href="javascript:void(0)" onclick="admin.verify('.$v['id'].',1,0,\''.$listData['data'][$k]['reason'].'\')">通过</a> - ';
 			$listData['data'][$k]['DOACTION'] .= '<a href="javascript:void(0)" onclick="admin.verify('.$v['id'].',-1)">驳回</a>';
 			
@@ -1126,6 +1126,10 @@ class UserAction extends AdministratorAction {
 						$user_group = D('user_verified')->where('id='.$v)->find();
 						$maps['uid'] = $user_group['uid'];
 						$maps['user_group_id'] = $user_group['usergroup_id'];
+						$exist = D('user_group_link')->where($maps)->find();
+						if ( $exist ){
+							continue;
+						}
 						D('user_group_link')->add($maps);
 						// 清除用户组缓存
 						model ( 'Cache' )->rm ('user_group_'.$user_group['uid']);
@@ -1139,12 +1143,15 @@ class UserAction extends AdministratorAction {
 					$user_group = D('user_verified')->where('id='.$id)->find();
 					$maps['uid'] = $user_group['uid'];
 					$maps['user_group_id'] = $user_group['usergroup_id'];
-					D('user_group_link')->add($maps);
-					// 清除用户组缓存
-					model ( 'Cache' )->rm ('user_group_'.$user_group['uid']);
-					// 清除权限缓存
-					model('Cache')->rm('perm_user_'.$user_group['uid']);
-					model('Notify')->sendNotify($user_group['uid'],'admin_user_doverify_ok');
+					$exist = D('user_group_link')->where($maps)->find();
+					if ( !$exist ){
+						D('user_group_link')->add($maps);
+						// 清除用户组缓存
+						model ( 'Cache' )->rm ('user_group_'.$user_group['uid']);
+						// 清除权限缓存
+						model('Cache')->rm('perm_user_'.$user_group['uid']);
+						model('Notify')->sendNotify($user_group['uid'],'admin_user_doverify_ok');
+					}
 				}	
 			}
 			if($status == -1){

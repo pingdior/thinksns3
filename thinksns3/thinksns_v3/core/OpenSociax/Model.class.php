@@ -223,7 +223,7 @@ class Model extends Think
     }
     // 回调方法 初始化模型
     protected function _initialize() {}
-    protected function getSourceInfo() {}
+//     protected function getSourceInfo() {}
 
     /**
      * 对保存到数据库的数据进行处理

@@ -39,7 +39,8 @@ function cookie($name,$value='',$option=null) {
        {
            foreach($_COOKIE as $key=>$val) {
                if (0 === stripos($key,$prefix)){
-                    setcookie($_COOKIE[$key],'',time()-3600,$config['path'],$config['domain']);
+                    //todo:https判断
+                    setcookie($_COOKIE[$key],'',time()-3600,$config['path'],$config['domain'],false,true);
                     unset($_COOKIE[$key]);
                }
            }
@@ -310,7 +311,7 @@ function M($name='',$app='@') {
  * @param string app Model所在项目
  * @return object
  */
-function D($name='',$app='@') {
+function D($name='', $app='@', $inclueCommonFunction=true) {
     static $_model = array();
 
     if(empty($name)) return new Model;
@@ -329,7 +330,7 @@ function D($name='',$app='@') {
         tsload(ADDON_PATH.'/model/'.$className.'.class.php');
     }elseif(file_exists(APPS_PATH.'/'.$app.'/Lib/Model/'.$className.'.class.php')){
         $common = APPS_PATH.'/'.$app.'/Common/common.php';
-        if(file_exists($common)){
+        if(file_exists($common) && $inclueCommonFunction){
             tsload($common);
         }
         tsload(APPS_PATH.'/'.$app.'/Lib/Model/'.$className.'.class.php');
@@ -502,8 +503,7 @@ function is_notsafe_file($file){
 function t($text){
     $text = nl2br($text);
     $text = real_strip_tags($text);
-    $text = str_ireplace(array("\r","\n","\t","&nbsp;"),'',$text);
-    $text = htmlspecialchars($text,ENT_QUOTES);
+    $text = addslashes($text);
     $text = trim($text);
     return $text;
 }
@@ -515,8 +515,6 @@ function t($text){
  * @return string 处理后内容
  */
 function h($text, $type = 'html'){
-    // 转移尖括号
-    $text = htmlspecialchars_decode($text);
     // 无标签格式
     $text_tags  = '';
     //只保留链接
@@ -538,7 +536,7 @@ function h($text, $type = 'html'){
     // 过滤攻击代码
     if($type != 'all') {
         // 过滤危险的属性，如：过滤on事件lang js
-        while(preg_match('/(<[^><]+)(onclick|onload|onerror|unload|onmouseover|onmouseup|onmouseout|onmousedown|onkeydown|onkeypress|onkeyup|onblur|onchange|onfocus|action|background|codebase|dynsrc|lowsrc)([^><]*)/i',$text,$mat)){
+        while(preg_match('/(<[^><]+)(ondblclick|onclick|onload|onerror|unload|onmouseover|onmouseup|onmouseout|onmousedown|onkeydown|onkeypress|onkeyup|onblur|onchange|onfocus|action|background|codebase|dynsrc|lowsrc)([^><]*)/i',$text,$mat)){
             $text = str_ireplace($mat[0], $mat[1].$mat[3], $text);
         }
         while(preg_match('/(<[^><]+)(window\.|javascript:|js:|about:|file:|document\.|vbs:|cookie)([^><]*)/i',$text,$mat)){
@@ -1017,16 +1015,13 @@ function CheckWeibaPermission( $weiba_admin , $id , $action , $uid){
 		}
 	}
 	//吧主判断
-	if ( !$id || $weiba_admin){
-		if ( !$weiba_admin ){
-			$map['weiba_id'] = $id;
-			$map['level'] = array('in','2,3');
-			$weiba_admin = D('weiba_follow')->where($map)->order('level desc')->field('follower_uid,level')->findAll();
-			$weiba_admin = getSubByKey( $weiba_admin , 'follower_uid' );
-		}
-		return in_array( $uid , $weiba_admin);
+	if ( !$weiba_admin && $id ){
+		$map['weiba_id'] = $id;
+		$map['level'] = array('in','2,3');
+		$weiba_admin = D('weiba_follow')->where($map)->order('level desc')->field('follower_uid,level')->findAll();
+		$weiba_admin = getSubByKey( $weiba_admin , 'follower_uid' );
 	}
-	return false;
+	return in_array( $uid , $weiba_admin);
 }
 function CheckTaskSwitch(){
 	$taskswitch = model('Xdata')->get('task_config:task_switch');
@@ -1114,17 +1109,19 @@ function getShort($str, $length = 40, $ext = '') {
  * @param string $string 字符串
  * @return Boolean
  */
-function is_utf8($string) {
-    return preg_match('%^(?:
-         [\x09\x0A\x0D\x20-\x7E]            # ASCII
-       | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
-       |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
-       | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
-       |  \xED[\x80-\x9F][\x80-\xBF]        # excluding surrogates
-       |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3
-       | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
-       |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16
-   )*$%xs', $string);
+if(!function_exists('is_utf8')){
+    function is_utf8($string) {
+        return preg_match('%^(?:
+             [\x09\x0A\x0D\x20-\x7E]            # ASCII
+           | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
+           |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
+           | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
+           |  \xED[\x80-\x9F][\x80-\xBF]        # excluding surrogates
+           |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3
+           | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
+           |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16
+       )*$%xs', $string);
+    }
 }
 
 // 自动转换字符集 支持数组转换
@@ -1267,7 +1264,7 @@ function parse_html($html){
 
 //解析成api显示格式
 function parseForApi($html){
-    $html = strip_tags(htmlspecialchars_decode($html));
+    $html = h($html);
     //以下三个过滤是旧版兼容方法-可屏蔽
     $html = preg_replace_callback("/img{data=([^}]*)}/",'_parse_img_forapi', $html);
     $html = preg_replace_callback("/@{uid=([^}]*)}/", '_parse_wap_at_by_uname', $html);
@@ -1526,6 +1523,44 @@ function getImageUrl($file,$width='0',$height='auto',$cut=false,$replace=false){
     return $imageUrl;
 }
 
+//保存远程图片
+function saveImageToLocal($url){
+  if(strncasecmp($url,'http',4)!=0){
+    return false;
+  } 
+  $opts = array(
+    'http'=>array(
+      'method' => "GET",
+      'timeout' => 30, //超时30秒
+      'user_agent'=>"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)"
+     )
+  );
+  $context = stream_context_create($opts);
+  $file_content = file_get_contents($url, false, $context);
+  $file_path = date('/Y/md/H/');
+  @mkdir(UPLOAD_PATH.$file_path,0777,true);
+  $i = pathinfo($url);
+  if(!in_array($i['extension'],array('jpg','jpeg','gif','png'))){
+    $i['extension'] = 'jpg';
+  }
+  $file_name = uniqid().'.'.$i['extension'];
+
+  //又拍云存储
+  $cloud = model('CloudImage');
+  if($cloud->isOpen()){
+    $res = $cloud->writeFile($file_path.$file_name,$file_content);
+  }else{
+    //本地存储
+    $res = file_put_contents(UPLOAD_PATH.$file_path.$file_name, $file_content);
+  }
+  
+  if($res){
+    return $file_path.$file_name;
+  }else{
+    return false;
+  }
+}
+
 function getImageUrlByAttachId($attachid){
     if($attachInfo = model('Attach')->getAttachById($attachid)){
         return getImageUrl($attachInfo['save_path'].$attachInfo['save_name']);
@@ -1609,18 +1644,6 @@ function desencrypt($input,$key) {
     tsload(ADDON_PATH.'/library/DES_MOBILE.php');
     $desc = new DES_MOBILE();
     return $desc->setKey($key)->encrypt($input);
-
-    $size = mcrypt_get_block_size('des', 'ecb');
-    $input = pkcs5_pad($input, $size);
-
-    $td = mcrypt_module_open('des', '', 'ecb', '');
-    $iv = @mcrypt_create_iv (mcrypt_enc_get_iv_size($td), MCRYPT_RAND);
-    @mcrypt_generic_init($td, $key, $iv);
-    $data = mcrypt_generic($td, $input);
-    mcrypt_generic_deinit($td);
-    mcrypt_module_close($td);
-    $data = base64_encode($data);
-    return $data;
 }
 
 /**
@@ -1634,51 +1657,15 @@ function desdecrypt($encrypted,$key) {
     tsload(ADDON_PATH.'/library/DES_MOBILE.php');
     $desc = new DES_MOBILE();
     return $desc->setKey($key)->decrypt($encrypted);
-
-    $encrypted = base64_decode($encrypted);
-    $td = mcrypt_module_open('des','','ecb','');    //使用MCRYPT_DES算法,cbc模式
-    $iv = @mcrypt_create_iv(mcrypt_enc_get_iv_size($td), MCRYPT_RAND);
-    $ks = mcrypt_enc_get_key_size($td);
-    @mcrypt_generic_init($td, $key, $iv);           //初始处理
-
-    $decrypted = mdecrypt_generic($td, $encrypted); //解密
-
-    mcrypt_generic_deinit($td);                     //结束
-    mcrypt_module_close($td);
-
-    $y = pkcs5_unpad($decrypted);
-    return $y;
-}
-
-/**
- * @see desencrypt()
- */
-function pkcs5_pad($text, $blocksize) {
-    $pad = $blocksize - (strlen($text) % $blocksize);
-    return $text . str_repeat(chr($pad), $pad);
-}
-
-/**
- * @see desdecrypt()
- */
-function pkcs5_unpad($text) {
-    $pad = ord($text{strlen($text)-1});
-
-    if ($pad > strlen($text))
-        return false;
-    if (strspn($text, chr($pad), strlen($text) - $pad) != $pad)
-        return false;
-
-    return substr($text, 0, -1 * $pad);
 }
 
 
 function getOAuthToken($uid){
-    return md5($uid . 'sociaxV1');
+    return md5( $uid . uniqid() );
 }
 
 function getOAuthTokenSecret(){
-    return md5($_SERVER['REQUEST_TIME'] . 'sociaxV1');
+    return md5( time() . uniqid() );
 }
 
 // 获取字串首字母
@@ -2308,4 +2295,29 @@ function msubstr($str, $start=0, $length, $charset="utf-8", $suffix=true) {
  */
 function isValidEmail($email) {
     return preg_match("/^[_a-zA-Z\d\-\.]+@[_a-zA-Z\d\-]+(\.[_a-zA-Z\d\-]+)+$/i", $email) !== 0;
+}
+// 发送常用http header信息
+function send_http_header($type='utf8'){
+	//utf8,html,wml,xml,图片、文档类型 等常用header
+	switch($type){
+		case 'utf8':
+			header("Content-type: text/html; charset=utf-8");
+			break;
+		case 'xml':
+			header("Content-type: text/xml; charset=utf-8");
+			break;
+	}
+}
+/**
+ * 判断作者
+ * @param unknown_type $dao
+ * @param unknown_type $field
+ * @param unknown_type $id
+ * @param unknown_type $user
+ * @return boolean
+ */
+function CheckAuthorPermission( $dao , $id , $field='id' , $getfield='uid'){
+	$map[$field] = $id;
+	$value = $dao->where($map)->getField($getfield);
+	return $value == $GLOBALS['ts']['mid'];
 }

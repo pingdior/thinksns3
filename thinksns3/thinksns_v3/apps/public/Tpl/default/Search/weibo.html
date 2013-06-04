@@ -1,3 +1,16 @@
+<script type="text/javascript">
+function addDigg(feed_id){
+   $.post("{:U('public/Feed/addDigg')}", {feed_id:feed_id}, function(res){
+       if(res==1){
+	       var num = $('#digg'+feed_id).attr('rel');
+    	   num++;
+    	   $('#digg'+feed_id).html('已赞('+num+')');
+	   }else {
+	       ui.error('操作失败，如没有登录请先登录再操作');
+       }
+   });
+}
+</script>
 <php> $cancomment = intval(CheckPermission('core_normal','feed_comment')); </php>
 <div id="feed-list" class="feed_lists">
     <php>if($keyword != ""){</php>
@@ -25,14 +38,20 @@
 			
 			<p class="info">
 			<span class="right">
-
+	<span id='digg{$vl.feed_id}' rel='{$vl.digg_count}'>
+	<php>if(!isset($diggArr[$vl['feed_id']])) { </php>
+	   <a href="javascript:void(0)" onclick="addDigg({$vl.feed_id})" >赞<if condition='!empty($vl[digg_count])'>({$vl.digg_count})</if></a>
+	<php> } else { </php>
+	   已赞<if condition='!empty($vl[digg_count])'>({$vl.digg_count})</if>
+	<php> } </php></span>
+	<i class="vline">|</i>
 			<php>if(in_array('repost',$weibo_premission)):</php>
 			<eq name='vl.actions.repost' value='true'>
 			<php>if(CheckPermission('core_normal','feed_share')){</php>
 			<php>
 				$sid = !empty($vl['app_row_id'])? $vl['app_row_id'] : $vl['feed_id'];
 			</php>
-			{:W('Share',array('sid'=>$sid,'stable'=>$vl['app_row_table'],'initHTML'=>'','current_table'=>'feed','current_id'=>$vl['feed_id'],'nums'=>$vl['repost_count'],'appname'=>$vl['app'],'cancomment'=>$cancomment_old,'feed_type'=>$vl['type']))}
+			{:W('Share',array('sid'=>$sid,'stable'=>$vl['app_row_table'],'initHTML'=>'','current_table'=>'feed','current_id'=>$vl['feed_id'],'nums'=>$vl['repost_count'],'appname'=>$vl['app'],'cancomment'=>$cancomment_old,'feed_type'=>$vl['type'],'is_repost'=>$vl['is_repost']))}
 			<i class="vline">|</i>
 			<php>}</php>
 			</eq>

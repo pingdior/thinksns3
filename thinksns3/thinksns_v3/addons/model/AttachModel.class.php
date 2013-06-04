@@ -140,7 +140,6 @@ class AttachModel extends Model {
 
 		// 定制化设这，覆盖默认设置
 		$options = is_array($input_options) ? array_merge($default_options,$input_options) : $default_options;
-
         //云图片
         if($data['upload_type']=='image'){
             $cloud = model('CloudImage');
@@ -260,11 +259,12 @@ class AttachModel extends Model {
 			'ctime' => time(),
 			'private' => $data['private'] > 0 ? 1 : 0,
 			'is_del' => 0,
-			'from' => isset($data['from']) ? intval($data['form']) : getVisitorClient(),
+			'from' => isset($data['from']) ? intval($data['from']) : getVisitorClient(),
 		);
 		if($options['save_to_db']) {
 			foreach($upload_info as $u) {
-				$data['name'] = $u['name'];
+				$name = t($u['name']);
+				$data['name'] = $name ? $name : $u['savename'];
 				$data['type'] = $u['type'];
 				$data['size'] = $u['size'];
 				$data['extension'] = strtolower($u['extension']);
@@ -277,11 +277,11 @@ class AttachModel extends Model {
 				$data['key'] = $u['key'];
 				$data['size'] = byte_format($data['size']);
 				$infos[] = $data;
-				unset($data);
 			}
 		} else {
 			foreach($upload_info as $u) {
-				$data['name'] = $u['name'];
+				$name = t($u['name']);
+				$data['name'] = $name ? $name : $u['savename'];
 				$data['type'] = $u['type'];
 				$data['size'] = byte_format($u['size']);
 				$data['extension'] = strtolower($u['extension']);
@@ -291,9 +291,12 @@ class AttachModel extends Model {
 				//$data['save_domain'] = C('ATTACH_SAVE_DOMAIN'); 	//如果做分布式存储，需要写方法来分配附件的服务器domain
 				$data['key'] = $u['key'];
 				$infos[] = $data;
-				unset($data);
 			}
 		}
 		return $infos;
+	}
+
+	public function saveAttach($file){
+		# code...
 	}
 }

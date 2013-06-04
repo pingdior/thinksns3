@@ -40,5 +40,13 @@ return array (
     'package' => 'thinksns_d2013041218_v21955.zip',
     'status' => 2,
   ),
+  2013060309 => 
+  array (
+    'id' => '2013060309',
+    'title' => 'ThinkSNS V3正式版2013.06.03的升级包',
+    'version' => 'ThinkSNS.V3.24017',
+    'package' => 'thinksns_d2013060309_v24017.zip',
+    'status' => 1,
+  ),
 );
 ?>

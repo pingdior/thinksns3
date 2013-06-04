@@ -46,8 +46,8 @@ img{border: 0px;}
 function changeverify(){
 	var date = new Date();
     var ttime = date.getTime();
-    var url = "{:U('admin/Public/verify')}";
-    $('#verifyimg').attr('src',url+'&'+ttime);
+    var url = "__ROOT__/public/captcha.php";
+    $('#verifyimg').attr('src',url+'?'+ttime);
 };
 // 绑定回车事件
 $(function() {
@@ -93,7 +93,7 @@ $(function() {
                     <li>
                         <div class="form-tt">{:L('PUBLIC_VERIFICATION_CODE')}：</div>
                          <div class="form-row"><input id="login_verify" class="s-txt" onfocus="this.className='s-txt-focus'" onblur="this.className='s-txt'" name="verify" value="" style="width:100px" >
-                        <img src="{:U('admin/Public/verify')}" id="verifyimg" alt="{:L('PUBLIC_CHANGE_ONE')}"  style="vertical-align:middle;padding:0 5px 0 0" onclick="changeverify()"/><!--<a href="javascript:void(0);" onclick="changeverify()">看不清，换一张</a>--> </div>
+                        <img src="__ROOT__/public/captcha.php" id="verifyimg" alt="{:L('PUBLIC_CHANGE_ONE')}"  style="vertical-align:middle;padding:0 5px 0 0" onclick="changeverify()"/><!--<a href="javascript:void(0);" onclick="changeverify()">看不清，换一张</a>--> </div>
                     </li>
                     <li>
                     <div class="form-tt"></div>

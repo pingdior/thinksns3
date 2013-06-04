@@ -139,6 +139,7 @@ document.onkeydown=inactiveF5;
 		<?php } ?>
 		</div>
 	</td>
+
     <td>
    	  <iframe onload="nof5()" id="MainIframe" name="MainIframe" scrolling="yes"  width="100%" height="100%" frameborder="0" noresize> </iframe>
 	</td>

@@ -7,7 +7,7 @@
 class UserVerifiedModel extends Model {
 
 	protected $tableName = 'user_verified';
-	protected $fields = array('id', 'uid', 'usergroup_id', 'user_verified_category_id', 'company', 'realname', 'idcard', 'phone', 'info', 'verified', 'attach_id');
+	protected $fields = array('id', 'uid', 'usergroup_id', 'user_verified_category_id','email', 'company', 'realname', 'idcard', 'phone', 'info', 'verified', 'attach_id');
 
 	/**
 	 * 获取指定用户的认证信息

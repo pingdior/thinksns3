@@ -6,15 +6,30 @@ class TestAction extends Action{
 	}
 	
 	function mylove(){
-		$data = model ( 'Xdata' )->get ( 'admin_Credit:level' );
-		unset($data[-1]);
-		dump($data);
-		model ( 'Xdata' )->put ( 'admin_Credit:level', $data );
-	}
-
-	public function index(){
-		$de = desencrypt('liguo@zhishisoft.com','SociaxV1');
-		echo desdecrypt($de,'SociaxV1');
+		$str = 'alipay_jilu:;atme:;attach:;attach_t:;blog:;blog_category:;channel:;channel_follow:;check_info:;collection:;comment:app_uid;comment:;comment:to_uid;credit_user:;denounce:;denounce:fuid;develop:;diy_page:;diy_widget:;document:deleteUid;document_attach:;document_draft:;document_lock:;event:;event_photo:;event_user:;feed:;feedback:;find_password:;group:;group_atme:;group_attachment:;group_comment:app_uid;group_comment:;group_comment:to_uid;group_feed:;group_invite_verify:;group_log:;group_member:;group_post:;group_topic:;group_user_count:;invite_code:inviter_uid;invite_code:receiver_uid;login:;login_logs:;login_record:;medal_user:;message_content:from_uid;message_list:from_uid;message_member:member_uid;notify_email:;notify_message:;online:;online_logs:;online_logs_bak:;poppk:cUid;poppk_vote:;poster:;sitelist_site:;survey_answer:;task_receive:;task_user:;template_record:;tipoff:;tipoff:bonus_uid;tipoff_log:;tips:;user_app:;user_blacklist:;user_category_link:;user_change_style:;user_count:;user_credit_history:;user_data:;user_department:;user_follow:;user_follow_group:;user_follow_group_link:;user_group_link:;user_official:;user_online:;user_privacy:;user_profile:;user_verified:;vote:;vote_user:;vtask:assigner_uid;vtask:deal_uid;vtask_log:;vtask_process:assigner_uid;vtask_process:deal_uid;weiba:;weiba:admin_uid;weiba_apply:follower_uid;weiba_apply:manager_uid;weiba_favorite:;weiba_favorite:post_uid;weiba_follow:follower_uid;weiba_log:;weiba_post:post_uid;weiba_post:last_reply_uid;weiba_reply:post_uid;weiba_reply:;weiba_reply:to_uid;x_article:;x_logs:';
+		$arr = explode(';', $str);
+		foreach ($arr as $v){
+			$info = explode(':', $v);
+			$table = C('DB_PREFIX').$info[0];
+			$field = empty($info[1]) ? 'uid' : $info[1];
+			
+			$sql = 'DELETE FROM '.$table.' WHERE '.$field.' NOT IN (SELECT uid FROM ts_user) ';
+			M()->execute($sql);
+		}
+				
+/* 		$sql = "SELECT TABLE_NAME,COLUMN_NAME FROM information_schema.`COLUMNS` WHERE TABLE_SCHEMA='uat_sociax' AND COLUMN_NAME LIKE '%uid%' AND DATA_TYPE='int'";
+		$list = M()->query($sql);
+		$str = '';
+		foreach ($list as $vo){
+			$str .= str_replace('ts_','', $vo['TABLE_NAME']).':';
+			if($vo['COLUMN_NAME']=='uid'){
+				$str .= ';';
+			}else{
+				$str .= $vo['COLUMN_NAME'].';';
+			}
+			
+		}
+		echo($str); */
 	}
 
 	public function testvideo(){
@@ -680,7 +695,7 @@ class TestAction extends Action{
 					continue;
 				}
 				
-				$oldPath = DATA_PATH.'/uploads/avatar/'.$uid.'/big.jpg';
+				$oldPath = UPLOAD_PATH.'/avatar/'.$uid.'/big.jpg';
 				if(!file_exists($oldPath)){
 					continue;
 				}
@@ -697,6 +712,7 @@ class TestAction extends Action{
 			echo '<script>window.location.href="'.U('public/Test/upFacePath', array('p'=>$p)).'";</script>';
 		}
 	}
+
 	/**
 	 * 创建多级文件目录
 	 * @param string $path 路径名称

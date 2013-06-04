@@ -1,16 +1,17 @@
 <?php if (!defined('THINK_PATH')) exit();?><!DOCTYPE html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><?php if(($_title)  !=  ""): ?><?php echo ($_title); ?><?php else: ?><?php echo ($site["site_name"]); ?>-<?php echo ($site["site_slogan"]); ?><?php endif; ?></title>
+<title><?php if(($_title)  !=  ""): ?><?php echo ($_title); ?> - <?php echo ($site["site_name"]); ?><?php else: ?><?php echo ($site["site_name"]); ?> - <?php echo ($site["site_slogan"]); ?><?php endif; ?></title>
 <meta content="<?php if(($_keywords)  !=  ""): ?><?php echo ($_keywords); ?><?php else: ?><?php echo ($site["site_header_keywords"]); ?><?php endif; ?>" name="keywords">
 <meta content="<?php if(($_description)  !=  ""): ?><?php echo ($_description); ?><?php else: ?><?php echo ($site["site_header_description"]); ?><?php endif; ?>" name="description">
 <?php echo Addons::hook('public_meta');?>
 <link href="__THEME__/image/favicon.ico?v=<?php echo ($site["sys_version"]); ?>" type="image/x-icon" rel="shortcut icon">
-<link href="__THEME__/css/global.css?v=<?php echo ($site["sys_version"]); ?>" rel="stylesheet" type="text/css" />
+<!-- <link href="__THEME__/css/global.css?v=<?php echo ($site["sys_version"]); ?>" rel="stylesheet" type="text/css" />
 <link href="__THEME__/css/module.css?v=<?php echo ($site["sys_version"]); ?>" rel="stylesheet" type="text/css" />
 <link href="__THEME__/css/menu.css?v=<?php echo ($site["sys_version"]); ?>" rel="stylesheet" type="text/css" />
 <link href="__THEME__/css/form.css?v=<?php echo ($site["sys_version"]); ?>" rel="stylesheet" type="text/css" />
-<link href="__THEME__/css/jquery.atwho.css?v=<?php echo ($site["sys_version"]); ?>" rel="stylesheet" type="text/css" />
+<link href="__THEME__/css/jquery.atwho.css?v=<?php echo ($site["sys_version"]); ?>" rel="stylesheet" type="text/css" /> -->
+<link href="__THEME__/css/css.php?t=css&f=global.css,module.css,menu.css,form.css,jquery.atwho.css&v=<?php echo ($site["sys_version"]); ?>.css" rel="stylesheet" type="text/css" />
 <?php if(!empty($appCssList)): ?>
 <?php if(is_array($appCssList)): ?><?php $i = 0;?><?php $__LIST__ = $appCssList?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$cl): ?><?php ++$i;?><?php $mod = ($i % 2 )?><link href="<?php echo APP_PUBLIC_URL;?>/<?php echo ($cl); ?>?v=<?php echo ($site["sys_version"]); ?>" rel="stylesheet" type="text/css"/><?php endforeach; ?><?php endif; ?><?php else: echo "" ;?><?php endif; ?>
 <?php endif; ?>
@@ -32,18 +33,19 @@ var LANG = new Array();
 <?php if(!empty($langJsList)) { ?>
 <?php if(is_array($langJsList)): ?><?php $i = 0;?><?php $__LIST__ = $langJsList?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$vo): ?><?php ++$i;?><?php $mod = ($i % 2 )?><script src="<?php echo ($vo); ?>?v=<?php echo ($site["sys_version"]); ?>"></script><?php endforeach; ?><?php endif; ?><?php else: echo "" ;?><?php endif; ?>
 <?php } ?>
-<script src="__THEME__/js/jquery-1.7.1.min.js?v=<?php echo ($site["sys_version"]); ?>"></script>
+<!-- <script src="__THEME__/js/jquery-1.7.1.min.js?v=<?php echo ($site["sys_version"]); ?>"></script>
 <script src="__THEME__/js/jquery.form.js?v=<?php echo ($site["sys_version"]); ?>"></script>
 <script src="__THEME__/js/common.js?v=<?php echo ($site["sys_version"]); ?>"></script>
 <script src="__THEME__/js/core.js?v=<?php echo ($site["sys_version"]); ?>"></script>
-<script src="__THEME__/js/plugins/core.comment.js?v=<?php echo ($site["sys_version"]); ?>"></script>
 <script src="__THEME__/js/module.js?v=<?php echo ($site["sys_version"]); ?>"></script>
 <script src="__THEME__/js/module.common.js?v=<?php echo ($site["sys_version"]); ?>"></script>
 <script src="__THEME__/js/jwidget_1.0.0.js?v=<?php echo ($site["sys_version"]); ?>"></script>
 <script src="__THEME__/js/jquery.atwho.js?v=<?php echo ($site["sys_version"]); ?>"></script>
 <script src="__THEME__/js/jquery.caret.js?v=<?php echo ($site["sys_version"]); ?>"></script>
 <script src="__THEME__/js/ui.core.js?v=<?php echo ($site["sys_version"]); ?>"></script>
-<script src="__THEME__/js/ui.draggable.js?v=<?php echo ($site["sys_version"]); ?>"></script>
+<script src="__THEME__/js/ui.draggable.js?v=<?php echo ($site["sys_version"]); ?>"></script> -->
+<script src="__THEME__/js/js.php?t=js&f=jquery-1.7.1.min.js,jquery.form.js,common.js,core.js,module.js,module.common.js,jwidget_1.0.0.js,jquery.atwho.js,jquery.caret.js,ui.core.js,ui.draggable.js&v=<?php echo ($site["sys_version"]); ?>.js"></script>
+<script src="__THEME__/js/plugins/core.comment.js?v=<?php echo ($site["sys_version"]); ?>"></script>
 <?php echo Addons::hook('public_head',array('uid'=>$uid));?>
 </head>
 <body>
@@ -60,7 +62,7 @@ var LANG = new Array();
                     <i class="vline"> | </i>
                     <a href="<?php echo U('public/Passport/login');?>"><?php echo L('PUBLIC_LOGIN');?></a>
                 </div>
-                <div class="logo" <?php if(strpos($_SERVER['HTTP_USER_AGENT'],'MSIE 6.0') !== false): ?>style="_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='<?php echo ($site["logo"]); ?>', sizingMethod='crop');_background:none;"<?php else: ?>style="background:url(<?php echo ($site["logo"]); ?>) 50% 50% no-repeat;"<?php endif; ?>><a href="<?php echo SITE_URL;?>"></a></div>
+                <div class="logo" <?php if(strpos($_SERVER['HTTP_USER_AGENT'],'MSIE 6.0') !== false): ?>style="_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='<?php echo ($site["logo"]); ?>', sizingMethod='crop');_background:none;"<?php else: ?>style="background:url(<?php echo ($site["logo"]); ?>) no-repeat;"<?php endif; ?>><a href="<?php echo SITE_URL;?>"></a></div>
                 <!-- logo -->
             </div>
 		</div><?php endif; ?>
@@ -76,11 +78,7 @@ var LANG = new Array();
                 <?php if($user['is_init'] == 1): ?>
                 <div class="nav">
                     <ul>
-                        <?php $flag=0 ?>
-                        <?php if(is_array($site_top_nav)): ?><?php $i = 0;?><?php $__LIST__ = $site_top_nav?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$st): ?><?php ++$i;?><?php $mod = ($i % 2 )?><li  <?php if((APP_NAME == 'public') AND ($st['app_name'] == 'head') AND ($actionName != 'indexPage') ): ?>class="current" 
-                          <?php $flag=1 ?>
-                          <?php elseif( $flag != 1 AND ((APP_NAME == $st['app_name'] ) OR ( $_GET['page'] == $st['app_name'] )) ): ?>class="current"<?php endif; ?> 
-                              ><a href="<?php echo ($st["url"]); ?>" target="<?php echo ($st["target"]); ?>" class="app"><?php echo ($st["navi_name"]); ?></a>
+                        <?php if(is_array($site_top_nav)): ?><?php $i = 0;?><?php $__LIST__ = $site_top_nav?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$st): ?><?php ++$i;?><?php $mod = ($i % 2 )?><li <?php if(APP_NAME == $st['app_name'] || $_GET['page'] == $st['app_name']): ?> class="current" <?php endif; ?> ><a href="<?php echo ($st["url"]); ?>" target="<?php echo ($st["target"]); ?>" class="app"><?php echo ($st["navi_name"]); ?></a>
                             <?php if(isset($st['child'])): ?><div model-node="drop_menu_list" class="dropmenu" style="width:100px;display:none;">
                                 <dl class="acc-list" >
                                     <?php if(is_array($st["child"])): ?><?php $i = 0;?><?php $__LIST__ = $st["child"]?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$stc): ?><?php ++$i;?><?php $mod = ($i % 2 )?><dd><a href="<?php echo ($stc["url"]); ?>" target="<?php echo ($stc["target"]); ?>"><?php echo (getShort($stc["navi_name"],6)); ?></a></dd><?php endforeach; ?><?php endif; ?><?php else: echo "" ;?><?php endif; ?>
@@ -88,7 +86,7 @@ var LANG = new Array();
                             </div><?php endif; ?>
                           </li><?php endforeach; ?><?php endif; ?><?php else: echo "" ;?><?php endif; ?>
                         <li style="*z-index:100;">
-                        <!-- <a href="###" class="app">应用</a> -->
+                        <a href="###" class="app">应用</a>
                         <div model-node="drop_menu_list" class="dropmenu" style="width:370px;left:-50px;display:none;z-index:100;">
                             <ul class="acc-list app-list clearfix">
                                 <?php if(is_array($site_nav_apps)): ?><?php $i = 0;?><?php $__LIST__ = $site_nav_apps?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$li): ?><?php ++$i;?><?php $mod = ($i % 2 )?><li><a href="<?php echo U($li['app_name']);?>"><img src="<?php echo empty($li['icon_url_large']) ? APPS_URL.'/'.$li['app_name'].'/Appinfo/icon_app_large.png':$li['icon_url_large']; ?>" width="50" height="50" /><?php echo (getShort($li["app_alias"],4)); ?></a></li><?php endforeach; ?><?php endif; ?><?php else: echo "" ;?><?php endif; ?>
@@ -142,7 +140,9 @@ var LANG = new Array();
                                     <dd><a  href="<?php echo U('public/Comment/index', array('type'=>'send'));?>">发出的评论</a></dd>
                                     <dd><a  href="<?php echo U('public/Message/index');?>">我的私信</a></dd>
                                     <dd><a  href="<?php echo U('public/Message/notify');?>">系统消息</a></dd>
-                                    <?php if(CheckPermission('core_normal','send_message')){ ?>
+                                    <!-- 消息菜单钩子 -->
+                                    <?php echo Addons::hook('header_message_dropmenu');?>
+                                <?php if(CheckPermission('core_normal','send_message')){ ?>
                                 <dd class="border"><a event-node="postMsg" href="javascript:void(0)" onclick="ui.sendmessage()"><?php echo L('PUBLIC_SEND_PRIVATE_MESSAGE');?>&raquo;</a></dd>
                                 <?php } ?>
                                 </dl>
@@ -158,10 +158,12 @@ var LANG = new Array();
                                 <dd><a href="<?php echo U('public/Medal/index');?>">勋章馆</a></dd>
                                 <?php endif; ?>
                                 
-                                <dd><a href="<?php echo U('public/Rank/index','type=2');?>">排行榜</a></dd>
+                                <dd><a href="<?php echo U('public/Rank/weibo');?>">排行榜</a></dd>
                                 <?php if(isInvite() && CheckPermission('core_normal','invite_user')): ?>
                                 <dd><a href="<?php echo U('public/Invite/invite');?>"><?php echo L('PUBLIC_INVITE_COLLEAGUE');?></a></dd>
                                 <?php endif; ?>
+                                <!-- 个人设置菜单钩子 -->
+                                <?php echo Addons::hook('header_account_dropmenu');?>
                                 <?php if(CheckPermission('core_admin','admin_login')){ ?>
                                 <dd><a href="<?php echo U('admin');?>"><?php echo L('PUBLIC_SYSTEM_MANAGEMENT');?></a></dd>
                                 <?php } ?>
@@ -181,6 +183,8 @@ var LANG = new Array();
                         <li rel="unread_message" style="display:none"><span></span>，<a href="<?php echo U('public/Message');?>" ><?php echo L('PUBLIS_MESSAGE_REMIND');?></a></li>
  	                    <li rel="unread_atme" style="display:none"><span></span>，<a href="<?php echo U('public/Mention');?>"><?php echo L('PUBLIS_MESSAGE_REMIND');?></a></li>
      	                <li rel="unread_notify" style="display:none"><span></span>，<a href="<?php echo U('public/Message/notify');?>"><?php echo L('PUBLIS_MESSAGE_REMIND');?></a></li>
+     	                <li rel="unread_group_atme" style="display:none"><span></span>，<a href="<?php echo U('group/SomeOne/index');?>"><?php echo L('PUBLIS_MESSAGE_REMIND');?></a></li>
+     	                <li rel="unread_group_comment" style="display:none"><span></span>，<a href="<?php echo U('group/SomeOne/index');?>"><?php echo L('PUBLIS_MESSAGE_REMIND');?></a></li> 
                 	</ul>
                 <a href="javascript:void(0)" onclick="core.dropnotify.closeParentObj()" class="ico-close1"></a>
                 </div>
@@ -223,18 +227,16 @@ var LANG = new Array();
     $(document).ready(function(){
         $("#mod-product dd").hover(function() {
             $(this).addClass("hover");
-        }, function() {
+        },function() {
             $(this).removeClass("hover");
         });
         core.plugInit('search');
     });
-
     core.plugFunc('dropnotify',function(){
         setTimeout(function(){
             core.dropnotify.init('message_list_container','message_container');
         },320);   
     });
-
     </script><?php endif; ?>
     </div>
 <?php //出现注册提示的页面
@@ -261,8 +263,8 @@ if(!$mid && in_array(APP_NAME.'/'.MODULE_NAME,$show_register_tips)){ ?>
 <div id="page-wrap">
 	   <div id="main-wrap">
 	   	   <div class="boxShadow"> 	 
-             <div class="find-type" style="height:26px;_overflow:hidden">
-      <div class="app-title">
+               <div class="find-type">    
+      <div class="app-title clearfix">
          <!--  <div class="search-input">
               <div id="mod-search" event-node="drop_weiba_search">
                <form name="search_weiba" id="search_weiba" method="get" action="<?php echo U('weiba/Index/search');?>">
@@ -270,7 +272,7 @@ if(!$mid && in_array(APP_NAME.'/'.MODULE_NAME,$show_register_tips)){ ?>
                </form>
               </div>
           </div> -->
-          <div class="search-input" style="z-index:99;">
+          <div class="search-input">
             <div id="mod-search" model-node="drop_weiba_search">
                 <form name="search_weiba" id="search_weiba" method="post" action="<?php echo U('weiba/Index/search');?>">
                     <!-- <input name="app" value="public" type="hidden"/>
@@ -284,13 +286,14 @@ if(!$mid && in_array(APP_NAME.'/'.MODULE_NAME,$show_register_tips)){ ?>
                 </form>
             </div>
           </div>
-          <h4 class="left"><a href="<?php echo U('weiba/Index/index');?>"><img src="__APP__/images/ico-weib.gif" /></a>微吧</h4>
-          <div class="app-tab-menu clearfix" style="margin:0 0 0 130px;_position:fixed">
+          <h4 href="<?php echo U('weiba/Index/index');?>" class="left"><img src="<?php echo ($ts['app']['small_icon_url']); ?>" />&nbsp;&nbsp;微吧</h4>
+          <div class="app-tab-menu clearfix" style="margin:0 0 0 130px;">
+            
             <ul>
               <li><a href="<?php echo U('weiba/Index/index');?>" <?php if(!$nav){ ?> class="current"<?php } ?>>首页<?php if(($nav)  ==  ""): ?><span class="triangle"></span><?php endif; ?></a><i class="line"></i></li>
-              <!--  <li><a href="<?php echo U('weiba/Index/weibaList');?>" <?php if($nav=="weibalist"){ ?>class="current"<?php } ?>>微吧<?php if(($nav)  ==  "weibalist"): ?><span class="triangle"></span><?php endif; ?></a><?php if($GLOBALS['ts']['mid']){ ?><i class="line"></i><?php } ?></li>-->
+              <li><a href="<?php echo U('weiba/Index/weibaList');?>" <?php if($nav=="weibalist"){ ?>class="current"<?php } ?>>微吧<?php if(($nav)  ==  "weibalist"): ?><span class="triangle"></span><?php endif; ?></a><?php if($GLOBALS['ts']['mid']){ ?><i class="line"></i><?php } ?></li>
               <?php if($GLOBALS['ts']['mid']){ ?>
-              <li><a href="<?php echo U('weiba/Index/myWeiba');?>" <?php if($nav=="myweiba"){ ?>class="current"<?php } ?>>我的微吧<?php if(($nav)  ==  "myweiba"): ?><span class="triangle"></span><?php endif; ?></a></li>
+              <li><a href="<?php echo U('weiba/Index/myWeiba',array('type'=>'myFollowing'));?>" <?php if($nav=="myweiba"){ ?>class="current"<?php } ?>>我的微吧<?php if(($nav)  ==  "myweiba"): ?><span class="triangle"></span><?php endif; ?></a></li>
               <?php } ?>
               <?php if($nav=="weibadetail"){ ?>
               <li><i class="line"></i><a href="<?php echo U('weiba/Index/detail',array('weiba_id'=>$weiba_id));?>" class="current"><span class="triangle"></span><?php echo ($weiba_name); ?></a></li>
@@ -298,27 +301,27 @@ if(!$mid && in_array(APP_NAME.'/'.MODULE_NAME,$show_register_tips)){ ?>
             </ul>
           </div>
       </div>      
-</div>
+   </div>
            
 	   	   	   <div class="mb10 clearfix">
 
                  <div id="col3" class="st-index-right">
   <div class="right-wrap">
-     <div class="weiba-pic weiba-box1 clearfix">
-       <div class="weiba-pic-title"><a href="<?php echo U('weiba/Index/weibaList');?>" class="right">更多微吧</a><h3>微吧推荐</h3></div>
+     <div class="right-box clearfix">
+       <h3><a href="<?php echo U('weiba/Index/weibaList');?>" class="right">更多微吧</a>微吧推荐</h3>
        <ul>
-          <?php if(is_array($weiba_recommend)): ?><?php $i = 0;?><?php $__LIST__ = $weiba_recommend?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$vo): ?><?php ++$i;?><?php $mod = ($i % 2 )?><li <?php if(is_int($i/5)){ ?>class="no-margin"<?php } ?>>
-                <div class="weiba-pic-l"><a href="<?php echo U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']));?>"><img src="<?php echo ($vo["logo"]); ?>" width="50" height="50"/></div><a href="<?php echo U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']));?>" class="weiba-name"><?php echo ($vo["weiba_name"]); ?></a>
+          <?php if(is_array($weiba_recommend)): ?><?php $i = 0;?><?php $__LIST__ = $weiba_recommend?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$vo): ?><?php ++$i;?><?php $mod = ($i % 2 )?><li>
+                <a href="<?php echo U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']));?>" class="face"><img src="<?php echo (getImageUrl($vo["logo"], 50, 50, true)); ?>" /><span><?php echo ($vo["weiba_name"]); ?></span></a>
             </li><?php endforeach; ?><?php endif; ?><?php else: echo "" ;?><?php endif; ?>
        </ul>
      </div>  
-     <div class="weiba-rank-list weiba-box1">
-       <div class="weiba-pic-title"><h3>微吧排行榜</h3></div>
+     <div class="rank-box1">
+       <h3>微吧排行榜</h3>
        <ul>
           <?php if(is_array($weiba_order)): ?><?php $i = 0;?><?php $__LIST__ = $weiba_order?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$v1): ?><?php ++$i;?><?php $mod = ($i % 2 )?><li><i class="ico-num ico-num<?php echo ($i); ?>"></i>
                   <dl>
-                     <dt><a href="<?php echo U('weiba/Index/detail',array('weiba_id'=>$v1['weiba_id']));?>"><img src="<?php echo ($v1["logo"]); ?>" width="30" height="30" /></a></dt>
-                     <dd><p><a href="<?php echo U('weiba/Index/detail',array('weiba_id'=>$v1['weiba_id']));?>"><?php echo ($v1["weiba_name"]); ?></a></p><p>粉丝数：<?php echo (($v1["follower_count"])?($v1["follower_count"]):0); ?>  帖子数：<?php echo (($v1["thread_count"])?($v1["thread_count"]):0); ?></p></dd>
+                     <dt><a href="<?php echo U('weiba/Index/detail',array('weiba_id'=>$v1['weiba_id']));?>"><img src="<?php echo (getImageUrl($v1["logo"], 30, 30, true)); ?>" width="30" height="30" /></a></dt>
+                     <dd><p><a href="<?php echo U('weiba/Index/detail',array('weiba_id'=>$v1['weiba_id']));?>"><?php echo ($v1["weiba_name"]); ?></a></p><p>粉丝数：<?php echo (($v1["follower_count"])?($v1["follower_count"]):0); ?>　帖子数：<?php echo (($v1["thread_count"])?($v1["thread_count"]):0); ?></p></dd>
                   </dl>
               </li><?php endforeach; ?><?php endif; ?><?php else: echo "" ;?><?php endif; ?>
        </ul>
@@ -336,7 +339,7 @@ if(!$mid && in_array(APP_NAME.'/'.MODULE_NAME,$show_register_tips)){ ?>
                         </div>
                         <div class="weiba-list mb20 clearfix">
                             <?php if(is_array($weibaList["data"])): ?><?php $i = 0;?><?php $__LIST__ = $weibaList["data"]?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$vo): ?><?php ++$i;?><?php $mod = ($i % 2 )?><dl>
-                                     <dt><a href="<?php echo U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']));?>"><img src="<?php echo ($vo["logo"]); ?>" width="100" height="100" /></a></dt>
+                                     <dt><a href="<?php echo U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']));?>"><img src="<?php echo (getImageUrl($vo["logo"],100,100,true)); ?>" /></a></dt>
                                      <dd>
                                         <div class="right"><!-- <a class="btn-cancel"><span>关注</span></a> --><?php echo W('FollowWeiba',array('weiba_id'=>$vo['weiba_id'],'follow_state'=>array('following'=>$vo['following'])));?></div>
                                         <p class="weiba_name"><a href="<?php echo U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']));?>"><?php echo ($vo["weiba_name"]); ?></a></p><p class="f9 mb10">粉丝数：<?php echo ($vo["follower_count"]); ?><span class="pl5 pr5">/</span>帖子数：<?php echo ($vo["thread_count"]); ?></p><p class="f3"><?php echo ($vo["intro"]); ?></p>
@@ -355,33 +358,30 @@ if(!$mid && in_array(APP_NAME.'/'.MODULE_NAME,$show_register_tips)){ ?>
 
 <div class="footer">
    <div class="login-footer">
-    <?php if($site_bottom_child_nav){ ?>
+    <?php if(!empty($site_bottom_nav) && $site_bottom_child_nav){ ?>
       <div class="foot clearfix">
          <?php if(is_array($site_bottom_nav)): ?><?php $i = 0;?><?php $__LIST__ = $site_bottom_nav?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$nv): ?><?php ++$i;?><?php $mod = ($i % 2 )?><dl>
             <dt><a href="<?php echo ($nv["url"]); ?>" target="<?php echo ($nv["target"]); ?>"><?php echo ($nv['navi_name']); ?></a></dt>
             <?php if(is_array($nv["child"])): ?><?php $i = 0;?><?php $__LIST__ = $nv["child"]?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$cv): ?><?php ++$i;?><?php $mod = ($i % 2 )?><dd><a href="<?php echo ($cv["url"]); ?>" target="<?php echo ($cv["target"]); ?>"><?php echo ($cv['navi_name']); ?></a></dd><?php endforeach; ?><?php endif; ?><?php else: echo "" ;?><?php endif; ?>
          </dl><?php endforeach; ?><?php endif; ?><?php else: echo "" ;?><?php endif; ?>
       </div>
-    <?php } ?>
-    <?php if(!$site_bottom_child_nav){ ?>
+    <?php } else if(!empty($site_bottom_nav)) { ?>
       <div class="foot foot1 clearfix">
          <?php if(is_array($site_bottom_nav)): ?><?php $i = 0;?><?php $__LIST__ = $site_bottom_nav?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$nv): ?><?php ++$i;?><?php $mod = ($i % 2 )?><dl>
             <dt><a href="<?php echo ($nv["url"]); ?>" target="<?php echo ($nv["target"]); ?>"><?php echo ($nv['navi_name']); ?></a></dt>
          </dl><?php endforeach; ?><?php endif; ?><?php else: echo "" ;?><?php endif; ?>
       </div>
     <?php } ?>
-    <!--  
     <p>
-      <span class="right">Powered By <a href="http://www.thinksns.com" title="������������������,���������������" target="_blank">ThinkSNS</a></span>
+      <span class="right">Powered By <a href="http://www.thinksns.com" title="开源微博系统,开源微社区" target="_blank">ThinkSNS</a></span>
       <?php echo ($GLOBALS["ts"]["site"]["site_footer"]); ?>
     </p>
-    -->
   </div>
 </div><!--footer end-->
 
 </div><!--page end-->
 <?php echo Addons::hook('public_footer');?>
-<!-- ������������-->
+<!-- 统计代码-->
 <div id="site_analytics_code" style="display:none;">
 <?php echo (base64_decode($site["site_analytics_code"])); ?>
 </div>

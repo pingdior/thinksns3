@@ -77,13 +77,11 @@ class AreaModel extends Model {
 			return $this->_MakeTree($pid);
 		}
 		// 全部地区树形结构
-		$list = array();
-		if(file_exists(CONF_PATH.'/city.php')) {
-			$list = unserialize(file_get_contents(CONF_PATH.'/city.php'));
-		} else {
+		$list = S('city');
+		if(empty($list)) {
 			set_time_limit(0);
 			$list = $this->_MakeTree($pid);
-			file_put_contents(CONF_PATH.'/city.php', serialize($list));
+			S('city', $list);
 		}
 	
 		return $list;
@@ -94,9 +92,7 @@ class AreaModel extends Model {
 	 * @return void
 	 */
 	public function remakeCityCache() {
-		if(file_exists(CONF_PATH.'/city.php')) {
-			unlink(CONF_PATH.'/city.php');
-		}
+		S('city', null);
 	}
 
 	/**

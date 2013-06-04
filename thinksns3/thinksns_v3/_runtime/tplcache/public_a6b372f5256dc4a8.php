@@ -1,5 +1,5 @@
-<?php if (!defined('THINK_PATH')) exit();?><div class="attention mb20 clearfix border-b" model-node="related_list">
-	<a href="javascript:;" event-node="change_related" event-args="uid=<?php echo ($uid); ?>&limit=<?php echo ($limit); ?>" id="changerelated" class="right">换一换</a><h3><?php echo ($title); ?></h3>
+<?php if (!defined('THINK_PATH')) exit();?><div class="right-box mb20 clearfix border-b" model-node="related_list">
+	<h3><a href="javascript:;" event-node="change_related" event-args="uid=<?php echo ($uid); ?>&limit=<?php echo ($limit); ?>" id="changerelated" class="right">换一换</a><?php echo ($title); ?></h3>
     <?php if(is_array($user)): ?><?php $i = 0;?><?php $__LIST__ = $user?><?php if( count($__LIST__)==0 ) : echo "" ; ?><?php else: ?><?php foreach($__LIST__ as $key=>$vo): ?><?php ++$i;?><?php $mod = ($i % 2 )?><dl model-node="related_dl">
     		<dt><a event-node="face_card" uid="<?php echo ($vo[userInfo]['uid']); ?>" href="<?php echo ($vo["userInfo"]["space_url"]); ?>" class="face"><img src="<?php echo ($vo["userInfo"]["avatar_small"]); ?>" width="50" height="50"/></a></dt>
             <dd>
@@ -44,7 +44,7 @@ M.addEventFns({
             var args = M.getEventArgs(this);
             var _model = M.getModels('related_list');
             $.post(U('widget/RelatedUser/changeRelate'), {uid:args.uid, limit:args.limit}, function(data) {
-                var html = '<a href="javascript:;" event-node="change_related" event-args="uid=<?php echo ($uid); ?>&limit=<?php echo ($limit); ?>" class="right">换一换</a><h3><?php echo ($title); ?></h3>';
+                var html = '<h3><a href="javascript:;" event-node="change_related" event-args="uid=<?php echo ($uid); ?>&limit=<?php echo ($limit); ?>" class="right">换一换</a><?php echo ($title); ?></h3>';
                 html += data;
                 $(_model).html(html);
                 M($(_model)[0]);

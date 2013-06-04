@@ -146,7 +146,7 @@ class WeiboSynHooks extends Hooks{
 			$temp[] = h($value);
 		}
 		$data['publish'] = $temp;
-		$res = model('AddonData')->lput('login', $data);
+		$_POST && $res = model('AddonData')->lput('login', $data);
 		return $res;
 	}
 }

@@ -32,15 +32,29 @@ class FeedListWidget extends Widget {
         $var['weibo_premission'] = $weiboSet['weibo_premission'];
         // 我关注的频道
         $var['channel'] = M('channel_follow')->where('uid='.$this->mid)->count();
-        
+ 
+        // 查询是否有话题ID
+        if($var['topic_id']) {
+        	$content = $this->getTopicData($var,'_FeedList.html');
+        } else {
+        	$content = $this->getData($var,'_FeedList.html');
+        }
+        // 查看是否有更多数据
+        if(empty($content['html'])) {
+        	// 没有更多的
+        	$var['list'] = L('PUBLIC_WEIBOISNOTNEW');
+        } else {
+        	$var['list'] = $content['html'];
+        	$var['lastId'] = $content['lastId'];
+        	$var['firstId'] = $content['firstId'] ? $content['firstId'] : 0;
+        	$var['pageHtml']	= $content['pageHtml'];
+        }
 	    $content['html'] = $this->renderFile(dirname(__FILE__)."/".$var['tpl'], $var); 
-
 		self::$rand ++;
 		unset($var, $data);
         //输出数据
 		return $content['html'];
     }
-
     /**
      * 显示更多微博
      * @return  array 更多微博信息、状态和提示
@@ -134,7 +148,6 @@ class FeedListWidget extends Widget {
     						$where .=" AND a.type = '".t($var['feed_type'])."'";
     					}
     				}
-
     				$list =  model('Feed')->getFollowingFeed($where,$this->limitnums,'',$var['fgid']);
     			}
     			break;
@@ -199,25 +212,6 @@ class FeedListWidget extends Widget {
 
                 $list = D('ChannelFollow', 'channel')->getFollowingFeed($where, $this->limitnums, '' ,$var['fgid']);
                 break;
-            case 'group'://所有的 --正在发生的
-                if(!empty($var['feed_key'])){
-                    //关键字匹配 采用搜索引擎兼容函数搜索 后期可能会扩展为搜索引擎
-                    $list = D('GroupWeibo','group')->searchFeed($var['feed_key'],'all',$var['loadId'],$this->limitnums);
-                }else{
-                    $where =' (is_audit=1 OR is_audit=0 AND uid='.$GLOBALS['ts']['mid'].') AND is_del=0 AND gid='.$var['gid'];
-                    if($var['loadId'] > 0){ //非第一次
-                        $where .=" AND feed_id < '".intval($var['loadId'])."'";
-                    }
-                    if(!empty($var['feed_type'])){
-                        if ( $var['feed_type'] == 'post' ){
-                            $where .=" AND is_repost = 0";
-                        } else {
-                            $where .=" AND type = '".t($var['feed_type'])."'";
-                        }
-                    }
-                    $list = D('GroupWeibo','group')->getList($where,$this->limitnums);
-                }
-                break;
     	}
     	// 分页的设置
         isset($list['html']) && $var['html'] = $list['html'];
@@ -225,6 +219,11 @@ class FeedListWidget extends Widget {
     		$content['firstId'] = $var['firstId'] = $list['data'][0]['feed_id'];
     		$content['lastId'] = $var['lastId'] = $list['data'][(count($list['data'])-1)]['feed_id'];
             $var['data'] = $list['data'];
+
+            //赞功能
+            $feed_ids = getSubByKey($var['data'],'feed_id');
+            $var['diggArr'] = model('FeedDigg')->checkIsDigg($feed_ids, $GLOBALS['ts']['mid']);
+            
             $uids = array();
             foreach($var['data'] as &$v) {
             	switch ( $v['app'] ){
@@ -292,6 +291,11 @@ class FeedListWidget extends Widget {
             $content['firstId'] = $var['firstId'] = $list['data'][0]['feed_id'];
             $content['lastId']  = $var['lastId'] = $list['data'][(count($list['data'])-1)]['feed_id'];
             $var['data'] = $list['data'];
+            
+            //赞功能
+            $feed_ids = getSubByKey($var['data'],'feed_id');
+            $var['diggArr'] = model('FeedDigg')->checkIsDigg($feed_ids, $GLOBALS['ts']['mid']);
+            
             $uids = array();
             foreach($var['data'] as &$v){
             	switch ( $v['app'] ){

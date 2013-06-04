@@ -13,22 +13,23 @@
 		     		<?php echo Addons::hook('tipoff_send_box_tab');?>
 		     		<?php } ?>
 				<?php else: ?>
-				<a><?php echo ($title); ?></a>
+				<a><?php echo (getShort($title,32)); ?></a>
 				<?php endif; ?>
 				</span>
 		    </div> 
 			<div class="input" model-node="weibo_post_box">
 				<div class="input_before mb5" model-node="mini_editor" model-args="prompt=<?php echo ($prompt); ?>">
-					
-					<textarea id="inputor<?php echo ($time); ?>" name="at" class="input_tips" event-node="mini_editor_textarea" model-args='t=feed'><?php echo ($topicHtml); ?></textarea>
-					
+					<textarea id="inputor<?php echo ($time); ?>" name="at" class="input_tips" event-node="mini_editor_textarea" model-args='t=feed'><?php if(trim($topicHtml) != ''): ?><?php echo ($topicHtml); ?><?php endif; ?></textarea>
 					<div model-node="post_ok" style="display:none;text-align:center;position:absolute;left:0;top:10px;width:100%"><i class="ico-ok"></i><?php echo L('PUBLIC_SHARE_SUCCESS');?></div>
 				</div>
 				<div class="action clearfix" model-node='send_action'>
 					<div class="kind">
-					<div class="right release"><!--<span class="synchro">同步<i class="arrow-line-down"></i></span>--><?php echo Addons::hook('weibo_syn_middle_publish');?><a class="btn-grey-white" event-node='<?php echo ($post_event); ?>' event-args='type=<?php echo ($type); ?>&app_name=<?php echo ($app_name); ?>&topicHtml=<?php echo ($initHtml); ?>' href="javascript:;"><span>发布</span></a></div>
-					<div class="acts">
+					
+					<div class="right release"><?php echo Addons::hook('weibo_syn_middle_publish');?>
+						<a class="btn-grey-white" event-node='<?php echo ($post_event); ?>' event-args='type=<?php echo ($type); ?>&app_name=<?php echo ($app_name); ?>&topicHtml=<?php echo ($initHtml); ?>' href="javascript:;"><span>发布</span></a>
+					</div>
 
+					<div class="acts">
 						<?php if(($actions["face"])  ==  "true"): ?><?php if(in_array('face',$weibo_type)): ?>
 					    <a event-node="insert_face" class="face-block" href="javascript:;"><i class="face"></i>表情</a>
 						<?php endif; ?><?php endif; ?>
@@ -67,6 +68,7 @@
 					    <a event-node="insert_contribute" class="contribute-block" href="javascript:;"><i class="contribute"></i>投稿</a>
 					    <input type="hidden" autocomplete="off" value="" id="contribute" />
 					    <?php endif; ?><?php endif; ?>
+						<?php echo Addons::hook('home_index_middle_publish_type',array('position'=>'index'));?>
 					</div>	
 					<div class="clear"></div>
 		            <div model-node ='faceDiv'></div>

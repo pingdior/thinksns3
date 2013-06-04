@@ -11,12 +11,7 @@
                 <include file="_sidebar"/>
                     <div id="col5" class="st-index-main">
                         <div class="extend-foot">
-                            <div class="tab-menu clearfix">                        
-                                <ul>
-                                  <li class="current"><span><a href="{:U('public/Profile/index',array('type'=>$type,'feed_type'=>'','uid'=>$uid))}">微博</a></span></li>
-                                  <!--<php>if($mid==$uid || CheckPermission('core_normal','read_data')){</php><li><span><a href="{:U('public/Profile/data',array('uid'=>$uid))}">资料</a></span></li><php>}</php>-->
-                                </ul>
-                            </div>
+                            <include file="_tab_menu"/>  
                             <div class="mod-feed-tab">
                                 <ul class="inner-feed-nav">
                                     <li <eq name='feed_type' value=''>class="current"</eq>><a href="{:U('public/Profile/index',array('type'=>$type,'feed_type'=>'','feed_key'=>$feed_key,'uid'=>$uid))}">全部</a></li>
@@ -38,6 +33,8 @@
                                 </span>
                             </div>
                             <!--feed list-->
+                            <!-- 查看他人微博  用于伪静态 FeedList中靠$_REQUEST中的uid取得用户信息 没有$_REQUEST取自己 -->
+                            <php>$_REQUEST['uid'] = $uid;</php>
                             {:W('FeedList',array('type'=>'space','feedApp'=>t($_GET['feedApp']),'feed_type'=>$feed_type,'feed_key'=>$feed_key,'loadnew'=>0))}
                         </div>
                     </div>

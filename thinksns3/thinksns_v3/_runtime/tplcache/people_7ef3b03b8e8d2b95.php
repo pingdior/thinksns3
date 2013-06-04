@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit();?><div class="select-type-list clearfix">
+<?php if (!defined('THINK_PATH')) exit();?><div class="mod-user clearfix">
 	<?php if(empty($userList['data'])): ?>
 	<p>暂时没有相关用户</p>
 	<?php else: ?>

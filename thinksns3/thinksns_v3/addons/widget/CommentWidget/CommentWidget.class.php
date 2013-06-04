@@ -155,9 +155,10 @@ class CommentWidget extends Widget
                 $isExist = M(ucfirst($data['table']),'develop')->where($map)->count();
                 break;
             default:
-                $map[$data['table'].'_id'] = $data['row_id'];
+/*                 $map[$data['table'].'_id'] = $data['row_id'];
                 $map['is_del'] = 0;
-                $isExist = model(ucfirst($data['table']))->where($map)->count();
+                $isExist = model(ucfirst($data['table']))->where($map)->count(); */
+                $isExist = 1;
                 break;
         }
         
@@ -207,7 +208,7 @@ class CommentWidget extends Widget
     			// 根据评论的对象获取原来的内容
     			$s['sid'] = $oldInfo['source_id'];
     			$s['app_name'] = $oldInfo['app'];
-                if($commentInfo['feedType'] == 'post' || $commentInfo['feedType'] == 'postimage' || $commentInfo['feedType'] == 'postfile' || $commentInfo['feedType'] == 'weiba_post') {   //加入微吧类型，2012/11/15
+                if($commentInfo['feedType'] == 'post' || $commentInfo['feedType'] == 'postimage' || $commentInfo['feedType'] == 'postfile' || $commentInfo['feedType'] == 'postfile' || $commentInfo['feedType'] == 'weiba_post') {   //加入微吧类型，2012/11/15
                     if(empty($data['to_comment_id'])) {
                         $s['body'] = $data['content'];
                     } else {
@@ -238,6 +239,7 @@ class CommentWidget extends Widget
                     $lessUids[] = $oldInfo['uid'];
                 }
     			model('Share')->shareFeed($s,'comment', $lessUids);
+    			model('Credit')->setUserCredit($this->mid,'forwarded_weibo');
     		} else {
                 //是否评论给原来作者
                 if($data['comment_old'] != 0) {

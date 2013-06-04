@@ -114,15 +114,20 @@ function getClientIp() {
 		$ip = $_SERVER ['REMOTE_ADDR'];
 	else
 		$ip = "unknown";
-	return ($ip);
+	return addslashes($ip);
 }
 // 过滤非法html标签
 function t($text) {
-	//过滤标签
-	$text	=	nl2br($text);
-	$text	=	htmlspecialchars_decode($text);
-	$text	=	strip_tags($text);
-	return $text;
+    //过滤标签
+    $text = nl2br($text);
+    $text = real_strip_tags($text);
+    $text = addslashes($text);
+    $text = trim($text);
+    return addslashes($text);
+}
+function real_strip_tags($str, $allowable_tags="") {
+    $str = stripslashes(htmlspecialchars_decode($str));
+    return strip_tags($str, $allowable_tags);
 }
 // 获取用户浏览器型号。新加浏览器，修改代码，增加特征字符串.把IE加到12.0 可以使用5-10年了.
 function getBrower(){
@@ -165,7 +170,7 @@ function getBrower(){
 	} else {  
 	    $browser = 'other';  
 	}
-	return $browser;
+	return addslashes($browser);
 }
 // 浏览器友好的变量输出
 function dump($var) {
@@ -230,7 +235,7 @@ function cookie($name,$value='',$option=null)
             $expire = !empty($config['expire'])? time()+ intval($config['expire']):0;
             //setcookie($name,serialize($value),$expire,$config['path'],$config['domain']);
            
-            setcookie($name,($value),$expire,$config['path'],$config['domain']);
+            setcookie($name,($value),$expire,$config['path'],$config['domain'],false,true);
 
             //$_COOKIE[$name] = ($value);
         }

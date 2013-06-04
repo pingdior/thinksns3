@@ -1,12 +1,12 @@
 <?php if (!defined('THINK_PATH')) exit();?><div class="<?php if($ischeck){ ?>sign-in-h<?php }else{ ?>sign-in<?php } ?>" id="checkdiv">
-	<span class="date"><?php echo ($day); ?></span>
-	<span class="week"><?php echo ($week); ?></span>
-	<span class="day">DAYS</span>
-	<span class="num" id="con_num_day"><?php echo ($con_num); ?></span>
+	<span class="datetime"><em class="date"><?php echo ($day); ?></em>
+	<em class="week"><?php echo ($week); ?></em></span>
+	<em class="day">DAYS</em>
+	<em class="num" id="con_num_day"><?php echo ($con_num); ?></em>
 <?php if($ischeck){ ?>
-<span id="checkin" class="btn-sign-h">已签到</span>
+<em id="checkin" class="btn-sign-h">已签到</em>
 <?php }else{ ?>
-<span href="javascript:void(0)" id="checkin" onclick="checkin()" class="btn-sign">签到</span>
+<em href="javascript:void(0)" id="checkin" onclick="checkin()" class="btn-sign">签到</em>
 <?php } ?>
    <div class="sign-wrap" style="display:none" id="checkdetail">
       <i class="arrow-y"></i>

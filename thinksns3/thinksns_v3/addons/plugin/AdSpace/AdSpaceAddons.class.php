@@ -32,14 +32,11 @@ class AdSpaceAddons extends NormalAddons
 	{
 		$menu = array();
 		$menu['config'] = '广告位管理';
+		$menu['addAdSpace'] = '添加广告位';
 		$page = isset($_GET['page']) ? t($_GET['page']) : 'addAdSpace';
-		switch($page) {
-			case 'addAdSpace':
-				$menu['addAdSpace'] = '添加广告位';
-				break;
-			case 'editAdSpace':
-				$menu['editAdSpace'] = array('content'=>'编辑广告位','param'=>array('id'=>intval($_GET['id'])));
-				break;
+		if ($page === 'editAdSpace') {
+			unset($menu['addAdSpace']);
+			$menu['editAdSpace'] = array('content'=>'编辑广告位','param'=>array('id'=>intval($_GET['id'])));
 		}
 
 		return $menu;
@@ -58,7 +55,7 @@ class AdSpaceAddons extends NormalAddons
 	{
 		// 插入数据表
 		$dbPrefix = C('DB_PREFIX');
-		$sql = "CREATE TABLE `ts_ad` (
+		$sql = "CREATE TABLE `{$dbPrefix}ad` (
 				  `ad_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '广告ID，主键',
 				  `title` varchar(255) DEFAULT NULL COMMENT '广告标题',
 				  `place` tinyint(1) NOT NULL DEFAULT '0' COMMENT '广告位置：0-中部；1-头部；2-左下；3-右下；4-底部；5-右上；',
@@ -72,7 +69,6 @@ class AdSpaceAddons extends NormalAddons
 				  PRIMARY KEY (`ad_id`)
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='广告位表';";
 		D()->execute($sql);
-
 		return true;
 	}
 
@@ -84,9 +80,8 @@ class AdSpaceAddons extends NormalAddons
 	{
 		// 卸载数据表
 		$dbPrefix = C('DB_PREFIX');
-		$sql = 'DROP TABLE IF EXISTS `'.$dbPrefix.'ad`;';
+		$sql = "DROP TABLE IF EXISTS `{$dbPrefix}ad`;";
 		D()->execute($sql);
-
 		return true;
 	}
 }

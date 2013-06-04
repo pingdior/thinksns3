@@ -1,24 +1,24 @@
-ï»¿#
-# ThinkSNS å®‰è£…è¯´æ˜Ž.txt
-#
+ÓÉÓÚ5.10Ìá¹©µÄÉý¼¶°üÓÐÎÊÌâ£¬Òò´Ë±¾Éý¼¶°üÊÇ´Ó4.12°æ±¾Éý¼¶µ½6.3°æ±¾µÄÉý¼¶£¬¸ÃÉý¼¶°üÍ¬ÑùÊÊÓÃÓÚ5ÔÂ·ÝÉý¼¶¹ý¡¢´ò¹ý²¹¶¡°ü»òÕß°²×°5.10ºÍ5.23È«ÐÂ°²×°°üµÄÍ¬Ñ§¡£
 
-+ å¸¸ç”¨è·¯å¾„
-  - å®‰è£…è·¯å¾„: http://yoursite/install
-  - å‰å°ç™»å½•: http://yoursite
-  - åŽå°ç™»å½•: http://yoursite/index.php?app=admin
+×¢£ºÉý¼¶°üÒÑ¾­¿ÉÒÔÔÚºóÌ¨ÔÚÏßÉý¼¶£¬µ«Èç¹ûÄãµÄÄ¿Ç°°æ±¾ÊÇ4.12ÈÕÇ°µÄ£¬ÇëÏÈÊÖ¹¤Éý¼¶µ½4.12°æ±¾£¬»òÕßÈç¹ûÄãµÄÏµÍ³±»¶þ´Î¿ª·¢¹ý£¬Îñ±ØÒªÊ¹ÓÃÊÖ¹¤Éý¼¶£¬ºóÌ¨×Ô¶¯Éý¼¶²»ÄÜÊ¹ÓÃ£¬·ñÔò»á¸²¸ÇÄãÐÞ¸Ä¹ýµÄÎÄ¼þ¡£Èç¹ûºóÌ¨ÔÚÏßÉý¼¶²»³É¹¦µÄÍ¬Ñ§£¬Ò²ÐèÒª°´ÒÔÏÂ·½·¨ÊÖ¹¤Éý¼¶.
 
-+ å…¶ä»–è¯´æ˜Ž
-  - å¦‚æžœå®‰è£…åŽé‡åˆ°æ•°æ®åº“é“¾æŽ¥é”™è¯¯ã€é¡µé¢æç¤º_NO_DB_CONFIG_å¯ä»¥æ‰§è¡Œ /cleancache.php
-  - å®‰è£…å®ŒæˆåŽï¼Œè¯·åˆ°åŽå°å…¨å±€é…ç½®ä¸­ï¼Œå¯¹ç½‘ç«™logoã€ç™»å½•é¡µå›¾ç‰‡è¿›è¡Œé…ç½®ç®¡ç†
-  - å¼€å¯ä¼ªé™æ€å’Œä¸ªæ€§åŒ–åŸŸå:  å‚è§"å¼€å¯URLä¼ªé™æ€çš„æ–¹æ³•.txt"
+Ò»¡¢ÊÖ¹¤Éý¼¶·½·¨
+1¡¢±¸·ÝÕûÕ¾´úÂëµ½±¾µØ£¬È»ºó°ÑÊý¾Ý¿âÒ²±¸·Ý³ÉSQLÎÄ¼þ£¬ÇÐ¼ÇÒªÓÐÕâÒ»²½£¬Èç¹ûÉý¼¶Ê§°Ü¿ÉÒÔÓÃ±¸·Ý»Ö¸´ÍøÕ¾
+2¡¢ÏÂÔØÉý¼¶°ü£ºhttp://up.thinksns.com/v3/thinksns_d2013060309_v24017.zip
+3¡¢ÔÚÄãµÄµçÄÔÉÏ½âÑ¹Éý¼¶°ü
+4¡¢Èç¹ûÄãµÄÊý¾Ý¿âµÄ±íÇ°×º²»ÊÇts_£¬Çë´ò¿ª¸ùÄ¿Â¼ÏÂµÄupdateDB.sqlÎÄ¼þ£¬°ÑÀïÃæµÄts_×Ö·ûÈ«²¿Ìæ»»³ÉÄãµÄÇ°×º£¬Èç¹ûÄãµÄÊý¾Ý±íÇ°×ºÊÇts_,ºöÂÔ´Ë²½¡£
+²»ÖªµÀ×Ô¼ºÍøÕ¾Êý¾Ý¿âµÄ±íÇ°×ºµÄÍ¬Ñ§¿ÉÒÔ¿´ÏÂÄãµÄÍøÕ¾Ä¿Â¼config/config.inc.phpÎÄ¼þÀïµÄDB_PREFIXµÄÖµ
+5¡¢¸üÐÂÊý¾Ý¿â£ºÖ´ÐÐupdateDB.sqlÀïµÄsqlÓï¾ä¸üÐÂÊý¾Ý¿â£¬Ö´ÐÐ¹ý³ÌÈç¹ûÓÐ±¨´íÐèÒªºöÂÔ´íÎóÖ´ÐÐÍêËùÓÐµÄSQLÓï¾ä¡£
+½¨Òé´ÓupdateDB.sqlÀïÒ»ÌõÒ»ÌõµØ¸´ÖÆSQLÓï¾äÖ´ÐÐ£¬ÕâÑù×î±£ÏÕ¡£
+5¡¢ÏÂÔØ²¢½âÑ¹µÃµ½¸üÐÂ¼ÇÂ¼ÎÄ¼þ£¨versions.php£©·Åµ½Éý¼¶°üµÄdata/updateÄ¿Â¼ÏÂ: http://up.thinksns.com/v3/versions_2013060311.zip
+6¡¢°ÑÉý¼¶°üÀïµÄÎÄ¼þÈ«²¿ÉÏ´«µ½ÄãµÄÍøÕ¾¸²¸ÇÔ­ÎÄ¼þ£¬Èç¹ûÊÇFTPÉÏ´«£¬½¨ÒéÓÃ¶þ½øÖÆ·½Ê½ÉÏ´«¡£
+7¡¢Èç¹ûÄãµÄ·þÎñÆ÷ÊÇlinux»òÕßÊÇÆäËüÐèÒªÅäÖÃÎÄ¼þÈ¨ÏÞ²ÅÓÐ¿ÉÐ´È¨ÏÞµÄ·þÎñÆ÷£¬ÉÏ´«ÍêÎÄ¼þºóÐèÒªÖØÐÂÉèÖÃÏÂÍøÕ¾Ä¿Â¼ºÍÎÄ¼þµÄÈ¨ÏÞ£¬·ÀÖ¹¸üÐÂÎÄ¼þºóµ¼ÖÂÎÄ¼þÈ¨ÏÞ±ä»¯¡£
+8¡¢Çå¿Õ»º´æ
+9¡¢½øÈëºóÌ¨£ºÏµÍ³--Õ¾µãÅäÖÃ ÀïÐÞ¸ÄJS°æ±¾Îª£º2013060311£¨Ò²¿ÉÒÔÊÇÆäËüÖµ£¬Ö»ÒªºÍÔ­À´µÄÖµ²»Ò»Ñù¾ÍÐÐ£©
+10¡¢ÔÙ´ÎÇå¿ÕÏÂ»º´æ¼´¿ÉÍê³ÉÉý¼¶
 
-+ æ³¨æ„äº‹é¡¹
-  - PHPéœ€è¦å¼€å¯mysql, gd, curl, mbstringæ”¯æŒ
-  - _runtimeã€dataã€configã€installç›®å½•éœ€è¦å¯å†™æƒé™(777)
-  - å‡çº§ç”¨æˆ·ï¼Œè¯·çœ‹å‡çº§è¯´æ˜Žï¼ˆæ³¨æ„å‡çº§å‰åšå¥½å¤‡ä»½ï¼‰
-
-+ ThinkSNS V3 å®‰è£…ã€å‡çº§è¯´æ˜Ž
-  http://demo.thinksns.com/t3/index.php?app=weiba&mod=Index&act=postDetail&post_id=640#
-
-+ ThinkSNS V3 å¸¸è§é—®é¢˜è§£ç­”
-  http://demo.thinksns.com/t3/index.php?app=weiba&mod=Index&act=postDetail&post_id=641
+¶þ¡¢Ê§°Ü»ØÍËµÄ·½·¨
+Èç¹ûÉý¼¶Ê§°Ü£¬¿ÉÒÔ°´ÏÂÃæµÄ²½Öè»Ö¸´ÍøÕ¾
+1¡¢°Ñ±¸·ÝµÄÎÄ¼þÖØÐÂ¸²¸Ç»ØÈ¥£¬²¢È·ÈÏÏÂÎÄ¼þµÄÈ¨ÏÞÊÇ·ñÕýÈ·£¬ÈçÓÐ±ä»¯ÖØÐÂÅäÖÃÏÂ¼´¿É
+2¡¢°Ñ±¸·ÝµÄÊý¾Ý¿âSQLÓï¾äÔÚÊý¾Ý¿âÀïÖ´ÐÐÏÂ£¬ÒÔ»Ö¸´Êý¾Ý¿âµÄ½á¹¹ºÍÊý¾Ý
+3¡¢Çå¿ÕÎÄ¼þ»º´æ

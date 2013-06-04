@@ -15,20 +15,38 @@ class MentionAction extends Action {
 		$this->assign('unread_atme_count',model('UserData')->where('uid='.$this->mid." and `key`='unread_atme'")->getField('value'));
 		// 拼装查询条件
 		$map['uid'] = $this->mid;
-		// !empty($_GET['t']) && $map['table'] = t($_GET['t']);
-		if(!empty($_GET['t'])) {
-			$table = t($_GET['t']);
-			switch($table) {
-				case 'feed':
-					$map['app'] = 'Public';
-					break;
+
+		$d['tab'] = model('Atme')->getTab(null);
+		foreach ($d['tab'] as $key=>$vo){
+			if($key=='feed'){
+				$d['tabHash']['feed'] = L('PUBLIC_WEIBO');
+			}elseif($key=='comment'){
+				$d['tabHash']['comment'] = L('PUBLIC_STREAM_COMMENT');
+			}else{
+				$langKey = 'PUBLIC_APPNAME_' . strtoupper ( $key );
+				$lang = L($langKey);
+				if($lang==$langKey){
+					$d['tabHash'][$key] = ucfirst ( $key );
+				}else{
+					$d['tabHash'][$key] = $lang;
+				}
 			}
 		}
+		$this->assign($d);
+				
+		!empty($_GET['t']) && $map['table'] = t($_GET['t']);
+
 		// 设置应用名称与表名称
 		$app_name = isset($_GET['app_name']) ? t($_GET['app_name']) : 'public';
 		// $app_table = isset($_GET['app_table']) ? t($_GET['app_table']) : '';
 		// 获取@Me微博列表
 		$at_list = model('Atme')->setAppName($app_name)->setAppTable($app_table)->getAtmeList($map);
+
+		// 赞功能
+		$feed_ids = getSubByKey ( $at_list ['data'], 'feed_id' );
+		$diggArr = model ( 'FeedDigg' )->checkIsDigg ( $feed_ids, $GLOBALS ['ts'] ['mid'] );
+		$this->assign ( 'diggArr', $diggArr );
+				
 		// dump($at_list);exit;
 		// 添加Widget参数数据
 		foreach($at_list['data'] as &$val) {

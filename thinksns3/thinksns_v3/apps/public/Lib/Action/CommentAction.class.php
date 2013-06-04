@@ -25,12 +25,21 @@ class CommentAction extends Action {
 			// 收到的
 			$map['_string'] = " (to_uid = '{$this->uid}' OR app_uid = '{$this->uid}') AND uid !=".$this->uid;
 		}
-		// 类型描述术语 TODO:放到统一表里面
-		$d['tabHash'] = array(
-							'feed'	=> L('PUBLIC_WEIBO')			// 微博
-						);
 
-		$d['tab'] = model('Comment')->getTab($map);	 
+		$d['tab'] = model('Comment')->getTab($map);
+		foreach ($d['tab'] as $key=>$vo){
+			if($key=='feed'){
+				$d['tabHash']['feed'] = L('PUBLIC_WEIBO');
+			}else{
+				$langKey = 'PUBLIC_APPNAME_' . strtoupper ( $key );
+				$lang = L($langKey);
+				if($lang==$langKey){
+					$d['tabHash'][$key] = ucfirst ( $key );
+				}else{
+					$d['tabHash'][$key] = $lang;
+				}
+			}
+		}
 		$this->assign($d);	
 
 		// 安全过滤
@@ -44,7 +53,7 @@ class CommentAction extends Action {
 		}
 		model('UserCount')->resetUserCount($this->mid, 'unread_comment',  0);
 		$this->assign('list', $list);
-		//dump($list);exit;
+		// dump($list);exit;
 		$this->setTitle($keyword.'的评论');					// 我的评论
 		$userInfo = model('User')->getUserInfo($this->mid);
 		$this->setKeywords($userInfo['uname'].$keyword.'的评论');

@@ -38,11 +38,12 @@ function gonext(type,level){
 <div id="page-wrap">
 	   <div id="main-wrap">
           <div class="boxShadow">
-	   	   	 <div class="find-type clearfix">
+              <div class="find-type">
 	   	   	   	   <div class="app-title clearfix">
-                       <a href="{:U('public/Medal/index')}" class="right">查看我的勋章</a>
-                       <h4 class="left"><img src="__APP__/image/ico-app-task.png" />任务</h4>
-                       <div class="app-tab-menu" style="margin:0 0 0 110px;">
+                       <a href="{:U('public/Medal/index')}" class="right">查看我的勋章</a> 
+                       <h4 class="left"><img src="__APP__/image/ico-app-account.png" />&nbsp;&nbsp;任务</h4>                     
+                       <div class="app-tab-menu clearfix" style="margin:0 0  0 130px;">
+                           
                            <ul>
                              <li><a href="{:U('public/Task/index' , array('type'=>2))}" <php>if($task_type==2){</php>class="current"<php>}</php>>主线任务<eq name="task_type" value="2"><span class="triangle"></span></eq></a><i class="line"></i></li>
                              <li><a href="{:U('public/Task/index' , array('type'=>1))}" <php>if($task_type==1){</php>class="current"<php>}</php>>每日任务<eq name="task_type" value="1"><span class="triangle"></span></eq></a><i class="line"></i></li>
@@ -50,7 +51,7 @@ function gonext(type,level){
                            </ul>
                        </div>
                    </div>
-            </div>
+                </div>
 	   	   	<div id="col" class="extend clearfix">
                 <php>if($task_type==2){</php>
                 <div class="task-stage">

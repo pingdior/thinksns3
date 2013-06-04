@@ -539,6 +539,9 @@ var ui = {
 	reply: function(comment_id) {
 		this.box.load(U('public/Comment/reply')+'&comment_id='+comment_id,L('PUBLIC_RESAVE'),function (){$('#at-view').hide();});
 	},
+	groupreply: function(comment_id,gid) {
+		this.box.load(U('group/Group/reply')+'&gid='+gid+'&comment_id='+comment_id,L('PUBLIC_RESAVE'),function (){$('#at-view').hide();});
+	},
 	/**
 	 * 选择部门弹窗API - 暂不使用
 	 */

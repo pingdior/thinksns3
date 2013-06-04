@@ -65,11 +65,71 @@ function showTree($data,$field,$func,$p=''){
 	return $html;
 }
 
-function formatsize($fileSize) {
+function admin_formatsize($fileSize) {
 	$size = sprintf("%u", $fileSize);
 	if($size == 0) {
 		return("0 Bytes");
 	}
 	$sizename = array(" Bytes", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB");
 	return round($size/pow(1024, ($i = floor(log($size, 1024)))), 2) . $sizename[$i];
+}
+
+//递归取给定的目录的文件MD5列表
+function _makeMd5FileToArray($dir, $res=array()) {
+	if (is_dir ( $dir )) {
+		if ($dh = opendir ( $dir )) {
+			$path = str_replace ( SITE_PATH.'/', '', $dir );
+			while ( ($file = readdir ( $dh )) !== false ) {
+				if ($file == '.' or $file == '..' or $file == '.svn') {
+					continue;
+				}
+
+				if (is_dir ( $dir . $file )) {
+					$res = _makeMd5FileToArray ( $dir . $file . '/', $res );
+				} else {
+					$res[$path.$file] = md5_file ( $dir . $file );
+				}
+			}
+		}
+		closedir ( $dh );
+	}
+	return $res;
+}
+/**
+ *把给定的目录生成一个文件MD5列表
+ *
+ * @param array|string $dir 目录路径
+ * @param string $type 类型：core 核心 app 应用 plug 插件 theme 模板
+ * @param string $name 包名
+ * @return null
+ */
+function makeMd5File($dir, $type, $name){
+	if(!is_array($dir)){
+		$dir = array($dir);
+	}
+	
+	$arr = array();
+	foreach ($dir as $path){
+		$path = SITE_PATH . '/'.$path.'/';
+		$res = _makeMd5FileToArray ( $path );
+		$arr = array_merge($arr, $res);
+	}
+
+	return F('md5FileInfo_'.$type.'_'.$name, $arr, DATA_PATH.'/update');
+}
+
+// 获取图片地址 - 兼容云
+function getImageUrlApp($file,$width='0',$height='auto',$cut=false,$replace=false){
+    $cloud = model('CloudImage');
+    if($cloud->isOpen()){
+        $imageUrl = $cloud->getImageUrl($file,$width,$height,$cut);
+    }else{
+        if($width>0){
+            $thumbInfo = getThumbImage($file,$width,$height,$cut,$replace);
+            $imageUrl = C('TS_UPDATE_SITE').'/data/upload/'.ltrim($thumbInfo['src'],'/');
+        }else{
+            $imageUrl = C('TS_UPDATE_SITE').'/data/upload/'.ltrim($file,'/');
+        }
+    }
+    return $imageUrl;
 }

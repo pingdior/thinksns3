@@ -12,7 +12,7 @@ class WeibaPostModel extends Model {
 							0 =>'post_id',1=>'weiba_id',2=>'post_uid',3=>'title',4=>'content',5=>'post_time',
 							6=>'reply_count',7=>'read_count',8=>'last_reply_uid',9=>'last_reply_time',10=>'digest',11=>'top',12=>'lock',
 							13=>'api_key',14=>'domain',15=>'province',16=>'city',17=>'area',18=>'reg_ip',
-							19=>'is_del',20=>'feed_id','_autoinc'=>true,'_pk'=>'post_id'
+							19=>'is_del',20=>'feed_id',21=>'reply_all_count','_autoinc'=>true,'_pk'=>'post_id'
 						);
 
 	/**

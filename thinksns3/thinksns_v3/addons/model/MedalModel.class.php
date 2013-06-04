@@ -12,7 +12,6 @@ class MedalModel extends Model{
 			foreach ( $list['data'] as &$v ){
 				$src = explode ( '|' , $v['src'] );
 				$v['src'] = getImageUrl( $src[1] );
-				
 				$smallsrc = explode ( '|' , $v['small_src'] );
 				$v['small_src'] = getImageUrl( $smallsrc[1] );
 			}

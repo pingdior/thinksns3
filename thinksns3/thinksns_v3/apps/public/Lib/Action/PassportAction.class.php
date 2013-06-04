@@ -13,7 +13,7 @@ class PassportAction extends Action
 	 * @return void
 	 */
 	protected function _initialize() {
-		$this->passport = D('Passport');
+		$this->passport = model('Passport');
 	}
 
 	/**
@@ -21,20 +21,23 @@ class PassportAction extends Action
 	 * @return void
 	 */
 	public function index() {
-		$this->display();
+		// 如果设置了登录前的默认应用
+		// U('welcome','',true);
+		// 如果没设置
+		$this->login();
 	}
 
 	/**
 	 * 默认登录页
 	 * @return void
 	 */
-	public function login()
-	{
+	public function login(){
 		// 添加样式
 		$this->appCssList[] = 'login.css';
-		if($GLOBALS['ts']['mid'] > 0){
+		if(model('Passport')->isLogged()){
 			U('public/Index/index','',true);
 		}
+
 		// 获取邮箱后缀
 		$registerConf = model('Xdata')->get('admin_Config:register');
 		$this->assign('emailSuffix', explode(',', $registerConf['email_suffix']));
@@ -50,7 +53,7 @@ class PassportAction extends Action
         
         $this->assign('login_bg', $login_bg);
         
-		$this->display();
+		$this->display('login');
 	}
 	
 	/**
@@ -72,16 +75,14 @@ class PassportAction extends Action
 		$remember	= intval($_POST['login_remember']);
 		
 		$result 	= $this->passport->loginLocal($login,$password,$remember);
-		
 		if(!$result){
 			$status = 0; 
 			$info	= $this->passport->getError();
-			$data 	= '';
+			$data 	= 0;
 		}else{
-			$status = 1; 
-			$info 	= L('PUBLIC_LOGIN_SUCCESS');
-			$data 	= $GLOBALS['ts']['site']['home_url'];
-			
+			$status = 1;
+			$info 	= $this->passport->getSuccess();
+			$data 	= ($GLOBALS['ts']['site']['home_url'])?$GLOBALS['ts']['site']['home_url']:0;
 		}
 		$this->ajaxReturn($data,$info,$status);
 	}	
@@ -92,7 +93,8 @@ class PassportAction extends Action
 	 */
 	public function logout() {
 		$this->passport->logoutLocal();
-		redirect(U('public/Passport/login'));
+		$this->assign('jumpUrl',U('public/Passport/login'));
+		$this->success('退出成功！');
 	}
 
 	/**
@@ -125,7 +127,6 @@ class PassportAction extends Action
 		}
 
 		$user =	model("User")->where('`email`="'.$_POST["email"].'"')->find();
-		
         if(!$user) {
         	$this->error('找不到该邮箱注册信息');
         } 
@@ -151,7 +152,7 @@ class PassportAction extends Action
 	        //添加新的修改密码code
 	        $add['uid'] = $user['uid'];
 	        $add['email'] = $user['email'];
-	        $add['cide'] = $code;
+	        $add['code'] = $code;
 	        $add['is_used'] = 0;
 	        $result = D('FindPassword')->add($add);
 	        if($result){
@@ -202,8 +203,8 @@ class PassportAction extends Action
 	 * @return void
 	 */
 	public function doResetPassword() {
-		$code = t($_GET['code']);
-		$user_info = $this->_checkResetPasswordCode($_POST['code']);
+		$code = t($_POST['code']);
+		$user_info = $this->_checkResetPasswordCode($code);
 
 		$password = trim($_POST['password']);
 		$repassword = trim($_POST['repassword']);
@@ -235,7 +236,7 @@ class PassportAction extends Action
 	private function _checkResetPasswordCode($code) {
 		$map['code'] = $code;
 		$map['is_used'] = 0;
-		$uid = D('find_password')->where("code='{$code}' and is_used=0")->getField('uid');
+		$uid = D('find_password')->where($map)->getField('uid');
 		if(!$uid){
 			$this->assign('jumpUrl',U('public/Passport/findPassword'));
 			$this->error('重置密码链接已失效，请重新找回');

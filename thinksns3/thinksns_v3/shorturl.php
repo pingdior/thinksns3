@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ERROR);	//设置错误级别
+error_reporting(0);	//设置错误级别
 define('SITE_PATH',dirname(__FILE__));
 
 //获取参数

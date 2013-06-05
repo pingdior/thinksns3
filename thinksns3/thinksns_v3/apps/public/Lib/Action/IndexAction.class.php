@@ -211,53 +211,107 @@ class IndexAction extends Action {
 	 */
 	public function loadRecommendPersons()
 	{
-	    $resultList = model('UserOfficial')->getUserOfficialList();
-	    // var_dump($resultList);
-	    // exit();
-	    return $resultList;	
-	}
-	
-	/**
-	 * 首页右侧最新用户数据装载
-	 * created by m@@
-	 */
-	public function loadRightData()
-	{
-		$i=0;
-		$j=0;
-		$playCount = 12; // 首页要呈现的最新用户个数
-		$result = array();
-		$flag = true;
-		while($flag)
+		$recDataList = model('UserOfficial')
+		->field('user_official_category_id,
+				official_id,uid')
+				->findAll();
+		$recTotal = array();
+		if(count($recDataList)>0)
 		{
-			$uidList = D('User')->field('uid')
-			->order('ctime desc')
-			->limit($i.','.$playCount)
-			->select();
-			//var_dump($uidList);
-            //echo '-------------';
-			if($uidList==null) break;
-			foreach($uidList as $u)
+			$count = count($recDataList);
+			$count_2 = 0; // 合作机构个数至多8个，user_official_category_id = 2
+			$recOg =array();
+			$count_3 = 0; // 乐DO红人个数至多8个，user_official_category_id = 3
+			$recHot = array();
+			for($i=$count-1;$i>=0;$i--)
 			{
-				$avatarArray = model('Avatar')->init($u['uid'])->getUserAvatar();
-				if(strpos($avatarArray['avatar_small'],self::$_IMAGELEXIT)>0){
-				//if(strstr('original',$avatarArray['avatar_small'])!=NULL){
-					$result[$j]['imageUrl']=$avatarArray['avatar_small'];
-					$result[$j]['uid']= $u['uid'];
-					$j++;
-					if($j==$playCount)
+				$avatarArray = model('Avatar')->init($recDataList[$i]['uid'])->getUserAvatar();
+				if(!strpos($avatarArray['avatar_small'],self::$_IMAGELEXIT)) continue;
+					
+					 
+					if($count_2<9 && $recDataList[$i]['user_official_category_id']==2)
 					{
-						$flag = false;
+						$userInfo = model ( 'User' )->getUserInfo ( $recDataList[$i]['uid'] );
+						$currentName = $userInfo ['uname'];
+	    	$recOg[$count_2]['imageUrl'] = $avatarArray['avatar_small'];
+	    	$recOg[$count_2]['user_official_category_id'] = $recDataList[$i]['user_official_category_id'];
+	    	$recOg[$count_2]['official_id'] = $recDataList[$i]['official_id'];
+	    	$recOg[$count_2]['uname'] = $currentName;
+	    	$recOg[$count_2]['uid'] = $recDataList[$i]['uid'];
+	    	$count_2++;
+					}
+					else if($count_3<9 && $recDataList[$i]['user_official_category_id']==3)
+					{
+						$userInfo = model ( 'User' )->getUserInfo ( $recDataList[$i]['uid'] );
+						$currentName = $userInfo ['uname'];
+	    	$recHot[$count_3]['imageUrl'] = $avatarArray['avatar_small'];
+	    	$recHot[$count_3]['user_official_category_id'] = $recDataList[$i]['user_official_category_id'];
+	    	$recHot[$count_3]['official_id'] = $recDataList[$i]['official_id'];
+	    	$recHot[$count_3]['uname'] = $currentName;
+	    	$recHot[$count_3]['uid'] = $recDataList[$i]['uid'];
+	    	$count_3++;
+					}
+					else if($count_2>8 && $count_3 >8 )
+					{
 						break;
 					}
 				}
+				if($count_2>0)
+				{
+					$recTotal['recOg']=$recOg;
+				}
+				if($count_3>0)
+				{
+					$recTotal['recHot']=$recHot;
+				}
 			}
-			$i=$i+$playCount;
+
+			//var_dump($recTotal);
+			//exit();
+			return $recTotal;
 		}
-		//var_dump($result);
-		//exit;
-		return $result;
-	}
+
+		/**
+		 * 首页右侧最新用户数据装载
+		 * created by m@@
+		 */
+		public function loadRightData()
+		{
+			$i=0;
+			$j=0;
+			$playCount = 12; // 首页要呈现的最新用户个数
+			$result = array();
+			$flag = true;
+			while($flag)
+			{
+				$uidList = D('User')->field('uid')
+				->order('ctime desc')
+				->limit($i.','.$playCount)
+				->select();
+				//var_dump($uidList);
+				//echo '-------------';
+				if($uidList==null) break;
+				foreach($uidList as $u)
+				{
+					$avatarArray = model('Avatar')->init($u['uid'])->getUserAvatar();
+					if(strpos($avatarArray['avatar_small'],self::$_IMAGELEXIT)>0){
+						//if(strstr('original',$avatarArray['avatar_small'])!=NULL){
+						$result[$j]['imageUrl']=$avatarArray['avatar_small'];
+						$result[$j]['uid']= $u['uid'];
+						$j++;
+						if($j==$playCount)
+						{
+							$flag = false;
+							break;
+						}
+					}
+				}
+				$i=$i+$playCount;
+			}
+			//var_dump($result);
+			//exit;
+			return $result;
+		}
 		/**
 		 * 首页左侧数据装载，按用户各个项目的推荐栏目，装载数据，固定顺序如下：活动、微吧、话题，项目可以为空，
 		 * 且推荐时间最新的放各个项目前头
@@ -303,9 +357,9 @@ class IndexAction extends Action {
 					$mapAttach['attach_id'] = array('in',$in_arr);
 					$resultCoverId = D('Attach')
 					->where($mapAttach)
-					->field('attach_id as eAttachId, save_path as eAttachPath, 
+					->field('attach_id as eAttachId, save_path as eAttachPath,
 							save_name as eAttachName')
-					->findAll();
+							->findAll();
 					$i=0;
 					foreach ($resultList as &$r)
 					{
@@ -338,7 +392,7 @@ class IndexAction extends Action {
 				}
 			}
 			$lengInPara=27;
-			$lengInTotal=54;	
+			$lengInTotal=54;
 			// 微吧
 			$weibaList = D('User')->table('ts_weiba_post weibaPost,ts_user eUser')
 			->where('weibaPost.recommend = 1 and weibaPost.post_uid = eUser.uid')
@@ -373,7 +427,7 @@ class IndexAction extends Action {
 				//var_dump($orderList);
 				//exit();
 			}
-			 
+
 			// 话题
 			$topicList = D('Topic')->table('ts_feed_topic as topic')
 			->where('topic.recommend = 1')
@@ -405,62 +459,25 @@ class IndexAction extends Action {
 			// 设置顺序数组
 			arsort($orderList);
 			$this->assign('orderList',$orderList);
-			
-            // 加载右侧数据
-            $newUserImages = $this->loadRightData();
-            if(count($newUserImages)>0)
-            {
-            	$this->assign("newUserImages",$newUserImages);
-            }
-            // 得到各推荐数据
-            $recommendList = $this->loadRecommendPersons();
-            if(count($recommendList)>0 && count($recommendList['data'])>0)
-            {
-            	$recDataList = $recommendList['data'];
-            	//var_dump($recDataList);
-            	//exit();
-            	$count = count($recDataList);
-            	$count_2 = 0; // 合作机构个数至多8个，user_official_category_id = 2
-            	$recOg =array();
-            	$count_3 = 0; // 乐DO红人个数至多8个，user_official_category_id = 3
-            	$recHot = array();
-            	for($i=$count-1;$i>=0;$i--)
-            	{
-            		if(!strpos($recDataList[$i]['avatar_small'],self::$_IMAGELEXIT)) continue;
-            		
-            		if($count_2<9 && $recDataList[$i]['user_official_category_id']==2)
-            		{
-            			$recOg[$count_2]['imageUrl'] = $recDataList[$i]['avatar_small']; 
-            			$recOg[$count_2]['user_official_category_id'] = $recDataList[$i]['user_official_category_id'];
-            			$recOg[$count_2]['official_id'] = $recDataList[$i]['official_id'];
-            			$recOg[$count_2]['uname'] = $recDataList[$i]['uname']; 
-            			$recOg[$count_2]['uid'] = $recDataList[$i]['uid'];
-            			$count_2++;
-            		}
-            		else if($count_3<9 && $recDataList[$i]['user_official_category_id']==3)
-            		{
-            			$recHot[$count_3]['imageUrl'] = $recDataList[$i]['avatar_small'];
-            			$recHot[$count_3]['user_official_category_id'] = $recDataList[$i]['user_official_category_id'];
-            			$recHot[$count_3]['official_id'] = $recDataList[$i]['official_id'];
-            			$recHot[$count_3]['uname'] = $recDataList[$i]['uname'];
-            			$recHot[$count_3]['uid'] = $recDataList[$i]['uid'];
-            			$count_3++;
-            		}
-            		else if($count_2>8 && $count_3 >8 )
-            		{
-            			break;
-            		}
-            	}
-            	if($count_2>0)
-            	{
-            		$this->assign('recOg',$recOg);
-            	}
-            	if($count_3>0)
-            	{
-            		$this->assign('recHot',$recHot);
-            	}
-            }
-			
+				
+			// 加载右侧数据
+			$newUserImages = $this->loadRightData();
+			if(count($newUserImages)>0)
+			{
+				$this->assign("newUserImages",$newUserImages);
+			}
+			// 得到各推荐数据
+			$recommendList = $this->loadRecommendPersons();
+			//var_dump($recommendList);
+			//exit();
+			if(count($recommendList['recHot'])>0)
+			{
+				$this->assign("recHot",$recommendList['recHot']);
+			}
+			if(count($recommendList['recOg'])>0)
+			{
+				$this->assign("recOg",$recommendList['recOg']);
+			}
 			$this->display();
 		}
 

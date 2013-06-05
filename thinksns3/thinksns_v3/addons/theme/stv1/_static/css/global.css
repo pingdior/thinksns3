@@ -69,7 +69,7 @@ a.font-orange:link, a.font-orange:visited{color:#f60}
 #col{margin:0 auto}
 #col1{width:118px;display:none;}
 #col2{width:220px}
-#col3{width:270px;}
+#col3{width:270px;top: 360px;left: 690px;position: absolute;}
 #col4{width:160px;}
 #col5{width:689px;}
 #col6{width:622px}
@@ -1668,7 +1668,11 @@ div.lineD_btm{
     margin-top:10px;
 	margin-bottom: 10px;
     left:0px;
-	font-size:12px;
+    width: 48px;
+    font-size:12px;
     position:relative;
 	text-align:center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }

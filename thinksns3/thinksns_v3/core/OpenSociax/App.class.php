@@ -11,13 +11,14 @@ class App
      * @access public
      * @return void
      */
-	static public function init() {
+    static public function init() {
         // 设定错误和异常处理
         set_error_handler(array('App','appError'));
         set_exception_handler(array('App','appException'));
-		// Session初始化
-        session_start(); 
-		// 时区检查
+        // Session初始化
+        if(!session_id())
+            session_start(); 
+        // 时区检查
         date_default_timezone_set('PRC');
         // 模版检查
     }
@@ -29,25 +30,38 @@ class App
      */
     static public function run() {
 
-		App::init();
+        App::init();
 
-		//API控制器
-		if(APP_NAME=='api'){
-			App::execApi();
+        //检查服务器是否开启了zlib拓展
+        //if(extension_loaded('zlib') && function_exists('ob_gzhandler')){
+            //ob_start('ob_gzhandler');
+        //}
 
-		//Widget控制器
-		}elseif(APP_NAME=='widget'){
-			App::execWidget();
+        //API控制器
+        if(APP_NAME=='api'){
+            App::execApi();
+
+        //Widget控制器
+        }elseif(APP_NAME=='widget'){
+            App::execWidget();
 
         //Plugin控制器
         }elseif(APP_NAME=='plugin'){
             App::execPlugin();
 
-		//APP控制器
-		}else{
-			App::execApp();
-		}
+        //APP控制器
+        }else{
+            App::execApp();
+        }
+        
+        if(C('LOG_RECORD')){
+            Log::save();
+        }
 
+        //输出buffer中的内容，即压缩后的css文件
+        //if(extension_loaded('zlib') && function_exists('ob_gzhandler')){
+            //ob_end_flush();
+        //}
         return ;
     }
 
@@ -56,8 +70,28 @@ class App
      * @access public
      * @return void
      */
-	static public function execApp() {
+    static public function execApp() {
 
+        //防止CSRF
+        if(strtoupper($_SERVER['REQUEST_METHOD'])=='POST' && stripos($_SERVER['HTTP_REFERER'], SITE_URL) !== 0 && $_SERVER['HTTP_USER_AGENT'] !== 'Shockwave Flash') {
+            die('illegal request.');
+        }
+    
+        // 使用手持设备时, 对用户的访问默认跳转至移动版, 除非用户指定访问普通版
+        //if (APP_NAME!='wap' && $_SESSION['wap_to_normal'] != '1' && cookie('wap_to_normal') != '1' && $_REQUEST['wap_to_normal'] != '1') {
+            // 根据各应用的配置来判断是否存在手机版访问配置文件
+            
+            // if (MODULE_NAME == 'Public' && ACTION_NAME == 'tryOtherLogin')
+            //     ;
+            // else if (MODULE_NAME == 'Widget' && ACTION_NAME == 'addonsRequest')
+            //     ;
+            // // else if (isiPhone() || isAndroid()) // iOS和Android跳转至3G版
+            // //     U('w3g/Index/index', '', true);
+            // else
+            //if (isMobile() && !isiPad() && model( 'App' )->isAppNameOpen('wap') ) // 其他手机跳转至WAP版
+                //U('wap/Index/index', '', true);
+        //}
+        
         // 加载所有插件
         if(C('APP_PLUGIN_ON')) {
             tsload(CORE_LIB_PATH.'/addons.class.php');
@@ -70,35 +104,35 @@ class App
         }
 
         //创建Action控制器实例
-		$className =  MODULE_NAME.'Action';
-		tsload(APP_ACTION_PATH.'/'.$className.'.class.php');
-		
-		if(!class_exists($className)) {
+        $className =  MODULE_NAME.'Action';
+        tsload(APP_ACTION_PATH.'/'.$className.'.class.php');
+        
+        if(!class_exists($className)) {
           
-			$className	=	'EmptyAction';
+            $className  =   'EmptyAction';
             tsload(APP_ACTION_PATH.'/EmptyAction.class.php');
             if(!class_exists($className)){
                 throw_exception( L('_MODULE_NOT_EXIST_').' '.MODULE_NAME );
             }
-		}
-		
-		$module	=	new $className();
+        }
 
-		//异常处理
-		if(!$module) {
+        $module =   new $className();
+
+        //异常处理
+        if(!$module) {
             // 模块不存在 抛出异常
-			throw_exception( L('_MODULE_NOT_EXIST_').' '.MODULE_NAME );
+            throw_exception( L('_MODULE_NOT_EXIST_').' '.MODULE_NAME );
         }
 
         //获取当前操作名
-        $action	=	ACTION_NAME;
+        $action =   ACTION_NAME;
 
         //执行当前操作
-		call_user_func(array(&$module,$action));
+        call_user_func(array(&$module,$action));
 
         //执行计划任务
         model('Schedule')->run();
-		return ;
+        return ;
     }
 
     /**
@@ -121,7 +155,7 @@ class App
         }elseif($format=='php'){
             //输出php格式
             exit(var_export($data));
-		}elseif($format=='test'){
+        }elseif($format=='test'){
             //测试输出
             dump($data);
             exit;
@@ -136,6 +170,11 @@ class App
      */
     static public function execWidget() {
 
+        //防止CSRF
+        if(strtoupper($_SERVER['REQUEST_METHOD'])=='POST' && stripos($_SERVER['HTTP_REFERER'], SITE_URL)!==0) {
+            die('illegal request.');
+        }
+
         //include_once (ADDON_PATH.'/widget/'.MODULE_NAME.'Widget/'.MODULE_NAME.'Widget.class.php');
         //$className = MODULE_NAME.'Widget';
         
@@ -147,24 +186,23 @@ class App
                 tsload(APP_PATH.'/Lib/Widget/'.MODULE_NAME.'Widget/'.MODULE_NAME.'Widget.class.php');
             }
         }
-
         $className = MODULE_NAME.'Widget';
 
-		$module	=	new $className();
+        $module =   new $className();
       
-		//异常处理
-		if(!$module) {
+        //异常处理
+        if(!$module) {
             // 模块不存在 抛出异常
-			throw_exception( L('_MODULE_NOT_EXIST_').MODULE_NAME );
+            throw_exception( L('_MODULE_NOT_EXIST_').MODULE_NAME );
         }
 
         //获取当前操作名
-        $action	=	ACTION_NAME;
+        $action =   ACTION_NAME;
 
         //执行当前操作
-		if($rs = call_user_func(array(&$module,$action))){
-			echo $rs;
-		}
+        if($rs = call_user_func(array(&$module,$action))){
+            echo $rs;
+        }
         return ;
     }
 

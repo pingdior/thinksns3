@@ -33,9 +33,9 @@ return  array(
     'COOKIE_PREFIX'         =>	'TSV3_',		// Cookie前缀 避免冲突
 
     /* 默认设定 */
-    'DEFAULT_APP'           =>	'public',		// 默认项目名称，@表示当前项目
-    'DEFAULT_MODULE'        =>	'Index',		// 默认模块名称
-    'DEFAULT_ACTION'        =>	'index',		// 默认操作名称
+    'DEFAULT_APP'           =>  'public',       // 默认项目名称，@表示当前项目
+    'DEFAULT_MODULE'        =>  'Index',        // 默认模块名称
+    'DEFAULT_ACTION'        =>  'index',        // 默认操作名称
     'DEFAULT_CHARSET'       =>	'utf-8',		// 默认输出编码
     'DEFAULT_TIMEZONE'      =>	'PRC',			// 默认时区
     'DEFAULT_LANG'          =>	'zh-cn',		// 默认语言

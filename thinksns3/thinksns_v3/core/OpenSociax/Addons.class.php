@@ -89,6 +89,7 @@ class Addons
     {
         if(!$addonsName)
             return;
+        $addonsName = basename($addonsName);
         $dirName = ADDON_PATH.'/plugin';
         $urlDir = SITE_URL.'/addons/plugin';
         $path = $dirName.'/'.$addonsName;
@@ -101,6 +102,9 @@ class Addons
             $filename = $path.'/'.$addonsName.'Addons.class.php';
             tsload($filename);
             $className = $addonsName.'Addons';
+            if ( !class_exists($className) ){
+            	die('不存在该类');
+            }
             $obj = new $className();
             $obj->setPath($path);
             $obj->setUrl($addonUrl);

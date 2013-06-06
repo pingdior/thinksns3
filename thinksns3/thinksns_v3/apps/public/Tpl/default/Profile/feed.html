@@ -1,4 +1,17 @@
 <include file="__THEME__/public_header" />
+<script type="text/javascript">
+function addDigg(feed_id){
+   $.post("{:U('public/Feed/addDigg')}", {feed_id:feed_id}, function(res){
+       if(res==1){
+	       var num = $('#digg'+feed_id).attr('rel');
+    	   num++;
+    	   $('#digg'+feed_id).html('已赞('+num+')');
+	   }else {
+	       ui.error('操作失败，如没有登录请先登录再操作');
+       }
+   });
+}
+</script>
 <div id="page-wrap">
     <div id="main-wrap">
         <div class="profile-title  boxShadow">
@@ -28,6 +41,13 @@
                                 </p>
                                 <p class="info">
                                 <span class="right">
+	<span id='digg{$feedInfo.feed_id}' rel='{$feedInfo.digg_count}'>
+	<php>if(!isset($diggArr[$feedInfo['feed_id']])) { </php>
+	   <a href="javascript:void(0)" onclick="addDigg({$feedInfo.feed_id})" >赞<if condition='!empty($feedInfo[digg_count])'>({$feedInfo.digg_count})</if></a>
+	<php> } else { </php>
+	   已赞<if condition='!empty($feedInfo[digg_count])'>({$feedInfo.digg_count})</if>
+	<php> } </php></span>
+	<i class="vline">|</i>                                
                                     <php>$cancomment_old = empty($feedInfo['app_row_id'])  ? 0 : 1;</php>
                                     <php>$cancomment = intval(CheckPermission('core_normal','feed_comment'));</php>
                                     <eq name='feedInfo.actions.repost' value='true'>
@@ -63,6 +83,31 @@
                             </eq>
                             </em>
                               </p>
+                              <div class="praise-detail-list clearfix" style="display:none">
+                                <i class="arrow arrow-t"></i>
+                                <ul>
+                                   <li><a href=""><img src="{$user_info[$uid]['avatar_big']}" width="30" height="30"/></a><a href="" class="ico-close1"></a></li>
+                                   <li><a href=""><img src="{$user_info[$uid]['avatar_big']}" width="30" height="30"/></a></li>
+                                   <li><a href=""><img src="{$user_info[$uid]['avatar_big']}" width="30" height="30"/></a></li>
+                                   <li><a href=""><img src="{$user_info[$uid]['avatar_big']}" width="30" height="30"/></a></li>
+                                   <li><a href=""><img src="{$user_info[$uid]['avatar_big']}" width="30" height="30"/></a></li>
+                                   <li><a href=""><img src="{$user_info[$uid]['avatar_big']}" width="30" height="30"/></a></li>
+                                   <li><a href=""><img src="{$user_info[$uid]['avatar_big']}" width="30" height="30"/></a></li>
+                                   <li><a href=""><img src="{$user_info[$uid]['avatar_big']}" width="30" height="30"/></a></li>
+                                   <li><a href=""><img src="{$user_info[$uid]['avatar_big']}" width="30" height="30"/></a></li>
+                                   <li><a href=""><img src="{$user_info[$uid]['avatar_big']}" width="30" height="30"/></a></li>
+                                   <li><a href=""><img src="{$user_info[$uid]['avatar_big']}" width="30" height="30"/></a></li>
+                                   <li><a href=""><img src="{$user_info[$uid]['avatar_big']}" width="30" height="30"/></a></li>
+                                   <li><a href=""><img src="{$user_info[$uid]['avatar_big']}" width="30" height="30"/></a></li>
+                                   <li><a href=""><img src="{$user_info[$uid]['avatar_big']}" width="30" height="30"/></a></li>
+                                   <li><a href=""><img src="{$user_info[$uid]['avatar_big']}" width="30" height="30"/></a></li>
+                                   <li><a href=""><img src="{$user_info[$uid]['avatar_big']}" width="30" height="30"/></a></li>
+                                </ul>
+                                <div class="praise-page">
+                                    <a href=""> < </a>
+                                    <a href=""> > </a>
+                                </div>
+                              </div>
                               <p class="border">
                                 	<!--<i class="arrow arrow-t"></i>-->
                               </p>

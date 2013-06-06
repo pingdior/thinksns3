@@ -58,6 +58,7 @@ li{list-style-type:none}
 .s-login .login-bd #js_login_input{height:18px}
 .s-login .login-bd .btn-blue-big{width:100px}
 .s-login .login-bd .actionBtn{height:50px;width:140px;}
+.s-login .login-bd .btn-login{background-position:0 -316px;width:140px;height:46px;line-height:46px;display:inline-block;font-family:"微软雅黑";text-align:center;font-size:20px;}
 
 .s-login .login-bd .s-row{position:relative}
 .s-login .login-bd .s-row1{height:19px;line-height:19px;padding:17px 0 17px 2px;width:271px;}
@@ -145,7 +146,7 @@ li{list-style-type:none}
 .reg-wrap .search-find{padding:0 0 0 100px;}
 .reg-wrap .search-find dd{padding:10px 0;}
 .reg-wrap .search-find a:link,.reg-wrap .search-find a:visited{color:#36c;}
-.reg-wrap .reg-main{display:block;padding:60px 0 0 0;_padding:20px 0 0 0;}
+.reg-wrap .reg-main{display:block;_padding:20px 0 0 0;}
 .reg-wrap .reg-main:after{clear: both;content: ".";display: block;height: 0;visibility: hidden}
 .reg-main .article{padding:40px;/*border:#d7d7d7 solid 1px;*/zoom:1}
 .reg-main .article #post-tag{width:360px;}
@@ -189,7 +190,7 @@ li{list-style-type:none}
 .reg-main .article .item dd.terms .box-ver{position:absolute;left:295px;}
 .item .edit-department{padding:5px 0;display:block}
 .reg-main .article .item .form-row{float:left;position:relative;}
-.reg-main .article .item .btn-green-big{margin:10px 0 0 160px;*margin:0 0 0 164px;}
+.reg-main .article .item .btn-green-big{margin:10px 0 0 160px;*margin:10px 0 0 164px;}
 .reg-main .article .item .choose-user{width:255px}
 .item .user-list li{background:#F9F9F9;height:18px;line-height:18px;padding:5px 10px;margin:0 5px 10px 0;font-weight:700;color:#999}
 .item .user-list .ico-close{margin:5px 0 0}

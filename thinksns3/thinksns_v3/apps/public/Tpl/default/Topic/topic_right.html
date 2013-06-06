@@ -5,12 +5,12 @@
             <a href="" class="right"><i class="ico-topic-rec"></i><span>推荐该话题</span></a>
     	</div> -->
         <php>if($topics['topic_user']){</php>
-            <div class="attention mb20 clearfix border-b">   
+            <div class="right-box mb20 clearfix border-b">   
                 <h3>话题人物推荐</h3>
                 {:W('TopicUser',array('topic_id'=>$topics['topic_id'], 'type'=>1))}    
             </div>
         <php>}</php>
-        <div class="attention mb20 clearfix border-b">
+        <div class="right-box mb20 clearfix border-b">
             <h3>参与该话题的人</h3>
             {:W('TopicUser',array('topic_id'=>$topics['topic_id'], 'type'=>2, 'limit'=>8))}
         </div>

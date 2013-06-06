@@ -8,27 +8,25 @@
 	   <div id="main-wrap">
         <div class="boxShadow"> 
 	   	   	 <include file="_weiba_header" />
-           <!-- 微吧帖子中部 -->
-            
 	   	   	   <div class="clearfix content-bg">
                  <div id="col3" class="st-index-right">
                     <div class="right-wrap">
-                        <div class="weiba-posts-list border-b mb20">
+                        <div class="right-list border-b mb20">
                          <h3>该作者发表的其他帖子</h3>
                          <ul>
                           <volist name="otherPost" id="vo">
                             <li>
-                            <i class="ico-piece"></i><div class="post-name"><a href="{:U('weiba/Index/postDetail',array('post_id'=>$vo['post_id']))}" target="_blank">{$vo.title}</a><a href="{:U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']))}" class="f9">【{$vo.weiba}】</a></div>
+                            <i class="ico-piece"></i><div class="info"><a href="{:U('weiba/Index/postDetail',array('post_id'=>$vo['post_id']))}" target="_blank">{$vo.title}</a><a href="{:U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']))}" class="f9">【{$vo.weiba}】</a></div>
                             </li>         
                           </volist>  
                          </ul>
                        </div>
-                       <div class="weiba-posts-list">
+                       <div class="right-list">
                          <h3>最新帖子</h3>
                          <ul>
                           <volist name="newPost" id="v1">
                             <li>
-                            <i class="ico-piece"></i><div class="post-name"><a href="{:U('weiba/Index/postDetail',array('post_id'=>$v1['post_id']))}" target="_blank">{$v1.title}</a><a href="{:U('weiba/Index/detail',array('weiba_id'=>$v1['weiba_id']))}" class="f9">【{$v1.weiba}】</a></div>
+                            <i class="ico-piece"></i><div class="info"><a href="{:U('weiba/Index/postDetail',array('post_id'=>$v1['post_id']))}" target="_blank">{$v1.title}</a><a href="{:U('weiba/Index/detail',array('weiba_id'=>$v1['weiba_id']))}" class="f9">【{$v1.weiba}】</a></div>
                             </li>         
                           </volist>        
                          </ul>
@@ -40,11 +38,12 @@
                  <div id="col5" class="st-index-main">
                     <div class="extend-foot Posts-content">
                         <div class="content">
+                          <!-- 微吧帖子中部 -->
+                          {:Addons::hook('show_ad_space', array('place'=>'weiba_post_top'))}
                             <p class="pb15 font-f-s"><a href="{:U('weiba/Index/index')}">微吧</a>&nbsp;>&nbsp;<a href="{:U('weiba/Index/detail',array('weiba_id'=>$post_detail['weiba_id']))}">{$weiba_name}</a>&nbsp;>&nbsp;帖子详情</p>
                             <dl class="pb10 mb20 weiba-post-title">
                                 <dd>
                                   <h3><span style="vertical-align:-1px;">{$post_detail.title}</span><php>if(strstr($post_detail['content'],'<img>')){</php><i class="ico-img"></i><php>}</php><php>if($post_detail['top']==2){</php><i class="ico-bar-top ml5">置顶</i><php>}</php><php>if($post_detail['top']==1){</php><i class="ico-bar-top0 ml5">置顶</i><php>}</php><php>if($post_detail['digest']==1){</php><i class="ico-bar-fine ml5">精华</i><php>}</php></h3>
-                                  {:Addons::hook('show_ad_space', array('place'=>'weiba_post_top'))}
                                   <p class="lh25">
                                     <span class="right">
                                     <php>if($GLOBALS['ts']['mid']){</php>
@@ -73,7 +72,7 @@
                             
                         </div>
                         <div class="reply">
-                          <div style="position:relative;z-index:99" class="pb15 pt15">
+                          <div style="position:relative;*z-index:9;" class="pb15 pt15">
                           <php>if($GLOBALS['ts']['mid']){</php>
                                 <php>if( $weiba_manage ){</php>
                                 <a href="javascript:void(0);" onclick="$('#post_manage').toggle();$('body').bind('click', function(event) {if($(event.target).attr('id') != 'manage') $('#post_manage').css('display', 'none') });" class="right" id="manage">管理</a>
@@ -159,4 +158,5 @@
 
   };
 </script>
+<script src="__THEME__/js/module.weibo.js"></script>
 <include file="__THEME__/public_footer" />

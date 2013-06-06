@@ -36,19 +36,19 @@ class UserInformationWidget extends Widget {
 		}
 		// 获取用户积分信息
 		$var['userCredit'] = model('Credit')->getUserCredit($var['uid']);
-		
-		// 获取发起活动数
-		$var['eventCount'] = model('UserData')->getEventCountById($var['uid']);
-		// 获取参与活动数
-		$var['joinCount'] = model('UserData')->getJoinCountById($var['uid']);
 		// Tab选中类型
 		$var['current'] = '';
 		strtolower(ACTION_NAME) == 'myfeed' && strtolower(MODULE_NAME) == 'index' && $var['current'] = 'myfeed';
 		strtolower(ACTION_NAME) == 'following' && strtolower(MODULE_NAME) == 'index' && $var['current'] = 'following';
-//		strtolower(ACTION_NAME) == 'follower' && strtolower(MODULE_NAME) == 'index' && $var['current'] = 'follower';
-//		strtolower(ACTION_NAME) == 'index' && strtolower(MODULE_NAME) == 'collection' && $var['current'] = 'collection';
-		strtolower(ACTION_NAME) == 'eventCount' && strtolower(MODULE_NAME) == 'index' && $var['current'] = 'eventCount';
-		strtolower(ACTION_NAME) == 'joinCount' && strtolower(MODULE_NAME) == 'index' && $var['current'] = 'joinCount';
+		strtolower(ACTION_NAME) == 'follower' && strtolower(MODULE_NAME) == 'index' && $var['current'] = 'follower';
+		strtolower(ACTION_NAME) == 'index' && strtolower(MODULE_NAME) == 'collection' && $var['current'] = 'collection';
+		// 用户分类信息
+		$map['app'] = 'public';
+		$map['table'] = 'user';
+		$map['row_id'] = $var['uid'];
+		$var['userTags'] = D()->table(C('DB_PREFIX').'app_tag AS a LEFT JOIN '.C('DB_PREFIX').'tag AS b ON a.tag_id = b.tag_id')->where($map)->findAll();
+		// 获取关注状态
+		$GLOBALS['ts']['mid'] != $var['uid'] && $var['follow_state'] = model('Follow')->getFollowState($GLOBALS['ts']['mid'], $var['uid']);
 
         // 渲染模版
         $content = $this->renderFile(dirname(__FILE__)."/".$var['tpl'].".html", $var);

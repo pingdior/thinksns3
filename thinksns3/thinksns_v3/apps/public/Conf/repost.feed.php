@@ -8,7 +8,7 @@
 		{$body|t|replaceUrl}
 		<dl class="comment">
 			<dt class="arrow bgcolor_arrow"><em class="arrline">◆</em><span class="downline">◆</span></dt>
-			<php>if($sourceInfo['is_del'] == 0):</php>
+			<php>if($sourceInfo['is_del'] == 0 && $sourceInfo['source_user_info'] != false):</php>
 			<dd class="name">
 				<space uid="sourceInfo.source_user_info.uid">@{uname}</space>
 			</dd>
@@ -61,7 +61,7 @@
 				      <img src="__THEME__/image/feedvideoplay.gif" ></a>
 				  </div>
 				</div>
-				<div class="feed_quote" style="width:560px;display:none;" id="video_show_{$feedid}"> 
+				<div class="feed_quote" style="display:none;" id="video_show_{$feedid}"> 
 				  <div class="q_tit">
 				    <img class="q_tit_l" onclick="switchVideo({$feedid},'open','{$sourceInfo.host}','{$sourceInfo.flashvar}')" src="__THEME__/image/zw_img.gif" />
 				  </div>

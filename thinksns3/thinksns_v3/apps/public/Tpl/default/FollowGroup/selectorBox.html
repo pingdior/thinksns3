@@ -6,7 +6,7 @@
     </div>
 
 	<div class="tit"><span>{:L('PUBLIC_PEOPLE_GROUP_SETTING',array('link'=>$fuserInfo['space_link']))}</span></div>
-    <div class="group-list">
+    <div class="group-name">
         <ul id="followGroupSelector">
             <volist name="group_list" id="g">
             <li>
@@ -128,8 +128,7 @@ var setFollowGroups = function() {
 	// }
 	var gids = checked.join(',');
 	// 设置分组操作
-	$.post(U('public/FollowGroup/setFollowGroups'), {gids:gids, fid:fid}, function(res) {
-		return false;
+	$.post(U('public/FollowGroup/setFollowGroups'), {gids:gids, fid:fid}, function() {
 	}, 'json');
 };
 /**
@@ -198,42 +197,43 @@ var createFollowGroup = function() {
  * @return void
  */
 var saveRemark = function() {
-	// 设置关注分组
-	setFollowGroups();
 	// 备注操作
 	var remark = $('#remark').val();
 	if(getLength(remark) > 10) {
 		ui.error('{:L('PUBLIC_REMARK_CHARACTER_LIMIT')}');
 		return false;
 	}
+	// 设置关注分组
+	setFollowGroups();
 	if($('#remark').val() =='' || $('#remark').val() =='{:L('PUBLIC_REMARK_SETTING')}'){
-		ui.box.close();	
 		ui.success('{:L('PUBLIC_SAVE_SUCCESS')}');
-		return false;
-	}
-	$.post(U('public/FollowGroup/saveRemark'),{remark:remark,fid:fid},function(msg){
-		if(msg.status == 0){
+		setTimeout(function (){
 			ui.box.close();
-			ui.error(msg.data);
-		}else{
-			if(remark==''){
-				$('.remark_'+fid).html('{:L('PUBLIC_REMARK_SETTING')}');
-				$('.remark_'+fid).attr('remark','');
+		},2000)
+	} else {
+		$.post(U('public/FollowGroup/saveRemark'),{remark:remark,fid:fid},function(msg){
+			if(msg.status == 0){
+				ui.box.close();
+				ui.error(msg.data);
 			}else{
-				if($('.remark_'+fid)){
-					$('.remark_'+fid).html(remark);
-					$('.remark_'+fid).attr('remark',encodeURIComponent(remark));
+				if(remark==''){
+					$('.remark_'+fid).html('{:L('PUBLIC_REMARK_SETTING')}');
+					$('.remark_'+fid).attr('remark','');
+				}else{
+					if($('.remark_'+fid)){
+						$('.remark_'+fid).html(remark);
+						$('.remark_'+fid).attr('remark',encodeURIComponent(remark));
+					}
 				}
+				if("undefined" != typeof(core.facecard) ){
+						core.facecard.deleteUser(fid);
+				}
+				ui.success('{:L('PUBLIC_SAVE_SUCCESS')}!');
+				setTimeout(function (){
+					ui.box.close();
+				},2000)
 			}
-			if("undefined" != typeof(core.facecard) ){
-					core.facecard.deleteUser(fid);
-			}
-			ui.box.close();	
-			ui.success('{:L('PUBLIC_SAVE_SUCCESS')}!');
-			setTimeout(function() {
-				location.reload();
-			}, 1500);
-		}
-	}, 'json');
+		}, 'json');
+	}
 };
 </script>

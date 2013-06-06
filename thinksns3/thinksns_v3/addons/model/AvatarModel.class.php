@@ -29,6 +29,7 @@ class AvatarModel {
 		$this->_uid = intval($uid);
 		return $this;
 	}
+
 	/**
 	 * 判断用户是否上传头像
 	 * @return array 
@@ -50,8 +51,9 @@ class AvatarModel {
 			$filemtime = @filemtime(UPLOAD_PATH.$original_file_name);
 			$avatar = getImageUrl($original_file_name,50,50).'?v'.$filemtime;
 		}
-		return $avatar;
+		return ($avatar)?true:false;
 	}
+
 	/**
 	 * 获取当前登录用户头像
 	 * @return array 用户的头像链接
@@ -140,6 +142,20 @@ class AvatarModel {
     		$data = $info['info'][0];
     		$image_url = getImageUrl($data['save_path'].$data['save_name']);
     		$image_info = getimagesize($image_url);
+    		//如果不支持获取远程图片信息，使用如下方法
+    		if(!$image_info){
+		  		$cloud = model('CloudImage');
+		        if($cloud->isOpen()){
+		        	$cinfo = $cloud->getFileInfo($data['save_path'].$data['save_name']);
+		        	if($cinfo){
+			        	$cinfo = json_decode($cinfo);
+			        	$image_info[0] = $cinfo['width'];
+			        	$image_info[1] = $cinfo['height'];
+		        	}
+		        }else{
+		        	$image_info = getimagesize(UPLOAD_PATH.'/'.$data['save_path'].$data['save_name']);
+		        }
+		    }
     		if($image_info){
     			unset($return);
     			$return['data']['picwidth'] = $image_info[0];
@@ -189,21 +205,20 @@ class AvatarModel {
 		//原图存储地址
 		$original_file_name = '/avatar'.$this->convertUidToPath($this->_uid).'/original.jpg';
 
-		//切割原图
-		require_once SITE_PATH.'/addons/library/phpthumb/ThumbLib.inc.php';
-		$thumb = PhpThumbFactory::create($src);
-		$res = $thumb->crop($x1, $y1, $w, $h);
-
-		//获取获取缩图后的数据
-		if(!$res){
-			die(json_encode(array('status'=>0,'info'=>'头像切割失败')));
-		}
-
 		$filemtime = microtime(true);
 
 		//如果是又拍上传
         $cloud = model('CloudImage');
         if($cloud->isOpen()){
+			//切割原图
+			require_once SITE_PATH.'/addons/library/phpthumb/ThumbLib.inc.php';
+			$thumb = PhpThumbFactory::create($src);
+			$res = $thumb->crop($x1, $y1, $w, $h);
+
+			//获取获取缩图后的数据
+			if(!$res){
+				die(json_encode(array('status'=>0,'info'=>'头像切割失败')));
+			}
         	@$cloud->deleteFile($original_file_name);
         	//重新上传新头像原图
         	$imageAsString = $thumb->getImageAsString();
@@ -222,6 +237,17 @@ class AvatarModel {
         		$return['info']	  = '切割头像失败';
         	}
         }else{
+
+			//切割原图
+			require_once SITE_PATH.'/addons/library/phpthumb/ThumbLib.inc.php';
+			$thumb = PhpThumbFactory::create(UPLOAD_PATH.'/'.$facedata['picurl']);
+			$res = $thumb->crop($x1, $y1, $w, $h);
+
+			//获取获取缩图后的数据
+			if(!$res){
+				die(json_encode(array('status'=>0,'info'=>'头像切割失败')));
+			}
+
         	if(!file_exists(UPLOAD_PATH.$original_file_name)) {
         		$this->_createFolder(UPLOAD_PATH.'/avatar'.$this->convertUidToPath($this->_uid));
         	}
@@ -234,6 +260,70 @@ class AvatarModel {
 		    $return['status'] = 1;
         }
         die(json_encode($return));
+    }
+
+    /**
+     * 保存用户头像图片 - 本地上传
+     * @return array 头像图片信息
+     */
+    public function saveRemoteAvatar($src,$uid) {
+
+		//原图存储地址
+		$original_file_name = '/avatar'.$this->convertUidToPath($uid).'/original.jpg';
+
+		//保存图片到原图
+		$opts = array(
+		'http'=>array(
+		  'method' => "GET",
+		  'timeout' => 3, //超时30秒
+		  'user_agent'=>"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)"
+		 )
+		);
+		$context = stream_context_create($opts);
+		$imageData = file_get_contents($src, false, $context);
+
+		$filemtime = microtime(true);
+
+		//如果是又拍上传
+        $cloud = model('CloudImage');
+        if($cloud->isOpen()){
+        	@$cloud->deleteFile($original_file_name);
+        	//重新上传新头像原图
+        	$imageAsString = $imageData;
+        	$res = $cloud->writeFile($original_file_name,$imageAsString,true);
+        	if($res){
+	 			unset($return);
+	 			$return['data']['big'] 		= getImageUrl($original_file_name).'!big.avatar.jpg?v'.$filemtime;
+				$return['data']['middle'] 	= getImageUrl($original_file_name).'!middle.avatar.jpg?v'.$filemtime;
+				$return['data']['small'] 	= getImageUrl($original_file_name).'!small.avatar.jpg?v'.$filemtime;
+				$return['data']['tiny'] 	= getImageUrl($original_file_name).'!tiny.avatar.jpg?v'.$filemtime;
+				$return['status'] = 1;
+			    // 清理用户缓存
+	    		model('User')->cleanCache($this->_uid);
+        	}else{
+        		$return['status'] = '0';
+        		$return['info']	  = '上传头像失败';
+        		return $return;
+        	}
+        }else{
+
+        	if(!file_exists(UPLOAD_PATH.$original_file_name)) {
+        		$this->_createFolder(UPLOAD_PATH.'/avatar'.$this->convertUidToPath($uid));
+        	}
+
+        	if(!file_put_contents(UPLOAD_PATH.$original_file_name, $imageData)){
+	    		$return['status'] = '0';
+	    		$return['info']	  = '切割保存失败';
+				return $return;
+			}
+
+			$return['data']['big'] 		= getImageUrl($original_file_name,200,200,true,true).'?v'.$filemtime;
+			$return['data']['middle'] 	= getImageUrl($original_file_name,100,100,true,true).'?v'.$filemtime;
+			$return['data']['small'] 	= getImageUrl($original_file_name,50,50,true,true).'?v'.$filemtime;
+			$return['data']['tiny'] 	= getImageUrl($original_file_name,30,30,true,true).'?v'.$filemtime;
+		    $return['status'] = 1;
+        }
+        return $return;
     }
 
 	/**

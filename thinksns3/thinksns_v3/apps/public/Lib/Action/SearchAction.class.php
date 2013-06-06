@@ -56,6 +56,12 @@ class SearchAction extends Action
 				//关键字匹配 采用搜索引擎兼容函数搜索 后期可能会扩展为搜索引擎
 				$feed_type = !empty($_GET['feed_type']) ? t($_GET['feed_type']) : '';
 				$list = model('Feed')->searchFeeds($this->key, $feed_type, 20, $Stime, $Etime);
+				
+				//赞功能
+				$feed_ids = getSubByKey($list['data'],'feed_id');
+				$diggArr = model('FeedDigg')->checkIsDigg($feed_ids, $GLOBALS['ts']['mid']);
+				$this->assign('diggArr', $diggArr);
+				
 				$this->assign('feed_type',$feed_type);
 				$this->assign('searchResult',$list);				 //搜索微博
 				$weiboSet = model('Xdata')->get('admin_Config:feed');

@@ -8,7 +8,7 @@
     <php>}</php>
     {:W('MedalList',array('uid'=>$user_info[$uid]['uid']))}
     <php>if($sidebar_following_list['data']){</php>
-        <div class="attention mb20 clearfix border-b">
+        <div class="right-box mb20 clearfix border-b">
             <h3><a href="{:U('public/Profile/following',array('uid'=>$user_info[$uid]['uid']))}" class="right f12">更多</a><php>if($user_info[$uid]['uid']==$mid){</php>我<php>}else{</php>TA<php>}</php>的关注({$userData.following_count|default=0})</h3>
             <ul>
                 <volist name="sidebar_following_list['data']" id="vo">
@@ -18,7 +18,7 @@
         </div>
     <php>}</php>
     <php>if($sidebar_follower_list['data']){</php>
-        <div class="attention mb20 clearfix border-b">
+        <div class="right-box mb20 clearfix border-b">
             <h3><a href="{:U('public/Profile/follower',array('uid'=>$user_info[$uid]['uid']))}" class="right f12">更多</a><php>if($user_info[$uid]['uid']==$mid){</php>我<php>}else{</php>TA<php>}</php>的粉丝({$userData.follower_count|default=0})</h3>
             <ul>
                 <volist name="sidebar_follower_list['data']" id="vo">
@@ -27,5 +27,9 @@
             </ul>
         </div>
     <php>}</php>
+    <!-- 主页右下广告 -->
+    <div style="width:230px;overflow:hidden;">
+    {:Addons::hook('show_ad_space', array('place'=>'profile_right'))}    
+    </div>
     </div>
 </div>

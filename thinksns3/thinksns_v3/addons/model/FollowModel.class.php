@@ -365,6 +365,7 @@ class FollowModel extends Model {
 	 * @return array 用户uid与一群人fids的彼此关注状态
 	 */
 	public function getFollowStateByFids($uid, $fids) {
+		array_map( 'intval' , $fids);
 		$_fids = is_array($fids) ? implode(',', $fids) : $fids;
 		if(empty($_fids)) {
 			return array();

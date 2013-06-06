@@ -13,6 +13,9 @@ if("undefined" == typeof(maxId)){
 if("undefined" == typeof(loadId)){
 	var loadId = 0;
 }
+if("undefinde" == typeof(firstId)){
+	var firstId = 0;
+}
 if("undefined" == typeof(feedType)){
 	var feedType = 'following';	// 默认的微博类型(关注的)
 }
@@ -40,13 +43,13 @@ if("undefined" == typeof(topic_id)) {
 if("undefinde" == typeof(gid)){
 	var gid = 0;
 }
-
 var _doc = document;
 var feedbtnlock = 0;
 var args = new Array();
 args['initNums'] 	= initNums;
 args['maxId']		= maxId;
 args['loadId']		= loadId;
+args['firstId']		= firstId;
 args['feedType']   	= feedType;
 args['loadmore']   	= loadmore;
 args['loadnew']   	= loadnew;
@@ -126,6 +129,15 @@ M.addEventFns({
 	},
 	post_feed_box:{
 		click:function(){
+			if (feedbtnlock == 0) {
+				feedbtnlock = 1;
+				setTimeout(function(){
+					feedbtnlock = 0;
+				}, 1500);
+			} else {
+				ui.error('正在发布请勿重复点击！');
+				return false;
+			}
 			var _this = this;
 			var mini_editor = this.parentModel.parentModel.childModels['mini_editor'][0];			
 			var textarea = $(mini_editor).find('textarea').get(0);
@@ -441,7 +453,7 @@ M.addEventFns({
 	}
 });
 $(".feed_img_lists li a").css("opacity","1").mouseover(function(){
-	$(this).animate({opacity:"0.8"},300)
+	$(this).animate({opacity:"1"},300)
 	});
 $(".feed_img_lists li a").mouseout(function(){
 	$(this).animate({opacity:"1"},10)

@@ -13,7 +13,7 @@
                     <div class="right-wrap">
                        <div class="person-info mb20 clearfix border-b">
                            <dl class="person-info-t clearfix">
-                              <dt><img src="{$weiba_detail['logo']}" /></dt>
+                              <dt><img src="{$weiba_detail['logo']|getImageUrl=###,100,100,true}" /></dt>
                               <dd>
                                 <p class="mb10">
                                   {$weiba_detail['weiba_name']}&nbsp;<php>if(in_array($mid,$weiba_admin_uids) || CheckPermission('core_admin','admin_login')){</php>[<a href="{:U('weiba/Manage/index',array('weiba_id'=>$weiba_detail['weiba_id']))}">管理</a>]<php>}</php>
@@ -33,15 +33,15 @@
                               </dd>
                            </dl>
                        </div>
-                       <div class="attention mb20 clearfix border-b">
+                       <div class="right-box mb20 clearfix border-b">
                          <h3>微吧简介</h3>
                          <div class="mb20 content"><p>{$weiba_detail['intro']}</p></div>
                        </div>
-                       <div class="attention mb20 clearfix border-b">
+                       <div class="right-box mb20 clearfix border-b">
                          <h3>公告</h3>
                          <div class="mb20 content"><p>{$weiba_detail['notify']}</p></div>
                        </div>
-                       <div class="attention mb20 clearfix border-b">
+                       <div class="right-box mb20 clearfix border-b">
                          <h3>吧主<span>({$weiba_admin_count|default=0}人)</span></h3>
                          <volist name="weiba_admin" id="vo">
                           <dl>

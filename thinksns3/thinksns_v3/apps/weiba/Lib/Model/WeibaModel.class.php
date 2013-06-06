@@ -37,8 +37,7 @@ class WeibaModel	extends	Model {
 		// 数据组装
 		foreach($list['data'] as $k => $v) {
 			$list['data'][$k]['weiba_name'] = '<a target="_blank" href="'.U('weiba/Index/detail',array('weiba_id'=>$v['weiba_id'])).'">'.$v['weiba_name'].'</a>';
-			$logo = D('attach')->where('attach_id='.$v['logo'])->find();
-			$list['data'][$k]['logo'] &&  $list['data'][$k]['logo'] = '<img src="'.getImageUrl($logo['save_path'].$logo['save_name']).'" width="50" height="50">';
+			$list['data'][$k]['logo'] &&  $list['data'][$k]['logo'] = '<img src="'.getImageUrlByAttachId($v['logo']).'" width="50" height="50">';
 			$create_uid = model('User')->getUserInfoByUids($v['uid']);
 			$list['data'][$k]['uid'] = $create_uid[$v['uid']]['space_link'];
 			$list['data'][$k]['ctime'] = friendlyDate($v['ctime']);
@@ -118,8 +117,7 @@ class WeibaModel	extends	Model {
 	public function getWeibaById($weiba_id){
 		$weiba = $this->where('weiba_id='.$weiba_id)->find();
 		if($weiba['logo']){
-			$logo = D('attach')->where('attach_id='.$weiba['logo'])->find();
-			$weiba['pic_url'] = getImageUrl($logo['save_path'].$logo['save_name']);
+			$weiba['pic_url'] = getImageUrlByAttachId($weiba['logo']);
 		}
 
 		return $weiba;
@@ -212,7 +210,7 @@ class WeibaModel	extends	Model {
 			return array();
 		}
 		$follow_data = D('weiba_follow')->where(" ( follower_uid = '{$uid}' AND weiba_id IN({$_weibaids}) ) ")->findAll();
-		//dump($follow_data);exit;
+
 		$follow_states = $this->_formatFollowState($uid, $weiba_ids, $follow_data);
 		return $follow_states[$uid];
 	}
@@ -257,8 +255,7 @@ class WeibaModel	extends	Model {
 		$weibaList = $this->where($where)->limit("{$start},{$end}")->order('weiba_id desc')->findAll();
 		foreach($weibaList as $k=>$v){
 			if($v['logo']){
-				$pic = D('attach')->where('attach_id='.$v['logo'])->find();
-				$weibaList[$k]['logo_url'] = getImageUrl($pic['save_path'].$pic['save_name']);
+				$weibaList[$k]['logo_url'] = getImageUrlByAttachId($v['logo']);
 			}
 			if(D('weiba_follow')->where('follower_uid='.$uid.' AND weiba_id='.$v['weiba_id'])->find()){
 				$weibaList[$k]['followstate'] = 1;
@@ -364,8 +361,7 @@ class WeibaModel	extends	Model {
 		if($weibaList){
 			foreach($weibaList as $k=>$v){
 				if($v['logo']){
-					$pic = D('attach')->where('attach_id='.$v['logo'])->find();
-					$weibaList[$k]['logo_url'] = getImageUrl($pic['save_path'].$pic['save_name']);
+					$weibaList[$k]['logo_url'] = getImageUrlByAttachId($v['logo']);
 				}
 				if(D('weiba_follow')->where('follower_uid='.$uid.' AND weiba_id='.$v['weiba_id'])->find()){
 					$weibaList[$k]['followstate'] = 1;

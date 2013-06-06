@@ -7,6 +7,11 @@
 
 if (!defined('SITE_PATH')) exit();
 
+// 重塑Session (必须位于session_start()之前)
+if (isset($_POST['PHPSESSID'])) {
+    session_id($_POST['PHPSESSID']);
+}
+
 /*  全局配置  */
 session_start();		//TODO 临时先放这里
 
@@ -31,14 +36,23 @@ check_gpc($_POST);
 //解析关键参数 todo:参数过滤 preg_match("/^([a-zA-Z_\/0-9]+)$/i", $ts, $url);
 $_REQUEST	=	array_merge($_GET,$_POST);
 
-if(isset($_REQUEST['os']) && !isset($_REQUEST['app'])){
-	$ts['_os']  = $_REQUEST['os'];
+//载入全局配置
+tsconfig(include CORE_LIB_PATH.'/convention.php');
+tsconfig(include CONF_PATH.'/config.inc.php');
+tsconfig(include CONF_PATH.'/access.inc.php');
+tsconfig(include CONF_PATH.'/router.inc.php');
+
+if(!isset($_REQUEST['app']) && !isset($_REQUEST['mod']) && !isset($_REQUEST['act'])){
+	$ts['_app'] = 'public';
+	$ts['_mod'] = 'Passport';
+	$ts['_act'] = 'login';
 }else{
-	$ts['_app'] = isset($_REQUEST['app']) && !empty($_REQUEST['app'])?$_REQUEST['app']:'public';
-	$ts['_mod'] = isset($_REQUEST['mod']) && !empty($_REQUEST['mod'])?$_REQUEST['mod']:'Index';
-	$ts['_act'] = isset($_REQUEST['act']) && !empty($_REQUEST['act'])?$_REQUEST['act']:'index';
+	$ts['_app'] = isset($_REQUEST['app']) && !empty($_REQUEST['app'])?$_REQUEST['app']:tsconfig('DEFAULT_APP');
+	$ts['_mod'] = isset($_REQUEST['mod']) && !empty($_REQUEST['mod'])?$_REQUEST['mod']:tsconfig('DEFAULT_MODULE');
+	$ts['_act'] = isset($_REQUEST['act']) && !empty($_REQUEST['act'])?$_REQUEST['act']:tsconfig('DEFAULT_ACTION');
 }
 $ts['_widget_appname'] = isset($_REQUEST['widget_appname']) && !empty($_REQUEST['widget_appname'])  ? $_REQUEST['widget_appname'] :'';
+
 //APP的常量定义
 tsdefine('APP_NAME'		, $ts['_app']);
 tsdefine('TRUE_APPNAME',!empty($ts['_widget_appname']) ? $ts['_widget_appname']:APP_NAME);
@@ -50,15 +64,21 @@ tsdefine('MODULE_CODE'	, $ts['_app'].'/'.$ts['_mod']);
 tsdefine('ACTION_CODE'	, $ts['_app'].'/'.$ts['_mod'].'/'.$ts['_act']);
 tsdefine('APP_RUN_PATH'	, CORE_RUN_PATH.'/~'.TRUE_APPNAME);
 
-//载入全局配置
-tsconfig(include CORE_LIB_PATH.'/convention.php');
-tsconfig(include CONF_PATH.'/config.inc.php');
-tsconfig(include CONF_PATH.'/access.inc.php');
-tsconfig(include CONF_PATH.'/router.inc.php');
-
 //载入扩展函数库
 tsload(CORE_LIB_PATH.'/functions.inc.php');
+
+//如果有UC的配置载入配置
+tsload(CONF_PATH.'/uc_config.inc.php');
+tsdefine('UC_SYNC', 0);
 //tsload(CORE_LIB_PATH.'/extend.inc.php');
+
+//安全防护功能
+if(file_exists(DATA_PATH.'/iswaf/config.php')){
+   require(DATA_PATH.'/iswaf/config.php');
+   define('iswaf_database',DATA_PATH.'/iswaf/');
+   require(ADDON_PATH.'/library/iswaf/iswaf.php');
+}
+
 
 /*  应用配置  */
 //载入应用配置
@@ -77,7 +97,12 @@ tsdefine('LANG_PATH', DATA_PATH.'/lang');
 tsdefine('LANG_URL', DATA_URL.'/lang');
 
 //默认风格包名称
-tsdefine('THEME_NAME'		, 'stv1');
+if(C('THEME_NAME')){
+	tsdefine('THEME_NAME'		, C('THEME_NAME'));
+}else{
+	tsdefine('THEME_NAME'		, 'stv1');
+}
+
 
 //默认静态文件、模版文件目录
 tsdefine('THEME_PATH'		, ADDON_PATH.'/theme/'.THEME_NAME);

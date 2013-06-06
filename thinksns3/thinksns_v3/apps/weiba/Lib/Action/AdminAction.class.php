@@ -335,15 +335,17 @@ class AdminAction extends AdministratorAction {
 			switch ($_POST['type']) {
 				case '1':         //推荐
 					//添加积分
-					model('Credit')->setUserCredit($post_detail['post_uid'],'recommend_topic');
+					if( $value == 1 ){
+						model('Credit')->setUserCredit($post_detail['post_uid'],'recommend_topic');
+					}
 					break;
 				case '2':         //精华
 					if($value == 1){
 						$config['typename'] = "精华";
 						model('Notify')->sendNotify($post_detail['post_uid'], 'weiba_post_set', $config); 
+						//添加积分
+						model('Credit')->setUserCredit($post_detail['post_uid'],'dist_topic');
 					}
-					//添加积分
-					model('Credit')->setUserCredit($post_detail['post_uid'],'dist_topic');
 
 					break;
 				case '3':         //置顶

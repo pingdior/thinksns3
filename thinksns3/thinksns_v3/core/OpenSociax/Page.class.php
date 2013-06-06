@@ -123,7 +123,8 @@ class Page
 
         if(0 == $this->totalRows) return;
 
-		$url	=	eregi_replace("(#.+$|p=[0-9]+)",'',$_SERVER['REQUEST_URI']);
+		//$url	=	eregi_replace("(#.+$|p=[0-9]+)",'',$_SERVER['REQUEST_URI']);
+        $url  =   eregi_replace("(#.+$|p=[0-9]+)",'',$_SERVER['PHP_SELF'] .'?'.$_SERVER['QUERY_STRING']);
 		$url	=	$url.(strpos($url,'?')?'':"?");
 		$url	=	eregi_replace("(&+)",'&',$url);
         $url    =   trim($url,'&');

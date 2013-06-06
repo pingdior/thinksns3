@@ -28,7 +28,19 @@ class UserCountModel extends Model {
 		$return['new_folower_count'] = intval($user_data['new_folower_count']);
 		// 合计的未读数目
 		$return['unread_total']  = array_sum($return);
-
+		$group = model('App')->getAppByName('group');
+		if ( $group['status'] ){
+			$groupatme = D( 'GroupUserCount' , 'group' )->where('uid='.$uid)->findAll();
+			$gatme = 0;
+			$gcomment = 0;
+			foreach ( $groupatme as $v){
+				$gatme += intval( $v['atme'] );
+				$gcomment += intval( $v['comment'] );
+			}
+			$return['unread_group_atme'] = $gatme;
+			$return['unread_group_comment'] = $gcomment;
+		}
+		
 		return $return;
 	}
 

@@ -57,13 +57,11 @@ class UserOfficialCategoryModel extends Model
 			return $this->_MakeTree($pid);
 		}
 		// 全部地区树形结构
-		$list = array();
-		if(file_exists(CONF_PATH.'/official.php')) {
-			$list = unserialize(file_get_contents(CONF_PATH.'/official.php'));
-		} else {
+		$list = S('official');
+		if(!$list) {
 			set_time_limit(0);
 			$list = $this->_MakeTree($pid);
-			file_put_contents(CONF_PATH.'/official.php', serialize($list));
+			S('official', $list);
 		}
 	
 		return $list;
@@ -74,9 +72,7 @@ class UserOfficialCategoryModel extends Model
 	 * @return void
 	 */
 	public function remakeOfficialCache() {
-		if(file_exists(CONF_PATH.'/official.php')) {
-			unlink(CONF_PATH.'/official.php');
-		}
+		S('official', null);
 	}
 
 	/**

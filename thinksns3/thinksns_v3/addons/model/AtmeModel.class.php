@@ -146,6 +146,57 @@ class AtmeModel extends Model {
 	    	}
     	}
 	}
+
+    /**
+     * 更新最近@的人
+     * @param string $content 原创微博内容
+     */
+    public function updateRecentAtForApi( $content ,$row_id){
+        // 获取@用户的UID数组
+        preg_match_all($this->_at_regex, $content, $matches);
+        $unames = $matches[1];
+        if ( $unames[0] ){
+            $map = "uname in ('".implode("','",$unames)."') AND uid!=".$GLOBALS['ts']['mid'].' AND `is_audit`=1 AND `is_init`=1 AND `is_active`=1';
+            $ulist = model('User')->where($map)->field('uid')->findall();
+            foreach ($ulist as $key => $value) {
+                // dump($content);dump($row_id);
+              // $this->addAtme($content,$row_id,$value['uid']);
+                model('Atme')->setAppName('Public')->setAppTable('feed')->addAtme($content, $row_id, $value['uid']);
+            }
+            $matchuids = getSubByKey($ulist,'uid');
+            $userdata = model( 'UserData' );
+            $value = $userdata->where('uid='.$GLOBALS['ts']['mid']." and `key`='user_recentat'")->field('value')->find();
+            if ( $value ){
+                $atdata = getSubByKey( unserialize( $value['value'] ) , 'uid');
+                $atdata && $matchuids = array_merge( $matchuids , $atdata);
+                $matchuids = array_unique( $matchuids );
+                $matchuids = array_slice( $matchuids , 0 , 10 );
+                $users = model( 'User' )->getUserInfoByUids( $matchuids );
+                foreach ( $users as $v){
+                    if ( !$v['uid'] ){
+                        continue;
+                    }
+                    $udata[] = array('uid'=>$v['uid'],'uname'=>$v['uname'],'avatar_small'=>$v['avatar_small'],'search_key'=>$v['search_key']);
+                }
+                //更新userdata表里面的最近@的人的信息
+                $userdata->setField('value' , serialize( $udata ) , "`key`='user_recentat' AND uid=".$GLOBALS['ts']['mid']);
+            } else {
+                $matchuids = array_slice( $matchuids , 0 , 10 );
+                $users = model( 'User' )->getUserInfoByUids( $matchuids );
+                foreach ( $users as $v){
+                    if ( !$v['uid'] ){
+                        continue;
+                    }
+                    $udata[] = array('uid'=>$v['uid'],'uname'=>$v['uname'],'avatar_small'=>$v['avatar_small'],'search_key'=>$v['search_key']);
+                }
+                $data['uid'] = $GLOBALS['ts']['mid'];
+                $data['key'] = 'user_recentat';
+                $data['value'] = serialize( $udata );
+                $data['mtime'] = time();
+                $userdata->add($data);
+            }
+        }
+    }
     
     /**
      * 获取@内容中的@用户
@@ -192,10 +243,10 @@ class AtmeModel extends Model {
         $content = model('Source')->getSourceInfo($this->_app_table, $row_id, false, $this->_app);
         $config['content'] = parse_html($content['source_content']);
         $config['publish_time'] = date('Y-m-d H:i:s',$content['ctime']);
-        $config['feed_url'] = U('public/Profile/feed',array('feed_id'=>$content['row_id'],'uid'=>$content['uid']));
+        $config['feed_url'] = $content['source_url'];
         $config['name'] = $author['uname'];
         $config['space_url'] = $author['space_url'];   
-        $config['face'] = $author['avatar_middle'];
+        $config['face'] = $author['avatar_small'];
         foreach($suid as $u_v) {
             model('Notify')->sendNotify($u_v, 'atme', $config);
         }
@@ -326,4 +377,13 @@ class AtmeModel extends Model {
         $data = model('Feed')->formatFeed($feed_ids,true); 
         return $data;
     }
+    /**
+     * 获取动态的种类，用于动态的Tab
+     * @param array $map 查询条件
+     * @return array 评论种类与其资源数目
+     */
+    public function getTab($map) {
+    	$list = $this->field('COUNT(1) AS `nums`, `table`')->where($map)->group('`table`')->getHashList('table', 'nums');
+    	return $list;
+    }    
 }

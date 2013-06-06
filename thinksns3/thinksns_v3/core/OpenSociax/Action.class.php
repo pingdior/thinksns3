@@ -78,7 +78,7 @@ abstract class Action
         //网站导航
         $GLOBALS['ts']['site_top_nav'] = model('Navi')->getTopNav();
         $GLOBALS['ts']['site_bottom_nav'] = model('Navi')->getBottomNav();
-        $GLOBALS['ts']['site_bottom_child_nav'] = model('Navi')->getBottomChildNav();
+        $GLOBALS['ts']['site_bottom_child_nav'] = model('Navi')->getBottomChildNav($GLOBALS['ts']['site_bottom_nav']);
 
         //获取可搜索的内容列表
         if(false===($searchSelect=S('SearchSelect'))){
@@ -87,7 +87,7 @@ abstract class Action
         }
         
         //网站所有的应用
-        $GLOBALS['ts']['site_nav_apps'] = model('App')->getAppList("status=1",9);
+        $GLOBALS['ts']['site_nav_apps'] = model('App')->getAppList(array('status'=>1,'add_front_top'=>1),9);
 
         //网站全局变量过滤插件
         Addons::hook('core_filter_init_site');
@@ -98,11 +98,7 @@ abstract class Action
         $this->assign('site_bottom_child_nav',$GLOBALS['ts']['site_bottom_child_nav']);
         $this->assign('site_nav_apps', $GLOBALS['ts']['site_nav_apps']);
         $this->assign('menuList', $searchSelect);
-        // m@@
-        $this->assign('actionName', $GLOBALS['ts']['_define']['ACTION_NAME']);
-        //echo $this->site;
-        //var_dump($GLOBALS['ts']['_define']['ACTION_NAME']);
-        //exit();
+
         return true;
 	}
 
@@ -139,6 +135,10 @@ abstract class Action
      * @return void
      */
 	private function initUser() {
+		// 邀请跳转
+		if(isset($_GET['invite']) && APP_NAME.'/'.MODULE_NAME!='public/Register') {
+			redirect(U('public/Register/index', array('invite'=>t($_GET['invite']))));exit();
+		}		
         // 验证登陆
         if (model('Passport')->needLogin()) {
             if(defined('LOGIN_URL')){
@@ -149,10 +149,6 @@ abstract class Action
                         redirect(U('admin/Public/login'));exit();
                     }
                 }else{
-                    // 邀请跳转
-                    if(isset($_GET['invite'])) {
-                        redirect(U('public/Register/index', array('invite'=>t($_GET['invite']))));exit();
-                    }
                     redirect(U('public/Passport/login'));exit(); 
                 }
             }
@@ -187,35 +183,28 @@ abstract class Action
       	} else {
       		$GLOBALS['ts']['_user'] = $GLOBALS['ts']['user'];
       	}
-      	
-        // 未初始化
-        if(0 < $this->mid && 0 == $this->user['is_init']) {
-        	if(APP_NAME != 'admin'){
-        		if(MODULE_NAME != 'Register' && MODULE_NAME != 'Passport'  && MODULE_NAME !="Account"){
-        			// 注册完成后就开启此功能
-                    if($this->user['is_active'] == '0') {
-                        U('public/Register/waitForActivation','uid='.$this->mid,true); 
-                    } else {
-                        $init_config = model('Xdata')->get('admin_Config:register');
-                        if($init_config['photo_open']){
-                            U('public/Register/step2','',true);
-                        }else{
-                            if($init_config['tag_open']){
-                                U('public/Register/step3','',true);
-                            }else{
-                                if($init_config['interester_open']){
-                                    U('public/Register/step4','',true);
-                                }else{
-                                    model('Register')->overUserInit($GLOBALS['ts']['mid']);
-                                    U('public/Register/index','',true);
-                                }
-                            }
-                        }
-                    }
-        			exit();
-        		}	
-        	}
-        }
+			
+		// 未初始化
+		$module_arr= array('Register'=>1,'Passport'=>1,'Account'=>1);
+		if (0 < $this->mid && 0 == $this->user ['is_init'] && APP_NAME != 'admin' && ! isset ( $module_arr [MODULE_NAME] )) {
+			// 注册完成后就开启此功能
+			if ($this->user ['is_active'] == '0') {
+				U ( 'public/Register/waitForActivation', 'uid=' . $this->mid, true );
+			} else {
+				$init_config = model ( 'Xdata' )->get ( 'admin_Config:register' );
+				if ($init_config ['photo_open']) {
+					U ( 'public/Register/step2', '', true );
+				}
+				if ($init_config ['tag_open']) {
+					U ( 'public/Register/step3', '', true );
+				}
+				if ($init_config ['interester_open']) {
+					U ( 'public/Register/step4', '', true );
+				}
+				model ( 'Register' )->overUserInit ( $GLOBALS ['ts'] ['mid'] );
+				U ( 'public/Register/index', '', true );
+			}
+		}
         
         //应用权限判断
         if(!empty($this->app) && $this->app['status'] == 0){
@@ -513,7 +502,13 @@ abstract class Action
      */
     private function _dispatch_jump($message,$status=1,$ajax=false) {
         // 判断是否为AJAX返回
-        if($ajax || $this->isAjax()) $this->ajaxReturn('',$message,$status);
+        if($ajax || $this->isAjax()) {
+            $data['jumpUrl'] = false;
+            if($this->get('jumpUrl')){
+                $data['jumpUrl'] = $this->get('jumpUrl');
+            }
+            $this->ajaxReturn($data,$message,$status);
+        }
         // 提示标题
         $this->assign('msgTitle',$status? L('_OPERATION_SUCCESS_') : L('_OPERATION_FAIL_'));
         //如果设置了关闭窗口，则提示完毕后自动关闭窗口

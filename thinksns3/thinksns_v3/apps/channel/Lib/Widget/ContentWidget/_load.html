@@ -5,9 +5,9 @@
 	<div class="pic">
 		<a href="{:U('public/Profile/feed', array('feed_id'=>$vo['feed_id'],'uid'=>$vo['user_info']['uid']))}" target="_blank"><i class="ico-detail"></i></a>
 		<ul><li><a href="{:U('public/Profile/feed', array('feed_id'=>$vo['feed_id'],'uid'=>$vo['user_info']['uid']))}"><img width="{$vo.width}" height="{$vo.height}" src="{$vo.attachInfo}" alt="{$vo.body|t}" /></a></li></ul>
-		<neq name="vo.attach_id" value="1">
-			<div class="pic-more"><a href="{:U('public/Profile/feed', array('feed_id'=>$vo['feed_id'],'uid'=>$vo['user_info']['uid']))}" target="_blank">点击查看全部图片</a></div>
-		</neq>
+		<php>if(count($vo['attach_id']) > 1):</php>
+		<div class="pic-more"><a href="{:U('public/Profile/feed', array('feed_id'=>$vo['feed_id'],'uid'=>$vo['user_info']['uid']))}" target="_blank">点击查看全部图片</a></div>
+		<php>endif;</php>
 	</div>
 	<php>endif;</php>
 

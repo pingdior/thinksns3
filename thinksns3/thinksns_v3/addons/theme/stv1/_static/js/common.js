@@ -14,6 +14,7 @@ var getLength = function(str, shortUrl) {
 		return Math.ceil(str.replace(/^\s+|\s+$/ig,'').replace(/[^\x00-\xff]/ig,'xx').length/2);
 	}
 };
+
 // 截取字符串
 var subStr = function(str, len) {
     if(!str) {
@@ -1014,13 +1015,23 @@ var switchVideo = function(id,type,host,flashvar){
 //显示视频
 var showFlash = function ( host, flashvar) {
 	if(host=='youtube.com'){
-		var flashHtml = '<iframe width="560" height="315" src="http://www.youtube.com/embed/'+flashvar+'" frameborder="0" allowfullscreen></iframe>';
+		var flashHtml = '<iframe width="560" height="315"  src="http://www.youtube.com/embed/'+flashvar+'" frameborder="0" allowfullscreen></iframe>';
 	}else{
 	var flashHtml = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="430" height="400">'
         + '<param value="transparent" name="wmode"/>'
 		+ '<param value="'+flashvar+'" name="movie" />'
-		+ '<embed src="'+flashvar+'" wmode="transparent" allowfullscreen="true" type="application/x-shockwave-flash" width="550" height="420"></embed>'
+		+ '<embed src="'+flashvar+'" wmode="transparent" allowfullscreen="true" type="application/x-shockwave-flash" width="525" height="420"></embed>'
 		+ '</object>';
 	}
 	return flashHtml;
+}
+
+//过滤html标签
+function strip_tags (input, allowed) {    
+allowed = (((allowed || "") + "").toLowerCase().match(/<[a-z][a-z0-9]*>/g) || []).join(''); // making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
+    var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
+        commentsAndPhpTags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi;
+    return input.replace(commentsAndPhpTags, '').replace(tags, function ($0, $1) {
+        return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
+    });
 }

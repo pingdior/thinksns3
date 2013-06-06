@@ -3,20 +3,22 @@
 <div id="page-wrap">
   <div id="main-wrap">
     <div class="mb20 boxShadow clearfix channel-box">
+    <div class="find-type">
       <div class="app-title clearfix">
         <div class="right">
           <a href="{:U('channel/Index/index', array('cid'=>$cid, 'tpl'=>'load'))}" class="mr10 <neq name='tpl' value='list'>current</neq>"><i class="ico-feed mr5"></i>瀑布流</a>
           <a href="{:U('channel/Index/index', array('cid'=>$cid, 'tpl'=>'list'))}" <eq name="tpl" value="list">class="current"</eq>><i class="ico-list mr5"></i>列表</a>
         </div>
-        <h4><img src="__APP__/image/ico-channel.gif" />频道</h4>
+        <h4><img src="{$ts['app']['small_icon_url']}" />&nbsp;&nbsp;频道</h4>
       </div>
+    </div>
       {:W('TopMenu', array('cid'=>$cid, 'title'=>$_title, 'channelCategory'=>$channelCategory))}
     </div>
     <!-- 内容渲染 -->
     <php>if($tpl == 'load'):</php>
     {:W('Content', array('tpl'=>$tpl,'cid'=>$cid,'channelCategory'=>$channelCategory))}
     <php>elseif($tpl == 'list'):</php>
-    <div id="col8" class="st-section boxShadow">
+    <div id="col8" class="st-section boxShadow mb10">
       <div id="col3" class="st-index-right">
         <div class="right-wrap">
           <div class="box channel-tab-menu clearfix border-b">

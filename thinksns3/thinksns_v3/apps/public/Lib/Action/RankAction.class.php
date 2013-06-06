@@ -335,5 +335,91 @@ class RankAction extends Action{
 		model( 'Feed' )->put( $this->mid , 'public' , 'post' , $data );
 		echo 1;
 	}
+	/**
+	 * 微博排行
+	 */
+	public function weibo(){
+		$order = intval ( $_GET['order'] );
+		switch ($order){
+			case 2:
+				$feed_order = 'repost_count desc';
+				break;
+			case 3:
+				$feed_order = 'digg_count desc';
+				break;
+			default:
+				$feed_order = 'comment_count desc';
+				break;
+		}
+		$map['is_del'] = 0;
+		$map['is_audit'] = 1;
+		$data = model('Feed')->getList( $map , 20 , $feed_order);
+		//赞功能
+		$feed_ids = getSubByKey($data['data'],'feed_id');
+		$data['diggArr'] = model('FeedDigg')->checkIsDigg($feed_ids, $GLOBALS['ts']['mid']);
+		
+		$data['remarkHash'] = model('Follow')->getRemarkHash($GLOBALS['ts']['mid']);
+		
+		foreach($data['data'] as &$v) {
+			switch ( $v['app'] ){
+				case 'weiba':
+					$v['from'] = getFromClient(0 , $v['app'] , '微吧');
+					break;
+				case 'tipoff':
+					$v['from'] = getFromClient(0 , $v['app'] , '爆料');
+					break;
+				default:
+					$v['from'] = getFromClient( $v['from'] , $v['app']);
+					break;
+			}
+			!isset($uids[$v['uid']]) && $v['uid'] != $GLOBALS['ts']['mid'] && $uids[] = $v['uid'];
+		}
+		if(!empty($uids)) {
+			$map = array();
+			$map['uid'] = $GLOBALS['ts']['mid'];
+			$map['fid'] = array('in',$uids);
+			$data['followUids'] = model('Follow')->where($map)->getAsFieldArray('fid');
+		} else {
+			$data['followUids'] = array();
+		}
+		$weiboSet = model('Xdata')->get('admin_Config:feed');
+		$this->assign( $weiboSet );
+		$this->assign( $data );
+		$this->assign( 'order' , $order );
+		$this->_rightRank();
+		$this->display();
+	}
+	/**
+	 * 右侧排行
+	 */
+	private function _rightRank(){
+		//话题排行
+		$topic = model('FeedTopic')->where('`status`=0 and `lock`=0')->order('count desc')->limit('10')->findAll();
+		$this->assign( 'tlright' , $topic );
+		//粉丝排行
+		$followermap['key'] = 'follower_count';
+		$followeruids = model('UserData')->where($followermap)->field('uid,`value`')->order('`value`+0 desc,uid')->limit(10)->findAll();
+		foreach ( $followeruids as &$v ){
+			$v = model( 'User' )->getUserInfo( $v['uid'] );
+		}
+		$this->assign( 'flright' , $followeruids );
+	}
+	/**
+	 * 话题排行
+	 */
+	public function topic(){
+		$map['status'] = 0;
+		$map['lock'] = 0;
+		$map['ctime'] = array( 'gt' , strtotime( date('Ymd') ) );
+		$today = model('FeedTopic')->where($map)->order('count desc')->limit('10')->findAll();
+		$map['ctime'] = array( 'gt' , ( time() - 604800 ) );
+		$week = model('FeedTopic')->where($map)->order('count desc')->limit('10')->findAll();
+		$map['ctime'] = array( 'gt' , ( time() -2592000 ) );
+		$month = model('FeedTopic')->where($map)->order('count desc')->limit('10')->findAll();
+		$this->assign( 'today' , $today );
+		$this->assign( 'week' , $week );
+		$this->assign( 'month' , $month );
+		$this->display();
+	}
 }
 ?>

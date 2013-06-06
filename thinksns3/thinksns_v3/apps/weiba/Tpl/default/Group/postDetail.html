@@ -12,22 +12,22 @@
 	   	   	   <div class="clearfix content-bg">
                  <div id="col3" class="st-index-right">
                     <div class="right-wrap">
-                        <div class="weiba-posts-list border-b mb20">
+                        <div class="right-list border-b mb20">
                          <h3>该作者发表的其他帖子</h3>
                          <ul>
                           <volist name="otherPost" id="vo">
                             <li>
-                            <i class="ico-piece"></i><div class="post-name"><a href="{:U('weiba/Index/postDetail',array('post_id'=>$vo['post_id']))}" target="_blank">{$vo.title}</a><a href="{:U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']))}" class="f9">【{$vo.weiba}】</a></div>
+                            <i class="ico-piece"></i><div class="info"><a href="{:U('weiba/Index/postDetail',array('post_id'=>$vo['post_id']))}" target="_blank">{$vo.title}</a><a href="{:U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']))}" class="f9">【{$vo.weiba}】</a></div>
                             </li>         
                           </volist>  
                          </ul>
                        </div>
-                       <div class="weiba-posts-list">
+                       <div class="right-list">
                          <h3>最新帖子</h3>
                          <ul>
                           <volist name="newPost" id="v1">
                             <li>
-                            <i class="ico-piece"></i><div class="post-name"><a href="{:U('weiba/Index/postDetail',array('post_id'=>$v1['post_id']))}" target="_blank">{$v1.title}</a><a href="{:U('weiba/Index/detail',array('weiba_id'=>$v1['weiba_id']))}" class="f9">【{$v1.weiba}】</a></div>
+                            <i class="ico-piece"></i><div class="info"><a href="{:U('weiba/Index/postDetail',array('post_id'=>$v1['post_id']))}" target="_blank">{$v1.title}</a><a href="{:U('weiba/Index/detail',array('weiba_id'=>$v1['weiba_id']))}" class="f9">【{$v1.weiba}】</a></div>
                             </li>         
                           </volist>        
                          </ul>

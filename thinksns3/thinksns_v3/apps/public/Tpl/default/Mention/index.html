@@ -1,11 +1,23 @@
 <include file="__THEME__/public_header" />
-
+<script type="text/javascript">
+function addDigg(feed_id){
+   $.post("{:U('public/Feed/addDigg')}", {feed_id:feed_id}, function(res){
+       if(res==1){
+	       var num = $('#digg'+feed_id).attr('rel');
+    	   num++;
+    	   $('#digg'+feed_id).html('已赞('+num+')');
+	   }else {
+	       ui.error('操作失败，如没有登录请先登录再操作');
+       }
+   });
+}
+</script>
 <div id="page-wrap">
   <div id="main-wrap">
-    <div id="st-index-grid" class="st-grid">
+    <div id="st-index-grid">
       <!--左边 -->
       <include file="__THEME__/public_left" />
-      <div id="col8" class="st-section content-bg" style="width:auto">
+      <div id="col8" class="content-bg clearfix boxShadow" style="width:auto">
         <div id="col4" class="main-left">
           <!--tab菜单-->
           <div id="aside" class="pad">
@@ -25,7 +37,18 @@
               <div class="set-hd"><h3>@提到我的</h3></div>
               <div class="mod-feed-tab">
                 <ul class="inner-feed-nav">
-                  <li <eq name="_GET.t" value="">class="current"</eq> <eq name='_GET.t' value='feed'>class="current"</eq>><a href="{:U('public/Mention/index',array('t'=>'feed'))}">{:L('PUBLIC_WEIBO')}</a></li>
+<!--                  <li <eq name="_GET.t" value="">class="current"</eq> <eq name='_GET.t' value='feed'>class="current"</eq>><a href="{:U('public/Mention/index',array('t'=>'feed'))}">{:L('PUBLIC_WEIBO')}</a></li>-->
+				  
+                  <li <eq name='_GET.t' value=''>class="current"</eq>>
+                    <a href="{:U('public/Mention')}">{:L('PUBLIC_ALL_STREAM')}</a>
+                  </li>
+                  <volist name='tab' id='t'>
+                    <php>if($tabHash[$key]){</php>
+                      <li <eq name='_GET.t' value='$key'>class="current"</eq>>
+                        <a href="{:U('public/Mention',array('t'=>$key))}">{$tabHash[$key]}</a>
+                      </li>
+                    <php>}</php>
+                  </volist>			  
                 </ul>
               </div>
             </div>
@@ -93,6 +116,23 @@
                 <p class="info">
                   <php>if($vo['is_audit']){</php>
                   <span class="right">
+	<php>if(CheckPermission('vtask_admin','vtask_recommend')):</php>
+	<em class="hover">
+	   <a href="javascript:void(0);" onclick="addToVtask({$vo.feed_id});">添加到事务</a>
+	   <i class="vline">|</i>	
+	   </em>
+	<php>endif;</php>
+	<php>if($vo['source_table'] == 'feed'):</php>
+	<span id='digg{$vo.feed_id}' rel='{$vo.digg_count}'>
+	<php>if(!isset($diggArr[$vo['feed_id']])) { </php>
+	   <a href="javascript:void(0)" onclick="addDigg({$vo.feed_id})" >赞<if condition='!empty($vo[digg_count])'>({$vo.digg_count})</if></a>
+	<php> } else { </php>
+	   已赞<if condition='!empty($vo[digg_count])'>({$vo.digg_count})</if>
+	<php> } </php></span>
+	<i class="vline">|</i>	
+	<php>endif;</php>		
+		  
+				  
                     <a href="{$vo.source_url}" >{:L('PUBLIC_VIEW')}</a>
                     <php>if(in_array('repost',$weibo_premission) || $vo['widget_stype'] !='feed'):</php>
                     <php>if($vo['source_table'] == 'comment'):</php>

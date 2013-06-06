@@ -9,12 +9,7 @@
                 <include file="_sidebar"/>
                 <div id="col5" class="st-index-main">
                 <div class="extend-foot">
-                    <div class="tab-menu">                              
-                        <ul>
-                        <li><span><a href="{:U('public/Profile/index',array('type'=>$type,'feed_type'=>'','uid'=>$uid))}">微博</a></span></li>
-                        <li class="current"><span><a href="{:U('public/Profile/data',array('uid'=>$uid))}">资料</a></span></li>
-                        </ul>
-                    </div>
+                    <include file="_tab_menu"/>  
                 <div class="feed-nav mt10">
                 </div>
 

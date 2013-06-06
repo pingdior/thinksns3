@@ -102,6 +102,11 @@ class RegisterModel extends Model {
 			$this->_error = L('PUBLIC_ACCOUNT_USED');				// 该用户名已被使用
 			$res = false;
 		}
+		// 敏感词
+		if (filter_keyword($name) !== $name) {
+			$this->_error = '抱歉，该昵称包含敏感词不允许被使用';
+			return false;
+		}
 
 		return $res;
 	}
@@ -291,9 +296,13 @@ class RegisterModel extends Model {
 			$receiverInfo = model('User')->getUserInfo($uid);
 			// 获取发起邀请用户ID
 			$inviteUid = model('Invite')->where("code='{$receiverInfo['invite_code']}'")->getField('inviter_uid');
+			// 邀请人积分操作
+            model('Credit')->setUserCredit($inviteUid, 'invite_friend');
 			// 相互关注操作
 			model('Follow')->doFollow($uid, intval($inviteUid));
 			model('Follow')->doFollow(intval($inviteUid), $uid);
+		    // 清除用户缓存
+		    $this->_user_model->cleanCache($uid);
 			// 发送通知
 			$config['name'] = $receiverInfo['uname'];
 			$config['space_url'] = $receiverInfo['space_url'];
@@ -302,10 +311,9 @@ class RegisterModel extends Model {
 			if($registerConfig['welcome_email']){
 				model('Notify')->sendNotify($uid, 'register_welcome', $config);
 			}
-			// 清除用户缓存
-			$this->_user_model->cleanCache($uid);
 		}
-		
+		// 清除用户缓存
+		$this->_user_model->cleanCache($uid);
 		return $res;
 	}
 }

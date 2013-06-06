@@ -77,7 +77,7 @@ class AppAction extends Action {
 	
 	public function addapp() {
 		$dao = model('App');
-		$all_apps  = $dao->getAppByPage(null,$limit=10);
+		$all_apps  = $dao->getAppByPage('add_front_applist=1',$limit=10);
 		$installed = isset($_SESSION['installed_app_user_'.$this->mid]) ? $_SESSION['installed_app_user_'.$this->mid] :M('user_app')->where('`uid`='.$this->mid)->field('app_id')->findAll();
 		$installed = getSubByKey($installed, 'app_id');
 		$this->assign($all_apps);

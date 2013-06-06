@@ -26,10 +26,11 @@
                                   </if>
                                 <!--关注分组end-->                                   
                                 <span class="right">
-								
+									<php>if($mid){</php>
                                     <if condition="$mid neq $_following['fid']">
                                         {:W('FollowBtn', array('fid'=>$_following['fid'], 'uname'=>$user_info[$_following['fid']]['uname'], 'refer'=> $uid == $mid ? 'following_list' : '', 'follow_state'=>$follow_state[$_following['fid']], 'type'=>'normal'))}
                                     </if>
+                                    <php>}</php>
                                 </span>
                                 
 

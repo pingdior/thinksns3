@@ -20,7 +20,7 @@
                         <div class="weiba-list mb20 clearfix">
                             <volist name="weibaList.data" id="vo">
                                 <dl>
-                                     <dt><a href="{:U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']))}"><img src="{$vo.logo}" width="100" height="100" /></a></dt>
+                                     <dt><a href="{:U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']))}"><img src="{$vo.logo|getImageUrl=###,100,100,true}" /></a></dt>
                                      <dd>
                                         <div class="right"><!-- <a class="btn-cancel"><span>关注</span></a> -->{:W('FollowWeiba',array('weiba_id'=>$vo['weiba_id'],'follow_state'=>array('following'=>$vo['following'])))}</div>
                                         <p class="weiba_name"><a href="{:U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']))}">{$vo.weiba_name}</a></p><p class="f9 mb10">粉丝数：{$vo.follower_count}<span class="pl5 pr5">/</span>帖子数：{$vo.thread_count}</p><p class="f3">{$vo.intro}</p>

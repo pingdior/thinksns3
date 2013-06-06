@@ -18,8 +18,9 @@ class IndexAction extends Action
 			$this->error('找人功能已关闭');
 		}
 		$this->assign('findPeopleConfig',$conf['findPeople']);
-		//dump($_GET['type']);exit;
-		if($_GET['type']){
+		if(!isset($_GET['type']) || empty($_GET['type']) ){
+			$_GET['type'] = $conf['findPeople'][0];
+		}else{
 			if(!in_array(t($_GET['type']), $conf['findPeople'])) $this->error('参数错误！');
 		}
 		// 获取相关数据

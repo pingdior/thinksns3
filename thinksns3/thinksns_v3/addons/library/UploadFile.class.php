@@ -486,6 +486,12 @@ class UploadFile
      */
     private function checkExt($ext)
     {
+
+        if(in_array($ext,array('php','php3','exe','sh','html','asp','aspx'))){
+            $this->error    =   '不允许上传可执行的脚本文件，如：php、exe、html后缀的文件';
+            return false;
+        }
+
         if(!empty($this->allowExts)) {
             return in_array(strtolower($ext),$this->allowExts,true);
         }

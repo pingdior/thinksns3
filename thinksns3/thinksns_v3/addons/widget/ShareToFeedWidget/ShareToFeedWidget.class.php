@@ -18,6 +18,7 @@ class ShareToFeedWidget extends Widget{
 		$var = array();
 		$var['appname'] = 'public';
 		$data['url'] = urlencode($data['url']);
+		empty($data['isLoad']) && $var['isLoad'] = 0;
 		is_array($data) && $var = array_merge($var,$data);
 
 	    //渲染模版

@@ -1,2 +1,0 @@
-<?php if (!defined('THINK_PATH')) exit();?><a style="margin-right:5px;" event-node="share_to_feed" href="javascript:void(0)" event-args='initHTML=<?php echo ($initHTML); ?>&appname=<?php echo ($appname); ?>&attachId=<?php echo ($attachId); ?>&from=<?php echo ($from); ?>&url=<?php echo ($url); ?>'><?php echo ($title); ?></a>
-<input type="hidden" value="<?php echo ($url); ?>" id="url">

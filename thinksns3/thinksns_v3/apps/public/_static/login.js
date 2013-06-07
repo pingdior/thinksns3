@@ -3,7 +3,8 @@ $(document).ready(function() {
     $('#ajax_login_form').submit(function(){
         $(this).ajaxSubmit({
             beforeSubmit:  checkLoginForm, 
-            success:       loginCallback
+            success:       loginCallback,
+            dataType: 'json'
         }); 
         return false; 
     });
@@ -20,19 +21,19 @@ $(document).ready(function() {
         return true;
     };
     // 成功后的回调函数
-    var loginCallback = function(e) {
-        var i = eval("("+e+")");
+    var loginCallback = function(i) {
+        // var i = eval("("+e+")");
         if(i.status==1){
-            var home_url = i.data;
-        //  window.location.href = U('public/Index/index');
-            window.location.href = home_url;
+            $('#js_login_input').html('<p>'+i.info+'</p>').show();    
+            if(i.data==0){
+                window.location.href = U('public/Index/index');  
+            }else{
+                window.location.href = i.data;            
+            }
         }else{
             $('#js_login_input').html('<p>'+i.info+'</p>').show();
         }
     };
-/*    core.plugFunc('imgshow',function(){
-        core.imgshow.loginImg();    
-    });*/
 }); 
 
 // 登录验证

@@ -1,5 +1,31 @@
-
-<php> $cancomment = intval(CheckPermission('core_normal','feed_comment')); </php>
+<script type="text/javascript">
+var digglock = 0;
+function addDigg(feed_id){
+	if (digglock==1){
+		return;
+	}
+	digglock = 1;
+   $.post("{:U('public/Feed/addDigg')}", {feed_id:feed_id}, function(res){
+       if(res==1){
+	       var num = $('#digg'+feed_id).attr('rel');
+    	   num++;
+    	   $('#digg'+feed_id).html('已赞('+num+')');
+	   }else {
+	       ui.error('操作失败，如没有登录请先登录再操作');
+       }
+       digglock = 0;
+   });
+}
+</script>
+<php> 
+$cancomment = intval(CheckPermission('core_normal','feed_comment')); 
+$canfeedshare = CheckPermission('core_normal','feed_share');
+$canfeeddel = CheckPermission('core_normal','feed_del');
+$adminfeeddel = CheckPermission('core_admin','feed_del');
+$canfeedreport = CheckPermission('core_normal','feed_report');
+$adminchannelrecom = CheckPermission('channel_admin','channel_recommend');
+$admintaskrecom = CheckPermission('vtask_admin','vtask_recommend');
+</php>
 <volist name='data' id ='vl'>
 	<php>
 		$cancomment_old = empty($vl['app_row_id'])  ? 0 : 1;
@@ -8,7 +34,7 @@
 	<dt class="face">
 	<a href="{$vl['user_info']['space_url']}"><img src="{$vl['user_info']['avatar_small']}"  event-node="face_card" uid='{$vl['user_info']['uid']}'></a></dt>
 	<dd class="content">
-    <span event-node="show_admin" event-args="feed_id={$vl['feed_id']}&uid={$vl['user_info']['uid']}&feed_del={:CheckPermission('core_admin','feed_del')}&channel_recommend={:CheckPermission('channel_admin','channel_recommend')}&vtask_recommend={:CheckPermission('vtask_admin','vtask_recommend')}" href="javascript:;" class="right f12 f9 hover" style="display:none;cursor:pointer">管理</span>
+    <span event-node="show_admin" event-args="feed_id={$vl['feed_id']}&uid={$vl['user_info']['uid']}&feed_del={$adminfeeddel}&channel_recommend={$adminchannelrecom}&vtask_recommend={$admintaskrecom}" href="javascript:;" class="right f12 f9 hover" style="display:none;cursor:pointer">管理</span>
 	<eq name='vl.is_del' value='0'>
 	<p class="hd">{$vl.title}
 	<volist name="vl['GroupData'][$vl['uid']]" id="v2">
@@ -23,9 +49,17 @@
 	
 	<p class="info">
 	<span class="right">
+	<span id='digg{$vl.feed_id}' rel='{$vl.digg_count}'>
+	<php>if(!isset($diggArr[$vl['feed_id']])) { </php>
+	   <a href="javascript:void(0)" onclick="addDigg({$vl.feed_id})" >赞<if condition='!empty($vl[digg_count])'>({$vl.digg_count})</if></a>
+	<php> } else { </php>
+	   已赞<if condition='!empty($vl[digg_count])'>({$vl.digg_count})</if>
+	<php> } </php>
+    </span>
+	<i class="vline">|</i>
 	<php>if(in_array('repost',$weibo_premission)):</php>
 	<eq name='vl.actions.repost' value='true'>
-	<php>if(CheckPermission('core_normal','feed_share')){</php>
+	<php>if($canfeedshare){</php>
 	<php>
 		$sid = !empty($vl['app_row_id'])? $vl['app_row_id'] : $vl['feed_id'];
 		$cancomment_old = in_array($vl['type'],$cancomment_old_type) ? 1 : 0;
@@ -55,12 +89,12 @@
 	<em class="hover">
 	<eq name='vl.actions.delete' value='true'>
 	<!-- 做普通删除权限 和 管理删除权限 判断 & 只有微博可以被删除  -->
-	<php>if(($vl['user_info']['uid'] == $GLOBALS['ts']['mid'] && CheckPermission('core_normal','feed_del')) || CheckPermission('core_admin','feed_del')){</php>
+	<php>if(($vl['user_info']['uid'] == $GLOBALS['ts']['mid'] && $canfeeddel) || $adminfeeddel){</php>
 		<a href="javascript:void(0)" event-node ='delFeed' event-args='feed_id={$vl.feed_id}&uid={$vl.user_info.uid}'>{:L('PUBLIC_STREAM_DELETE')}</a>
 	<php>}</php>
 	</eq>
 	<php>if($vl['user_info']['uid'] != $GLOBALS['ts']['mid']){</php>
-	<php>if(CheckPermission('core_normal','feed_report')){</php>
+	<php>if($canfeedreport){</php>
 	<a href="javascript:void(0)" event-node='denounce' event-args='aid={$vl.feed_id}&type=feed&uid={$vl.user_info.uid}'>{:L('PUBLIC_STREAM_REPORT')}</a>
 	<php>}</php>
 	<php>}</php>
@@ -68,6 +102,16 @@
     </span>
 </p>
 	   <div model-node="comment_detail" class="repeat clearfix" style="display:none;"></div>
+	   	<div class="praise-list clearfix" style="display:none;">
+	   		<i class="arrow arrow-t"></i>
+	   	  <ul>
+	   	  	  <li><a href=""><img src="{$vl['user_info']['avatar_small']}" width="30" height="30"/></a><a href="" class="ico-close1"></a></li>
+	   	  	  <li><a href=""><img src="{$vl['user_info']['avatar_small']}" width="30" height="30"/></a></li>
+	   	  	  <li><a href=""><img src="{$vl['user_info']['avatar_small']}" width="30" height="30"/></a></li>
+	   	  	  <li><a href=""><img src="{$vl['user_info']['avatar_small']}" width="30" height="30"/></a></li>
+	   	  	  <li><a href=""><i class="arrow-next-page"></i></a></li>
+	   	  </ul>
+        </div>
  	
  	<else />
 	
@@ -82,6 +126,7 @@
 	</dd>
 	</dl>
 </volist>
+
 <script>
 function doHighlight(a,b){
     highlightStartTag="<span style='color:red'>";
@@ -140,7 +185,7 @@ $(document).ready(function() {
 			}
 		});	
 	};
-	updateTime();
+	//updateTime();
 	setInterval(function() {
 		wTime += 10;
 		updateTime();

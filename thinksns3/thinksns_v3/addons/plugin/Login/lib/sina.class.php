@@ -24,10 +24,15 @@ class sina{
 		return $this->loginUrl;
 	}
 
+	//获取token信息
+	public function getTokenInfo($access_token){
+		return $this->_oauth->getTokenInfo( $access_token ) ;
+	}
+
 	//用户资料
-	public function userInfo(){
-		$sinauid = $this->doClient()->get_uid();
-		$me = $this->doClient()->show_user_by_id($sinauid['uid']);
+	public function userInfo($opt){
+		$sinauid = $this->doClient($opt)->get_uid();
+		$me = $this->doClient($opt)->show_user_by_id($sinauid['uid']);
 		$user['id']          = $me['id'];
 		$user['uname']       = $me['name'];
 		$user['province']    = $me['province'];
@@ -61,15 +66,22 @@ class sina{
 				$token = null;
 			}
 		}else{
-			return false;
+			$keys = array();
+			$keys['refresh_token'] = $_REQUEST['code'];
+			try {
+				$token = $this->_oauth->getAccessToken( 'token', $keys ) ;
+			} catch (OAuthException $e) {
+				$token = null;
+			}
 		}
-
 		if ($token) {
 			setcookie( 'weibojs_'.$this->_oauth->client_id, http_build_query($token) );
 			$_SESSION['sina']['access_token']['oauth_token'] = $token['access_token'];
 			$_SESSION['sina']['access_token']['oauth_token_secret'] = $token['refresh_token'];
+			$_SESSION['sina']['expire'] = time()+$token['expires_in'];
 			$_SESSION['sina']['uid'] = $token['uid'];
 			$_SESSION['open_platform_type'] = 'sina';
+			return $token;
 		}else{
 			return false;
 		}

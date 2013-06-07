@@ -18,6 +18,7 @@
 <script>
 function showgroup(gname,obj,gid){
 	if ( $('#'+gname+' > li').html() == null ){
+		$('#groupusers').append('<img src="'+ THEME_URL+'/image/load.gif" id="loadimg" class="alM">');
 		$.post(U('public/Feed/changGroup'),{gid:gid},function (res){
 			$('#loadimg').remove();
 			$('#groupusers').append(res);
@@ -29,6 +30,5 @@ function showgroup(gname,obj,gid){
 	$('#groups li').removeClass('current');
 	$(obj).addClass('current');
 	$('#groupusers ul[id!="'+gname+'"]').hide();
-	$('#groupusers').append('<img src="'+ THEME_URL+'/image/load.gif" id="loadimg" class="alM">');
 }
 </script>

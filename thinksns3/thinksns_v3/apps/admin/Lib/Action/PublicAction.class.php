@@ -8,6 +8,9 @@ tsload(APPS_PATH.'/admin/Lib/Action/AdministratorAction.class.php');
 class PublicAction extends AdministratorAction {
 	
 	public function _initialize(){
+		if ( !in_array( ACTION_NAME , array('login','doLogin','logout','selectDepartment') ) ){
+			parent::_initialize();
+		}
 		$this->assign('isAdmin',1);	//是否后台
 	}
 	/**
@@ -15,25 +18,19 @@ class PublicAction extends AdministratorAction {
 	 * Enter description here ...
 	 */
 	public function login(){
-		
 		if ($_SESSION['adminLogin']) {
 			redirect(U('admin/Index/index'));exit();
 		}
 		$this->setTitle( L('ADMIN_PUBLIC_LOGIN') );
 		$this->display();
 	}
-	/**
-	 * 验证码
-	 * Enter description here ...
-	 */
-	public function verify(){
-		tsload(ADDON_PATH.'/library/Image.class.php');
-		tsload(ADDON_PATH.'/library/String.class.php');
-		Image::buildImageVerify();
-	}
-	
+
 	public function doLogin(){
-		$login =model('Passport')->adminLogin();
+        //检查验证码
+        if (md5(strtoupper($_POST['verify'])) != $_SESSION['verify']) {
+            $this->error('验证码错误');
+        }
+		$login = model('Passport')->adminLogin();
 		if($login){
 			if(CheckPermission('core_admin','admin_login')){
 				$this->success(L('PUBLIC_LOGIN_SUCCESS'));	
@@ -41,7 +38,6 @@ class PublicAction extends AdministratorAction {
 				$this->assign('jumpUrl',SITE_URL);
 				$this->error(L('PUBLIC_NO_FRONTPLATFORM_PERMISSION_ADMIN'));
 			}
-			
 		}else{
 			$this->error(model('Passport')->getError());
 		}
@@ -69,7 +65,9 @@ class PublicAction extends AdministratorAction {
 			echo json_encode( $return );exit();
 		}
 
-		$ctree = model('Department')->getDepartment($_POST['pid']);
+		$_POST['pid'] = intval($_POST['pid']);
+        $_POST['sid'] = intval($_POST['sid']);
+        $ctree = model('Department')->getDepartment($_POST['pid']);
         if(empty($ctree['_child'])){
         	$return['status'] = 0;
 			$return['data']   = L('PUBLIC_SYSTEM_SONCATEGORY_ISNOT');	

@@ -78,7 +78,7 @@ class XconfigModel extends Model {
 		
 		$cache_id = '_system_config_lget_'.$list_name;
 		
-		if(($data = F($cache_id)) === false || $data =='') {
+		if(($data = F($cache_id)) === false || $data == '' || empty($data)) {
 			$data = array();
 			$map['`list`'] = $list_name;
 			

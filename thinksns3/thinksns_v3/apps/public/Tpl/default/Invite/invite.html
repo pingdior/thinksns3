@@ -286,6 +286,9 @@ var doInviteEmail = function()
         return false;
       } else {
         ui.error(res.info);
+        setTimeout(function () {
+          location.reload();
+        }, 1500);
         return false;
       }
     }, 'json');

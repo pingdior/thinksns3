@@ -283,6 +283,19 @@ M.addEventFns({
 		}
 	},
 	share_to_feed:{//分享操作
+		load: function () {
+			var attrs = M.getEventArgs(this);
+			if (attrs.isLoad == 1) {
+				var initHTML = attrs.initHTML;
+				var attachId = attrs.attachId;
+				var from = attrs.from;
+				var appname = attrs.appname;
+				var source_url = attrs.url;
+				var url = U('public/Share/shareToFeed')+'&initHTML='+initHTML+'&attachId='+attachId+'&from='+from+'&appname='+appname+'&source_url='+source_url;
+				ui.box.load(url,'分享');
+			}
+			return false;
+		},
 		click : function(){
 			var attrs =M.getEventArgs(this);
 			var initHTML = attrs.initHTML;

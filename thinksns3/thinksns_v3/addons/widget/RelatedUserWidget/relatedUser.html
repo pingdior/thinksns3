@@ -1,5 +1,5 @@
-<div class="attention mb20 clearfix border-b" model-node="related_list">
-	<a href="javascript:;" event-node="change_related" event-args="uid={$uid}&limit={$limit}" id="changerelated" class="right">换一换</a><h3>{$title}</h3>
+<div class="right-box mb20 clearfix border-b" model-node="related_list">
+	<h3><a href="javascript:;" event-node="change_related" event-args="uid={$uid}&limit={$limit}" id="changerelated" class="right">换一换</a>{$title}</h3>
     <volist name="user" id="vo">
     	<dl model-node="related_dl">
     		<dt><a event-node="face_card" uid="{$vo[userInfo]['uid']}" href="{$vo.userInfo.space_url}" class="face"><img src="{$vo.userInfo.avatar_small}" width="50" height="50"/></a></dt>
@@ -46,7 +46,7 @@ M.addEventFns({
             var args = M.getEventArgs(this);
             var _model = M.getModels('related_list');
             $.post(U('widget/RelatedUser/changeRelate'), {uid:args.uid, limit:args.limit}, function(data) {
-                var html = '<a href="javascript:;" event-node="change_related" event-args="uid={$uid}&limit={$limit}" class="right">换一换</a><h3>{$title}</h3>';
+                var html = '<h3><a href="javascript:;" event-node="change_related" event-args="uid={$uid}&limit={$limit}" class="right">换一换</a>{$title}</h3>';
                 html += data;
                 $(_model).html(html);
                 M($(_model)[0]);

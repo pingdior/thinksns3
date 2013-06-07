@@ -19,11 +19,15 @@ class IndexAction extends Action
 		$this->assign('channelCategory', $channelCategory);
 		// 频道分类选中
 		$cid = intval($_GET['cid']);
+		$categoryIds = getSubByKey($channelCategory, 'channel_category_id');
+		if (!in_array($cid, $categoryIds) && !empty($cid)) {
+			$this->error('您请求的频道分类不存在');
+			return false;
+		}
 		$channelConf = model('Xdata')->get('channel_Admin:index');
 		if(empty($cid)) {
 			$cid = $channelConf['default_category'];
 			if (empty($cid)) {
-				$categoryIds = getSubByKey($channelCategory, 'channel_category_id');
 				$cid = array_shift($categoryIds);
 			}
 		}

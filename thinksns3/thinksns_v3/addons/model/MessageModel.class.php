@@ -112,8 +112,7 @@ class MessageModel extends Model {
     public function getDetailList($map,$limit=20,$order = 'a.message_id DESC') {
         $field = 'a.*, a.from_uid AS fuid, b.type, b.min_max';
         $table = '`'.$this->tablePrefix.'message_content` AS a LEFT JOIN `'.$this->tablePrefix.'message_list` AS b ON a.list_id = b.list_id LEFT JOIN `'.$this->tablePrefix.'message_member` AS c ON a.list_id = c.list_id';
-        $list = $this->table($table)->where($map)->field($field)->order($order)->findPage($limit);
-
+        $list = $this->table($table)->where($map)->field($field)->group('a.message_id')->order($order)->findPage($limit);
         return $list;
     }
 
@@ -188,7 +187,7 @@ class MessageModel extends Model {
      */
     public function getUnreadMessageCount($uid, $type) {
         $map['a.member_uid'] = intval($uid);
-        $map['a.new'] = array('eq', 2);
+        $map['a.new'] = array('EQ', 2);
         $type && $map['b.type'] = array('IN', $type);
         $table = $this->tablePrefix.'message_member AS a LEFT JOIN '.$this->tablePrefix.'message_list AS b ON a.list_id = b.list_id';
         $unread = $this->table($table)->where($map)->count();
@@ -241,7 +240,7 @@ class MessageModel extends Model {
         $author = model('User')->getUserInfo($from_uid);
         $config['name'] = $author['uname'];
         $config['space_url'] = $author['space_url']; 
-        $config['face'] = $author['avatar_middle'];
+        $config['face'] = $author['avatar_small'];
         $config['content'] = $data['content'];
         $config['ctime'] = date('Y-m-d H:i:s',$data['mtime']);
         $config['source_url'] = U('public/Message/index');
@@ -300,7 +299,7 @@ class MessageModel extends Model {
                     $this->_addMessageMember($member_data, $from_uid);
                 } else {
                     // 重置其他成员信息
-                    $member_data['new'] = array('exp', '`new`+1');
+                    $member_data['new'] = 2;
                     $member_data['message_num'] = array('exp', '`message_num`+1');
                     $member_data['list_ctime'] = $time;
                     D('message_member')->where("`list_id`={$list_id} AND `member_uid`!={$from_uid}")->save($member_data);
@@ -310,7 +309,7 @@ class MessageModel extends Model {
                 // 重置最新记录
                 D('message_list')->save($list_data);
                 // 重置其他成员信息
-                $member_data['new'] = array('exp', '`new`+1');
+                $member_data['new'] = 2;
                 $member_data['message_num'] = array('exp', '`message_num`+1');
                 $member_data['list_ctime'] = $time;
                 D('message_member')->where("`list_id`={$list_id} AND `member_uid`!={$from_uid}")->save($member_data);

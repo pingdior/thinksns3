@@ -7,7 +7,7 @@
 class FeedModel extends Model {
 
 	protected $tableName = 'feed';
-	protected $fields = array('feed_id','uid','type','app','app_row_id','app_row_table','publish_time','is_del','from','comment_count','repost_count','comment_all_count','is_repost','is_audit','_pk'=>'feed_id');
+	protected $fields = array('feed_id','uid','type','app','app_row_id','app_row_table','publish_time','is_del','from','comment_count','repost_count','comment_all_count','digg_count','is_repost','is_audit','_pk'=>'feed_id');
 
 	public $templateFile = '';			// 模板文件
 
@@ -27,6 +27,7 @@ class FeedModel extends Model {
 	public function put($uid, $app = 'public', $type = '', $data = array(), $app_id = 0, $app_table = 'feed', $extUid = null, $lessUids = null, $isAtMe = true, $is_repost = 0) {
 		// 判断数据的正确性
 		if(!$uid || $type == '') {
+			$this->error = L('PUBLIC_ADMIN_OPRETING_ERROR');
 			return false;
 		}
 		if ( strpos( $type , 'postvideo' ) !== false ){
@@ -77,7 +78,7 @@ class FeedModel extends Model {
 			foreach($scream as $value) {
 				$tbody[] = $value;
 				$bodyStr = implode('//', $tbody);
-				if(get_str_length($bodyStr) > $feedNums) {
+				if(get_str_length(ltrim($bodyStr)) > $feedNums) {
 					break;
 				}
 				$body[] = $value;
@@ -116,13 +117,16 @@ class FeedModel extends Model {
 				model('Notify')->sendNotify($v['uid'], 'feed_audit');
 			}
 		}
+		// 目前处理方案格式化数据
+		$data['content'] = str_replace(chr(31), '', $data['content']);
+		$data['body'] = str_replace(chr(31), '', $data['body']);
 		// 添加关联数据
 		$feed_data = D('FeedData')->data(array('feed_id'=>$feed_id,'feed_data'=>serialize($data),'client_ip'=>get_client_ip(),'feed_content'=>$data['body']))->add();
 
 		// 添加微博成功后
 		if($feed_id && $feed_data) {
 			//微博发布成功后的钩子
-			Addons::hook("weibo_publish_after",array('weibo_id'=>$feed_id,'post'=>$data));
+			//Addons::hook("weibo_publish_after",array('weibo_id'=>$feed_id,'post'=>$data));
 
 			// 发送通知消息 - 重点 - 需要简化把上节点的信息去掉.
 			if($data['is_repost'] == 1) {
@@ -191,29 +195,39 @@ class FeedModel extends Model {
 	 */
 	public function getFeedInfo($id, $forApi = false) {
 		$data = model( 'Cache' )->get( 'feed_info_'.$id );
-		if ( $data ){
+		if ( $data !== false ){
 			return $data;
 		}
+
 		$map['a.feed_id'] = $id;
-		// $map['a.is_del'] = 0;//过滤已删除的微博
+		
+		// //过滤已删除的微博 wap 版收藏
+		// if($forApi){
+		// 	$map['a.is_del'] = 0;
+		// }
+		
 		$data = $this->where($map)
 					 ->table("{$this->tablePrefix}feed AS a LEFT JOIN {$this->tablePrefix}feed_data AS b ON a.feed_id = b.feed_id ")
 					 ->find();
+
 		$fd = unserialize($data['feed_data']);	
 
 		$userInfo = model('User')->getUserInfo($data['uid']);
 		$data['ctime'] = date('Y-m-d H:i',$data['publish_time']);
 		$data['content'] = $forApi ? parseForApi($fd['body']):$fd['body'];
 		$data['uname'] = $userInfo['uname'];
+		$data['user_group'] = $userInfo['api_user_group'];
 		$data['avatar_big'] = $userInfo['avatar_big'];
 		$data['avatar_middle'] = $userInfo['avatar_middle'];
 		$data['avatar_small']  = $userInfo['avatar_small'];
 		unset($data['feed_data']);
+		
 		// 微博转发
 		if($data['type'] == 'repost'){
 			$data['transpond_id'] = $data['app_row_id'];
 			$data['transpond_data'] = $this->getFeedInfo($data['transpond_id'], $forApi);
 		}
+
 		// 附件处理
 		if(!empty($fd['attach_id'])) {
 			$data['has_attach'] = 1;
@@ -235,6 +249,7 @@ class FeedModel extends Model {
 		} else {
 			$data['has_attach'] = 0;
 		}
+
 		if( $data['type'] == 'postvideo' ){
 			$data['host'] = $fd['host'];
 			$data['flashvar'] = $fd['flashvar'];
@@ -242,6 +257,7 @@ class FeedModel extends Model {
 			$data['flashimg'] = $fd['flashimg'];
 			$data['title'] = $fd['title'];
 		}
+
 		$data['feedType'] = $data['type'];
 		
 		// 是否收藏微博
@@ -257,8 +273,14 @@ class FeedModel extends Model {
 		// 微博详细信息
 		$feedInfo = $this->get($id);
 		$data['source_body'] = $feedInfo['body'];
+		$data['api_source'] = $feedInfo['api_source'];
 		//一分钟缓存
 		model( 'Cache' )->set( 'feed_info_'.$id , $data , 60);
+		if($forApi){
+			$data['content'] = real_strip_tags($data['content']);
+			unset($data['is_del'],$data['is_audit'],$data['from_data'],$data['app_row_table'],$data['app_row_id']);
+			unset($data['source_body']);
+		}
 		return $data;			  	
 	}
 
@@ -447,9 +469,11 @@ class FeedModel extends Model {
 		if(is_array($feed_ids)) {
 			foreach($feed_ids as $v) {
 				model('Cache')->rm('fd_'.$v);
+				model('Cache')->rm('feed_info_'.$v);
 			}
 		} else {
 			model('Cache')->rm('fd_'.$feed_ids);
+			model('Cache')->rm('feed_info_'.$feed_ids);
 		}
 	}
 
@@ -492,6 +516,7 @@ class FeedModel extends Model {
 				$v['info'] = $parseData['info'];
 				$v['title'] = $parseData['title'];
 				$v['body'] = $parseData['body'];
+				$v['api_source'] = $parseData['api_source'];
 				$v['actions'] = $parseData['actions'];
 				$v['user_info'] = $parseData['userInfo'];
 				$v['GroupData'] = model('UserGroupLink')->getUserGroupData($v['uid']);
@@ -506,6 +531,7 @@ class FeedModel extends Model {
 			$value['info'] = $parseData['info'];
 			$value['title'] = $parseData['title'];
 			$value['body'] = $parseData['body'];
+			$value['api_source'] = $parseData['api_source'];
 			$value['actions'] = $parseData['actions'];
 			$value['user_info'] = $parseData['userInfo'];
 			$value['GroupData'] = model('UserGroupLink')->getUserGroupData($value['uid']);
@@ -580,6 +606,7 @@ class FeedModel extends Model {
 	    $return['info'] =  trim((string) $result[0]['info']);
 	    //$return['title'] =  parse_html($return['title']); 
 	    $return['body']  =  parse_html($return['body']);
+	    $return['api_source'] = $var['sourceInfo'];
 		// $return['sbody'] =  parse_html($return['sbody']); 
 	    $return['actions'] = $actions['@attributes'];
 	    //验证转发的原信息是否存在
@@ -697,6 +724,13 @@ class FeedModel extends Model {
 			$save['is_del'] = $type =='delFeed' ? 1 : 0;
 
 			if($type == 'deleteFeed') {
+				$feedArr = is_array($feed_id) ? $feed_id : explode(',', $feed_id);
+				// 取消微博收藏
+				foreach ($feedArr as $sid) {
+					$feed = $this->where('feed_id='.$sid)->find();
+					model('Collection')->delCollection($sid, 'feed', $feed['uid']);
+				}
+				// 彻底删除微博
 				$res = $this->where($map)->delete();
 				// 删除微博相关信息
 				if($res) {
@@ -706,10 +740,6 @@ class FeedModel extends Model {
 				$ids = !is_array($feed_id) ? array($feed_id) : $feed_id;
 				$feedList = $this->getFeeds($ids);
 				$res = $this->where($map)->save($save);
-				$this->cleanCache($ids); 		// 删除微博缓存信息
-				// 资源微博缓存相关微博
-				$sids = $this->where('app_row_id='.$feed_id)->getAsFieldArray('feed_id');
-				$this->cleanCache($sids);
 				if($type == 'feedRecover'){
 					// 添加微博数
 					foreach($feedList as $v) {
@@ -724,7 +754,14 @@ class FeedModel extends Model {
 						model('UserData')->setUid($v['user_info']['uid'])->updateKey('weibo_count', -1);
 					}
 					$this->_deleteFeedAttach($ids, 'delAttach');
+					// 删除频道相应微博
+					$channelMap['feed_id'] = array('IN', $ids);
+					D('channel')->where($channelMap)->delete();
 				}
+				$this->cleanCache($ids); 		// 删除微博缓存信息
+				// 资源微博缓存相关微博
+				$sids = $this->where('app_row_id='.$feed_id)->getAsFieldArray('feed_id');
+				$this->cleanCache($sids);
 			}
 			// 删除评论信息
 			$cmap['app'] = 'Public';
@@ -780,6 +817,9 @@ class FeedModel extends Model {
 			if($res) {
 				$return = array('status'=>1);
 			}
+			
+			//更新缓存
+			$this->cleanCache($feed_id);
 		}	
 		return $return;
 	}

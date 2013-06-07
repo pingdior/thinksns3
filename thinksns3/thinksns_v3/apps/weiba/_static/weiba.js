@@ -374,6 +374,12 @@ var followWeiba = {
 					}
 				});
 				break;
+			default:
+				M.addListener(node, {
+					mouseleave: function() {
+					}
+				});
+			break;
 		}
 	},
 	/**
@@ -577,7 +583,8 @@ var saveWeibaInfo = function(){
 	var weiba_name = $('#weiba_name').val();
 	var intro = $('#intro').val();
 	var logo = $('#form_logo').val();
-	$.post(U('weiba/Manage/doWeibaEdit'),{weiba_id:weiba_id,weiba_name:weiba_name,intro:intro,logo:logo},function(msg){
+	var who_can_post = $('input:checked[name="who_can_post"]').val();
+	$.post(U('weiba/Manage/doWeibaEdit'),{weiba_id:weiba_id,weiba_name:weiba_name,intro:intro,logo:logo,who_can_post:who_can_post},function(msg){
 		if(msg=='1'){
 			ui.success('保存成功');
 		}else{

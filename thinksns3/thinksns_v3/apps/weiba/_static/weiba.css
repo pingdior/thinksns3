@@ -1,26 +1,9 @@
 /*图标*/
-.ico-comment{background-position:-219px -66px;width:16px;height:16px;vertical-align:-6px;*vertical-align:-3px}
-.ico-forward{background-position:-219px 0;width:16px;height:16px;vertical-align:-5px;*vertical-align:-3px}
-.ico-favorites{background-position:-219px -33px;width:16px;height:16px;vertical-align:-4px;*vertical-align:-2px}
-.ico-num1{background-position:-303px 0;display:inline-block;width:16px;height:26px;margin:4px 15px 0 0;}
-.ico-num2{background-position:-303px -46px;display:inline-block;width:16px;height:26px;margin:4px 15px 0 0;}
-.ico-num3{background-position:-303px -91px;display:inline-block;width:16px;height:26px;margin:4px 15px 0 0;}
-.ico-num4{background-position:-303px -142px;display:inline-block;width:16px;height:16px;margin:8px 15px 0 0;}
-.ico-num5{background-position:-303px -188px;display:inline-block;width:16px;height:16px;margin:8px 15px 0 0;}
-.ico-num6{background-position:-303px -232px;display:inline-block;width:16px;height:16px;margin:8px 15px 0 0;}
-.ico-num7{background-position:-303px -278px;display:inline-block;width:16px;height:16px;margin:8px 15px 0 0;}
-.ico-num8{background-position:-303px -320px;display:inline-block;width:16px;height:16px;margin:8px 15px 0 0;}
-.ico-num9{background-position:-303px -365px;display:inline-block;width:16px;height:16px;margin:8px 15px 0 0;}
-.ico-num10{background-position:-303px -410px;display:inline-block;width:16px;height:16px;margin:8px 15px 0 0;}
-.ico-piece{background-position:-266px 0;display:inline-block;width:4px;height:4px;vertical-align:5px;margin:0 5px 0 0;_vertical-align:-7px;}
+
 
 
 .arrow-weiba{background-position:0 -258px;width:12px;height:6px;display:block;}
-/*
-.btn-cancel span,.btn-grey-white,.btn-green-small,.btn-green-big,.btn-register,.btn-login,.btn-att-green,.btn-att-white,.btn-copy,.btn-cancel,.btn-grey{background:url(../images/btn.png) no-repeat 0 0;display:inline-block;vertical-align:middle;overflow:hidden;cursor:pointer;_background:url(../weiba/image/btn.gif) no-repeat 0 0;}
-.btn-cancel{background-position:0 -452px;padding:0 0 0 2px;}
-.btn-cancel span{background-position:right -484px;padding:0 7px;height:24px;line-height:23px;color:#666;display:inline-block;_line-height:17px;_height:17px;_padding:6px 5px;}
-*/
+
 
 .channel-title{padding:20px;}
 .channel-title img{margin:0 10px 0 0;}
@@ -29,12 +12,7 @@
 .channel-type a.no-margin{margin:0;width:96px;}
 .channel-type a:hover,.channel-type a.current{background:#0F8CA8;color:#fff;}
 #col3 .pad{padding:20px 20px 20px 0;}
-.weiba-pic-l{position:relative;width:50px;height:50px;}
-.weiba-pic-l .btn-att-white{position:absolute;bottom:3px;left:10%;visibility:hidden;_visibility:visible;}
-.weiba-pic-l .btn-cancel{position:absolute;bottom:3px;left:25%;visibility:hidden;_visibility:visible;}
-.weiba-pic .weiba-name{width:48px;height:14px;overflow:hidden;text-align:center;margin:10px 0 0 0;display:block;}
 
-/*.weiba-box1{background:#fafafa;border:1px solid #eee;padding:0 20px 20px 20px;margin:0 0 20px 0;overflow:hidden;*zoom:1;}*/
 .weiba-box1 .weiba-pic-title{padding:0;background:0;border:0;}
 .weiba-pic{margin:0 0 20px 0;}
 .weiba-pic li{float:left;margin:20px 26px 0 0;_margin:20px 20px 0 0;}
@@ -47,20 +25,13 @@
 .hot-posts-list li.no-margin{margin-right:0;}
 .hot-posts-list li .tit{width:200px;height:20px;line-height:20px;overflow:hidden;display:inline-block;}
 .hot-posts-list li span a{width:210px;display:inline-block;font-size:14px;}
-.weiba-rank-list h3,.weiba-posts-list h3{font-size:16px;color:#333;margin:0 0 20px 0;}
-.weiba-rank-list h3 span{font-size:12px;font-weight:normal;}
-.weiba-rank-list li dl{margin:0 0 0 30px;}
-.weiba-rank-list li dl.no-margin{margin:0;}
-.weiba-rank-list dt{float:left;}
-.weiba-rank-list dd{margin:0 0 0 40px;}
-.weiba-rank-list dd p{line-height:16px;}
-.weiba-rank-list li{overflow:hidden;*zoom:1;margin:15px 0 0 0;}
-.weiba-rank-list .ico-num{float:left;width:16px;}
+
+
+
+
 .my-weiba-list li{padding:15px 0;border-bottom:1px dotted #ddd;}
 .my-weiba-list li:hover{background:#f6f6f6;}
-.weiba-posts-list li{margin:0 0 10px 0;}
-.weiba-posts-list li .ico-piece{float:left;margin:8px 0 0 0;}
-.weiba-posts-list li .post-name{margin:0 0 0 14px;line-height:18px;*margin:-12px 0 0 10px;}
+
 
 
 
@@ -76,7 +47,7 @@
 .weiba-list dl{border-bottom:1px dotted #ddd;padding:25px 0;overflow:hidden;*zoom:1;}
 .weiba-list dt{float:left;width:100px;height:100px;}
 .weiba-list dd{margin:0 0 0 115px;}
-.weiba-list dd .f3{line-height: 14px;}
+.weiba-list dd .f3{line-height:20px}
 
 /*.Posts-content dl{overflow:hidden;*zoom:1;}*/
 .weiba-post-title{ border-bottom:1px dotted #DDDDDD;}
@@ -113,7 +84,7 @@
 .weiba-manage .member-list .c3{float:left;width:auto;text-align:left;line-height:50px;margin:0 10px;_margin:0 5px;}
 
 /*微吧公告*/
-.attention .content p{line-height:20px}
+.right-box .content p{line-height:20px}
 
 
 /*全部帖子列表&单个微吧内帖子列表*/
@@ -131,4 +102,4 @@
 
 /*微吧列表*/
 .weiba_name { margin-bottom:15px;}
-.weiba_name a{ font-size: 16px; font-family:"微软雅黑";}
+.weiba_name a{ font-size:18px; font-family:"微软雅黑";}

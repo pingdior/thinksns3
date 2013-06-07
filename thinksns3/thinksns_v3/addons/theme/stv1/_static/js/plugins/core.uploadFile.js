@@ -33,10 +33,16 @@ core.uploadFile = {
 			this.allowFileType = "undefined"==typeof(allowType) || '' == allowType ? "":allowType;
 			this.urlquery = $(obj).attr('urlquery');
 			this.stop = false;
+			var limit = $(obj).attr('limit');
+			if (typeof limit === 'undefined' || isNaN(limit) || limit === '') {
+				this.limit = 4;
+			} else {
+				this.limit = parseInt(limit);
+			}
 				
 			if("undefined" == typeof(this.filehash)){
 				this.filehash = new Array();
-			}	
+			}
 	
 			
 			//结果展示 保留div
@@ -108,8 +114,8 @@ core.uploadFile = {
 				});
 
 				//验证附件上传个数 不能大于4个
-				if($(_this.resultDiv).find('li').size()>3){
-					ui.error( L('PUBLIC_UPLOAD_ISMAX') );
+				if(_this.limit!=0 && $(_this.resultDiv).find('li').size() > (_this.limit - 1)){
+					ui.error('最多只能上传'+_this.limit+'个附件');
 					return false;
 				}
 

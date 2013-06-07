@@ -18,7 +18,7 @@
                     <div class="extend-foot">
                         <div class="tab-menu">
                             <ul>
-                                <li <eq name="type" value="">class="current"</eq>><span><a href="{:U('weiba/Index/myWeiba')}">我关注的微吧帖子</a></span></li>
+                                <li <eq name="type" value="myFollowing">class="current"</eq>><span><a href="{:U('weiba/Index/myWeiba',array('type'=>'myFollowing'))}">我关注的微吧帖子</a></span></li>
                                 <li <eq name="type" value="myPost">class="current"</eq>><span><a href="{:U('weiba/Index/myWeiba',array('type'=>'myPost'))}">我发表的帖子</a></span></li>
                                 <li <eq name="type" value="myReply">class="current"</eq>><span><a href="{:U('weiba/Index/myWeiba',array('type'=>'myReply'))}">我回复的帖子</a></span></li>
                                 <li <eq name="type" value="myFavorite">class="current"</eq>><span><a href="{:U('weiba/Index/myWeiba',array('type'=>'myFavorite'))}">我收藏的帖子</a></span></li>

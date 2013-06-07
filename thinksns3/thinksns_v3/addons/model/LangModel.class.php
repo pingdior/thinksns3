@@ -56,8 +56,8 @@ class LangModel extends Model {
 	 * @return integer 是否更改成功，1表示成功；0表示失败
 	 */
 	public function updateLangData($data, $sid) {
-		$addData['key'] = strtoupper($data['key']);
-		$addData['appname'] = strtoupper($data['appname']);
+		$addData['key'] = strtoupper(t($data['key']));
+		$addData['appname'] = strtoupper(t($data['appname']));
 		$addData['filetype'] = $data['filetype'];
 		$fields = $this->getLangType();
 		foreach($fields as $value) {

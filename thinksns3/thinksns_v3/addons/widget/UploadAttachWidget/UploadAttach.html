@@ -1,7 +1,7 @@
 <script type="text/javascript" src="__PUBLIC__/js/ajaxupload.3.6.js?v={$core.site.update_v}"></script>
 <?php
 // 读取附件大小的配置
-$_editor_system_default = model('Xdata')->lget('attach');
+$_editor_system_default = model('Xdata')->get('admin_Config:attach');
 $_editor_size_limit = empty($_editor_system_default['attach_max_size']) ? 2 : $_editor_system_default['attach_max_size']; // 默认2M
 $_editor_size_limit = floatval($_editor_size_limit) * 1024; // K
 
@@ -97,9 +97,9 @@ $num   = jiami($limit);
 <div id="attach_upload_widget">
   <div id="attach_upload_data<php> echo $end;</php>" class="lh25">
     <volist id="vo" name="editdata">
-      <input type="hidden" value="{$vo.id}" name="attach[]" class="attach{$vo.id}"/>
-      <p class="attach{$vo.id}" style="height:20px; line-height:22px; overflow:hidden"> 
-      <a onclick="deleteAttach({$vo.id})" href="javascript:void(0)" class="attach{$vo.id}">[ 删除 ]</a> 
+      <input type="hidden" value="{$vo.attach_id}" name="attach[]" class="attach{$vo.attach_id}"/>
+      <p class="attach{$vo.attach_id}" style="height:20px; line-height:22px; overflow:hidden"> 
+      <a onclick="deleteAttach({$vo.attach_id})" href="javascript:void(0)" class="attach{$vo.attach_id}">[ 删除 ]</a> 
       <span class="attach{$vo.id}">{$vo.name}</span> </p>
     </volist>
   </div>
@@ -109,7 +109,7 @@ $num   = jiami($limit);
 		<button class="btn_b"  id="ajax_upload_attach_button{$end}" disabled="disabled" style="vertical-align:middle" onclick="return false;">{:L('upload_attach_loading')}</button>
 	</div>
 	<neq name='nodiwei' value='1'>
-	<div class="di_wei left" style="padding-top:7px;+padding-top:0;_padding-top:7px;">
+	<div class="di_wei left" style="padding-top:7px;">
 	<img src="__APP__/images/doubt_Icon.gif" onmouseover="$('#ajax_attach_help').show()" onmouseout="$('#ajax_attach_help').hide()" />
 	<div class="clewbox" id="ajax_attach_help" style="display:none;">
 		<div class="clewbox_bg">

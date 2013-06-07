@@ -116,71 +116,75 @@ class Image
      +----------------------------------------------------------
      * @return void
      */
-    static function cut($image,$cutfile,$cutWidth='',$cutHeight=''){
+    static function cut($image,$filename,$maxWidth='',$maxHeight=''){
 
-        $cutHeight = intval($cutHeight);
-        $cutWidth = intval($cutWidth);
-
+        // 获取原图信息
         $info  = Image::getImageInfo($image);
-        if($info){
-            if(empty($cutHeight)  && empty($cutWidth)){
-            //将原图拷贝一份
-                copy($image,$cutfile);
-                return true;
+        //dump($image);
+        if($info !== false) {
+            $srcWidth  = $info['width'];
+            $srcHeight = $info['height'];
+            $pathinfo = pathinfo($image);
+            $type =  $pathinfo['extension'];
+            $type = empty($type)?$info['type']:$type;
+            $type   =   strtolower($type);
+            $interlace  =  $interlace? 1:0;
+            unset($info);
+            // 载入原图
+            $createFun = 'ImageCreateFrom'.($type=='jpg'?'jpeg':$type);
+            $srcImg     = $createFun($image);
+
+            //创建缩略图
+            if($type!='gif' && function_exists('imagecreatetruecolor'))
+                $thumbImg = imagecreatetruecolor($maxWidth, $maxHeight);
+            else
+                $thumbImg = imagecreate($maxWidth, $maxHeight);
+
+            // 新建PNG缩略图通道透明处理
+            if('png'==$type) {
+                imagealphablending($thumbImg, false);//取消默认的混色模式
+                imagesavealpha($thumbImg,true);//设定保存完整的 alpha 通道信息
+            }elseif('gif'==$type) {
+            // 新建GIF缩略图预处理，保证透明效果不失效
+                $background_color  =  imagecolorallocate($thumbImg,  0,255,0);  //  指派一个绿色
+                imagecolortransparent($thumbImg,$background_color);  //  设置为透明色，若注释掉该行则输出绿色的图
             }
-            $srcWidth  = $info['width'];   //原始宽
-            $srcHeight = $info['height'];  //原始高
-            (empty($cutWidth) || $cutWidth > $srcWidth ) && $cutWidth = $srcWidth;  //切割后的宽
-            (empty($cutHeight) || $cutHeight > $srcHeight ) && $cutHeight = $srcHeight; //切割后的高
-            
-            
-            $swh = $srcWidth/$srcHeight;
-            
-            //start 方案1 直接压缩原图并截取
-           /*
-            if($swh > 1){
-                $cutHeight =  $cutWidth/$swh;
+
+            // 计算缩放比例
+            if(($maxWidth/$maxHeight)>=($srcWidth/$srcHeight)){
+                //宽不变,截高，从中间截取 y=
+                $width  =   $srcWidth;
+                $height =   $srcWidth*($maxHeight/$maxWidth);
+                $x      =   0;
+                $y      =   ($srcHeight-$height)*0.5;
             }else{
-                $cutWidth = $swh * $cutHeight;
+                //高不变,截宽，从中间截取，x=
+                $width  =   $srcHeight*($maxWidth/$maxHeight);
+                $height =   $srcHeight;
+                $x      =   ($srcWidth-$width)*0.5;
+                $y      =   0;
             }
-            */
-            //<< end 方案1
-            $ext = $info['type'];
-            $func   =   ($ext != 'jpg' && $ext !='jpeg') ? 'imagecreatefrom' . $ext : 'imagecreatefromjpeg';
-            $img_r  =   call_user_func($func,$image);
-            $dst_r  =   ImageCreateTrueColor( $cutWidth, $cutHeight );
-            $back   =   ImageColorAllocate( $dst_r, 255, 255, 255 );
-            ImageFilledRectangle( $dst_r, 0, 0, $cutWidth, $cutHeight, $back );
-            
-           
-           // ImageCopyResampled( $dst_r, $img_r, 0, 0, 0,0, $cutWidth, $cutHeight, $srcWidth, $srcHeight );  //方案1 实现
-
-            //>> start 方案2：先切一个最大的正方形 再压缩
-           
-
-            if($swh > 1){ 
-                $_srcWidth = $srcHeight;
-                $_srcHeight = $srcHeight;
-                $_s_x = ($srcWidth - $srcHeight) /2;
-                $_s_y = 0;
+            // 复制图片
+            if(function_exists("ImageCopyResampled")){
+                ImageCopyResampled($thumbImg, $srcImg, 0, 0, $x, $y, $maxWidth, $maxHeight, $width,$height);
             }else{
-                $_srcWidth = $srcWidth;
-                $_srcHeight = $srcWidth;
-                $_s_x = 0;
-                $_s_y = ($srcHeight - $srcWidth) /2;
-            }  
-            ImageCopyResampled( $dst_r, $img_r, 0, 0, $_s_x,$_s_y, $cutWidth, $cutHeight, $_srcWidth, $_srcHeight );
-           
-            //<< end
+                ImageCopyResized($thumbImg, $srcImg, 0, 0, $x, $y, $maxWidth, $maxHeight,  $width,$height);
+            }
+            ImageDestroy($srcImg);
 
-            ImagePNG($dst_r, $cutfile);  
+            // 对jpeg图形设置隔行扫描
+            if('jpg'==$type || 'jpeg'==$type)   imageinterlace($thumbImg,$interlace);
 
-            imagedestroy($dst_r);
-            imagedestroy($img_r);
+            // 生成图片
+            //$imageFun = 'image'.($type=='jpg'?'jpeg':$type);
+            $imageFun   =   'imagepng';
+            $filename  = empty($filename)? substr($image,0,strrpos($image, '.')).$suffix.'.'.$type : $filename;
 
-        }else{
-            return false;
-        }
+            $imageFun($thumbImg,$filename);
+            ImageDestroy($thumbImg);
+            return $filename;
+         }
+         return false;
     }
     /**
 

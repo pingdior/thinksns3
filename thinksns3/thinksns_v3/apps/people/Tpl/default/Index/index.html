@@ -4,9 +4,21 @@
   <div id="main-wrap">
     <div class="boxShadow">
 
-      <div class="find-type clearfix">
+      <div class="find-type">
         <div class="app-title clearfix">
-          <div class="app-tab-menu">
+          <div class="search-input">
+            <form id="search_people" action="{:U('public/Search/index')}" method="GET">
+                <input name="app" value="public" type="hidden" />
+                <input name="mod" value="Search" type="hidden" />
+                <input name="a" value="public" id='search_a' type="hidden"/>
+                <input name="t" value="1" id='search_t' type="hidden"/>
+                <input id="searchpeople_input" class="s-txt left"  type="text" value="<php>if(!empty($searchkey)){</php>{$searchkey}<php>}else{</php>请输入昵称<php>}</php>" onfocus="this.value=''" onblur="if(this.value=='') this.value='请输入昵称';" name="k">
+                <a href="javascript:void(0)" class="btn-search" onclick="if(getLength($('#searchpeople_input').val()) && $('#searchpeople_input').val()!=='请输入昵称'){ $('#search_people').submit(); return false;}"><span>搜索</span></a>
+            </form>
+          </div>
+          <h4 class="left"><img src="{$ts['app']['small_icon_url']}" />&nbsp;&nbsp;找人</h4>
+          <div class="app-tab-menu clearfix" style="margin:0 0 0 130px;">
+            
             <ul>
               <php>if(in_array('tag',$findPeopleConfig)){</php>
                 <li>
@@ -33,19 +45,8 @@
               <php>}</php>
             </ul>
           </div>
-
-          <div class="search-input" style="z-index:99;float:right;width:240px;">
-            <form id="search_people" action="{:U('public/Search/index')}" method="GET">
-                <input name="app" value="public" type="hidden" />
-                <input name="mod" value="Search" type="hidden" />
-                <input name="a" value="public" id='search_a' type="hidden"/>
-                <input name="t" value="1" id='search_t' type="hidden"/>
-                <input id="searchpeople_input" class="s-txt left"  type="text" value="<php>if(!empty($searchkey)){</php>{$searchkey}<php>}else{</php>请输入昵称<php>}</php>" onfocus="this.value=''" onblur="if(this.value=='') this.value='请输入昵称';" name="k">
-                <a href="javascript:void(0)" class="btn-search" onclick="if(getLength($('#searchpeople_input').val()) && $('#searchpeople_input').val()!=='请输入昵称'){ $('#search_people').submit(); return false;}"><span>搜索</span></a>
-            </form>
-          </div>
       </div>
-        </div>
+     </div>
 
       <div id="col" class="extend clearfix">
         <div id="col9" class="st-index-right">

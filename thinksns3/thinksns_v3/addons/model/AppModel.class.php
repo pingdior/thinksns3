@@ -26,6 +26,8 @@ class AppModel extends Model {
 			16 => 'company_name',
 			17 => 'has_mobile',
 			18 => 'child_menu',
+			19 => 'add_front_top',
+			20 => 'add_front_applist',
 			'_pk' => 'app_id' 
 	);
 	public static $defaultApp = array (); // 默认应用字段
@@ -33,7 +35,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 初始化 - 用于双语处理
-	 * 
+	 *
 	 * @return void
 	 */
 	public function _initialize() {
@@ -45,7 +47,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 获取应用列表 - 分页型
-	 * 
+	 *
 	 * @param array $map
 	 *        	查询条件
 	 * @param integer $limit
@@ -63,7 +65,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 获取指定用户的应用列表 - 不分页型
-	 * 
+	 *
 	 * @param integer $uid
 	 *        	用户UID
 	 * @param integer $inweb
@@ -83,7 +85,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 获取指定用户的应用列表 - 分页型
-	 * 
+	 *
 	 * @param integer $uid
 	 *        	用户UID
 	 * @param integer $limit
@@ -106,7 +108,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 获取指定用户在前台可管理的应用列表
-	 * 
+	 *
 	 * @param integer $uid
 	 *        	用户UID
 	 * @return array 获取指定用户有管理权限的应用列表
@@ -146,7 +148,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 获取所有应用列表 - 不分页型
-	 * 
+	 *
 	 * @param array $map
 	 *        	查询条件
 	 * @param string $limit
@@ -159,7 +161,7 @@ class AppModel extends Model {
 			$listorder = $this->where ( $map )->field ( 'app_id' )->order ( 'app_id DESC' );
 			
 			// 根据条件获取相应结果集
-			if (!$limit) {
+			if (! $limit) {
 				$list = $listorder->limit ( $limit )->findAll ();
 			} else {
 				$list = $listorder->findAll ();
@@ -179,7 +181,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 批量获取应用信息
-	 * 
+	 *
 	 * @param array $list
 	 *        	应用列表数组，其中必须包含app_id字段值
 	 * @param boolean $used
@@ -199,7 +201,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 获取已经安装应用的Hash数组
-	 * 
+	 *
 	 * @param string $hashKey
 	 *        	Hash中的Key值，默认为app_id
 	 * @param string $hashValue
@@ -220,7 +222,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 通过应用名称，获取应用的信息
-	 * 
+	 *
 	 * @param string $appname
 	 *        	应用名称
 	 * @return array 应用的相应信息
@@ -243,6 +245,7 @@ class AppModel extends Model {
 					$info ['app_entry'] = U ( $info ['app_name'] . '/' . $info ['app_entry'] );
 					$info ['icon_url'] = SITE_URL . '/apps/' . $info ['app_name'] . '/Appinfo/icon_app.png';
 					$info ['large_icon_url'] = SITE_URL . '/apps/' . $info ['app_name'] . '/Appinfo/icon_app_large.png';
+					$info ['small_icon_url'] = SITE_URL . '/apps/' . $info ['app_name'] . '/Appinfo/icon_app_small.png';
 					$info ['iphone_icon'] = SITE_URL . '/apps/' . $info ['app_name'] . '/Appinfo/icon_iphone.png';
 					$info ['android_icon'] = SITE_URL . '/apps/' . $info ['app_name'] . '/Appinfo/icon_android.png';
 				}
@@ -262,7 +265,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 根据应用ID为应用做缓存，缓存KEY为app_Appinfo_[应用ID]，Appinfo_[应用ID]
-	 * 
+	 *
 	 * @param integer $app_id
 	 *        	应用ID
 	 * @param boolean $used
@@ -287,6 +290,7 @@ class AppModel extends Model {
 					$info ['app_entry'] = U ( $info ['app_name'] . '/' . $info ['app_entry'] );
 					$info ['icon_url'] = SITE_URL . '/apps/' . $info ['app_name'] . '/Appinfo/icon_app.png';
 					$info ['large_icon_url'] = SITE_URL . '/apps/' . $info ['app_name'] . '/Appinfo/icon_app_large.png';
+					$info ['small_icon_url'] = SITE_URL . '/apps/' . $info ['app_name'] . '/Appinfo/icon_app_small.png';
 					$info ['iphone_icon'] = SITE_URL . '/apps/' . $info ['app_name'] . '/Appinfo/icon_iphone.png';
 					$info ['android_icon'] = SITE_URL . '/apps/' . $info ['app_name'] . '/Appinfo/icon_android.png';
 				}
@@ -307,7 +311,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 获取系统默认配置应用列表
-	 * 
+	 *
 	 * @return array 系统默认应用列表
 	 */
 	public function getDefaultApp() {
@@ -336,7 +340,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 清除缓存
-	 * 
+	 *
 	 * @param array $ids
 	 *        	应用ID数组
 	 * @return boolean 是否清除缓存
@@ -363,7 +367,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 获取应用的配置列表
-	 * 
+	 *
 	 * @return array 应用的配置列表信息
 	 */
 	public function getConfigList() {
@@ -384,15 +388,15 @@ class AppModel extends Model {
 	
 	/**
 	 * 获取未安装应用列表
-	 * 
+	 *
 	 * @return array 未安装应用列表
 	 */
 	public function getUninstallList() {
 		$uninstalled = array ();
 		
-		$installed = $this->field ( 'app_id' )->order ( 'app_id DESC' )->findAll();
+		$installed = $this->field ( 'app_id' )->order ( 'app_id DESC' )->findAll ();
 		foreach ( $installed as $k => $v ) {
-			$installed[$k] = $this->getAppById ( $v ['app_id'] );
+			$installed [$k] = $this->getAppById ( $v ['app_id'] );
 		}
 		$installed = getSubByKey ( $installed, 'app_name' );
 		// 默认应用，不能安装卸载
@@ -402,8 +406,8 @@ class AppModel extends Model {
 		$dirs = new Dir ( APPS_PATH );
 		$dirs = $dirs->toArray ();
 		foreach ( $dirs as $v ) {
-			if ($v ['isDir'] && ! in_array ( $v['filename'], $installed )) {
-				if ($info = $this->__getAppInfo ( $v['filename'] )) {
+			if ($v ['isDir'] && ! in_array ( $v ['filename'], $installed )) {
+				if ($info = $this->__getAppInfo ( $v ['filename'] )) {
 					$uninstalled [] = $info;
 				}
 			}
@@ -414,7 +418,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 获取应用信息
-	 * 
+	 *
 	 * @param string $path_name
 	 *        	应用路径名称
 	 * @param boolean $using_lowercase
@@ -439,7 +443,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 保存应用信息数据
-	 * 
+	 *
 	 * @param array $data
 	 *        	应用相关数据
 	 * @return boolean 是否保存成功
@@ -485,10 +489,25 @@ class AppModel extends Model {
 			if (file_exists ( $install_script )) {
 				include_once $install_script;
 			}
+			
+			// 判断是否需要自动补充导航的语言KEY：PUBLIC_APPNAME_应用名
+			$lang ['key'] = 'PUBLIC_APPNAME_' . strtoupper ( $data ['app_name'] );
+			$lang ['appname'] = 'PUBLIC';
+			$lang ['filetype'] = 0;
+			$lang ['zh-cn'] = $oldInfo ['name'];
+			$lang ['en'] = ucfirst ( $data ['app_name'] );
+			$lang ['zh-tw'] = '';
+			$res = model ( 'Lang' )->updateLangData ( $lang );
+			
+			// 清空语言缓存
+			if ($res == 2) {
+				model ( 'Lang' )->createCacheFile ( $lang ['appname'], $lang ['filetype'] );
+			}
+			
 			$data ['ctime'] = time ();
 			// 为便于排序，将order设置为ID
 			unset ( $data ['app_id'] );
-			
+
 			if ($res = $this->add ( $data )) {
 				// 成功入库之后执行的操作
 				$GLOBALS ['appid'] = $res;
@@ -507,7 +526,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 判断指定应用是否已经安装
-	 * 
+	 *
 	 * @param string $app_name
 	 *        	应用名称
 	 * @param integer $app_id
@@ -540,7 +559,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 判断指定应用是否已经开启
-	 * 
+	 *
 	 * @param string $app_name
 	 *        	应用名称
 	 * @param string $app_id
@@ -576,7 +595,7 @@ class AppModel extends Model {
 	
 	/**
 	 * 后台卸载指定应用
-	 * 
+	 *
 	 * @param integer $app_id
 	 *        	应用ID
 	 * @return boolean 是否卸载成功

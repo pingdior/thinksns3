@@ -369,7 +369,7 @@ class ContentAction extends AdministratorAction
 			$v['uid'] 	   = $user['space_link']; 
 			$v['name']	   = in_array($v['extension'],$image) 
 							? '<a href="'.U('widget/Upload/down',array('attach_id'=>$v['attach_id'])).'">'.
-								"<img src='".UPLOAD_URL."/".$v['save_path'].$v['save_name']."' width='100'><br/>{$v['name']}</a>"
+								"<img src='".getImageUrl($v['save_path'].$v['save_name'],225)."' width='100'><br/>{$v['name']}</a>"
 							:'<a href="'.U('widget/Upload/down',array('attach_id'=>$v['attach_id'])).'">'.$v['name'].'</a>';
 			$v['size']	   = byte_format($v['size']);
 			$v['from']     = $this->from[$v['from']];
@@ -618,7 +618,7 @@ class ContentAction extends AdministratorAction
 		//$data['name'] = t($_POST['name']); 
 		$data['note'] = t($_POST['note']);
 		$data['domain'] = t($_POST['domain']); 
-		$data['des'] = t($_POST['des']); 
+		$data['des'] = h($_POST['des']); 
 		$data['pic'] = t($_POST['pic']); 
 		$data['topic_user'] = t($_POST['topic_user']); 
 		$data['outlink'] = t($_POST['outlink']); 

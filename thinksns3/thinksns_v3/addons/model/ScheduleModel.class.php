@@ -121,7 +121,10 @@ class ScheduleModel extends Model {
 			}
 		}
 		$this->saveSchedule($schedule);
-		$str_log = "schedule_id = {$schedule['id']} 已运行。任务url为: {$schedule['task_to_run']} .任务描述为: {$schedule['info']} .";
+		$str_log = "schedule_id = {$schedule['id']} 的任务已运行。";
+		if(C('APP_DEBUG')){
+			$str_log  .= "任务url为: {$schedule['task_to_run']} ，任务描述为: {$schedule['info']} 。";
+		}
 		$this->_log($str_log);
 	}
 	
@@ -169,6 +172,7 @@ class ScheduleModel extends Model {
 		if( $this->isValidSchedule($schedule) ) {
 			$schedule['start_datetime'] = date('Y-m-d H:i:s', $this->setSecondToZero($schedule['start_datetime']));
 			$res = $this->add($schedule);
+			$this->cleanCache();
 			return $res;
 		}else {
 			return false;
@@ -183,8 +187,10 @@ class ScheduleModel extends Model {
 		//更新到数据库
 		if( $this->isValidSchedule($schedule) ) {
 			
-			$schedule['start_datetime'] = date('Y-m-d H:i:s', $this->setSecondToZero($schedule['start_datetime']));
-			$res = $this->save($schedule);
+			$data['last_run_time'] = $schedule['last_run_time'];
+			$map['id'] = $schedule['id'];
+			$res = $this->where($map)->save($data);
+			$this->cleanCache();
 			return $res;
 		}else {
 			return false;
@@ -194,7 +200,11 @@ class ScheduleModel extends Model {
 	//查询数据库，获取所有的计划任务（包括过期的）
 	//@return array()
 	public function getScheduleList() {
-		$this->scheduleList = $this->order('id')->findAll();
+		$this->scheduleList = S ( 'getScheduleList' );
+		if ($this->scheduleList === false) {
+			$this->scheduleList = $this->order ( 'id' )->findAll ();
+			S ( 'getScheduleList', $this->scheduleList, 604800 ); // 缓存一周
+		}
 		return $this->scheduleList;
 	}
 
@@ -713,5 +723,12 @@ class ScheduleModel extends Model {
 		unlink($lockfile);
 		return ;
 	}
+	/**
+	 * 清除缓存
+	 * @return void
+	 */
+	public function cleanCache() {
+		S ( 'getScheduleList', null );
+	}	
 }
 ?>

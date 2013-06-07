@@ -1,160 +1,0 @@
-10
-
-dir
-40
-http://mengchi.org:8000/svn/myproject/thinksns3/addons/widget
-http://mengchi.org:8000/svn/myproject
-
-
-
-2013-05-01T20:09:28.028571Z
-37
-qq
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-210ee244-59cc-4565-a3e9-0f12eaf84660
-
-UserCategoryWidget
-dir
-
-DateSelectWidget
-dir
-
-TopicUserWidget
-dir
-
-MedalListWidget
-dir
-
-TipsWidget
-dir
-
-FollowGroupWidget
-dir
-
-DenouceWidget
-dir
-
-UploadWidget
-dir
-
-SameUserWidget
-dir
-
-UserInformationWidget
-dir
-
-UserCountWidget
-dir
-
-AnnouncementWidget
-dir
-
-CollectionWidget
-dir
-
-ShareWidget
-dir
-
-DepartmentWidget
-dir
-
-VideoWidget
-dir
-
-AreaWidget
-dir
-
-UploadAttachWidget
-dir
-
-TopicListWidget
-dir
-
-TagWidget
-dir
-
-StringTextWidget
-dir
-
-ShowImgWidget
-dir
-
-CategoryWidget
-dir
-
-ColorWidget
-dir
-
-PlotWidget
-dir
-
-AvatarWidget
-dir
-
-RelatedUserWidget
-dir
-
-SendWeiboWidget
-dir
-
-RemarkWidget
-dir
-
-FormInputWidget
-dir
-
-DiyWidget
-dir
-
-EditorWidget
-dir
-
-InviteFriendWidget
-dir
-
-ManageWidget
-dir
-
-ShareToFeedWidget
-dir
-
-SelectFriendsWidget
-dir
-
-FeedListWidget
-dir
-
-CommentWidget
-dir
-
-SearchUserWidget
-dir
-
-CheckInWidget
-dir
-
-WeiboWidget
-dir
-
-FollowBtnWidget
-dir
-
-BlacklistWidget
-dir
-
-MySpaceCountWidget
-dir
-

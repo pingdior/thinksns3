@@ -35,12 +35,12 @@
                                 <span class="right">搜微吧&nbsp;|&nbsp;<a href="{:U('weiba/Index/search',array('k'=>$searchkey,'type'=>2))}">搜帖子</a></span>
                                 <span class="no-result">抱歉，暂时没有与&nbsp;“<em style="color:red;">{$searchkey}</em>”&nbsp;相关的微吧</span>
                             </div>
-                            <div class="right-box clearfix">
-                                <h3>热门微吧推荐</h3>
+                            <div class="weiba-pic">
+                              <div class="weiba-pic-title"><h3>热门微吧推荐</h3></div>
                               <ul>
                                  <volist name="weiba_recommend" id="vo">
-                                    <li>
-                                        <a href="{:U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']))}" class="face"><img src="{$vo.logo|getImageUrl=###,50,50,true}" /><span>{$vo.weiba_name}</span></a>
+                                    <li <php>if(is_int($i/5)){</php>class="no-margin"<php>}</php>>
+                                        <div class="weiba-pic-l"><a href="{:U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']))}"><img src="{$vo.logo}" width="50" height="50"/></div><a href="{:U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']))}" class="weiba-name">{$vo.weiba_name}</a>
                                     </li>
                                 </volist>
                                </ul>
@@ -53,7 +53,7 @@
                             <div class="weiba-list mb20 clearfix">
                                 <volist name="weibaList.data" id="vo">
                                     <dl>
-                                         <dt><a href="{:U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']))}"><img src="{$vo.logo|getImageUrl=###,100,100,true}" /></a></dt>
+                                         <dt><a href="{:U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']))}"><img src="{$vo.logo}" width="100" height="100" /></a></dt>
                                          <dd>
                                             <div class="right"><!-- <a class="btn-cancel"><span>关注</span></a> -->{:W('FollowWeiba',array('weiba_id'=>$vo['weiba_id'],'follow_state'=>array('following'=>$follow_state[$vo['weiba_id']]['following'])))}</div>
                                             <p class="weiba_name"><a href="{:U('weiba/Index/detail',array('weiba_id'=>$vo['weiba_id']))}" class="mb10">{$vo.weiba_name}</a></p><p class="f9 mb10">粉丝数：{$vo.follower_count}<span class="pl5 pr5">/</span>帖子数：{$vo.thread_count}</p><p class="f3">{$vo.intro}</p>

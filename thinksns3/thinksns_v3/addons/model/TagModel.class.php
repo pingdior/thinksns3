@@ -210,7 +210,7 @@ class TagModel extends Model
 	 */
 	public function getTagId($name) {
 		// $name = t(getShort(preg_replace('/^[\s　]+|[\s　]+$/', '', $name), 15));
-		$name = getShort(t($name), 15);
+		$name = t(trim($name), 15);
 		if(!$name || !is_string($name)) {
 			$this->error = 'Tag_Empty';
 			return false;

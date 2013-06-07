@@ -46,9 +46,7 @@ core.dropnotify = {
                 unread_atme:    L('PUBLIC_SYSTEM_TAME'),
                 unread_comment: L('PUBLIC_SYSTEM_CONCENT'),
                 unread_message: L('PUBLIC_SYSTEM_PRIVATE_MAIL'),
-                new_folower_count: L('PUBLIC_SYSTEM_FOLLOWING'),
-                unread_group_atme: '条群聊@提到我',
-                unread_group_comment: '条群组评论'
+                new_folower_count: L('PUBLIC_SYSTEM_FOLLOWING')
         };
         var loopCount = '';
 		var getCount = function() {

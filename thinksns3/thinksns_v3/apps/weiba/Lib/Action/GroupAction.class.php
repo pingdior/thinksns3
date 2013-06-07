@@ -32,7 +32,8 @@ class GroupAction extends Action {
 	public function weibaList(){
 		$weibaList = D('weiba')->where('is_del=0')->order('recommend desc,follower_count desc,thread_count desc')->findpage(10);
 		foreach($weibaList['data'] as $k=>$v){
-			$weibaList['data'][$k]['logo'] = getImageUrlByAttachId($v['logo']);
+			$logo = D('attach')->where('attach_id='.$v['logo'])->find();
+			$weibaList['data'][$k]['logo'] = UPLOAD_URL.'/'.$logo['save_path'].$logo['save_name'];
 		}
 		$weiba_ids = getSubByKey($weibaList['data'], 'weiba_id');
 		$this->_assignFollowState($weiba_ids);
@@ -123,7 +124,8 @@ class GroupAction extends Action {
 		if(!$weiba_detail){
 			$this->error('该微吧不存在或已被解散');
 		}
-		$weiba_detail['logo'] = getImageUrlByAttachId($weiba_detail['logo']);
+		$logo = D('attach')->where('attach_id='.$weiba_detail['logo'])->find();
+		$weiba_detail['logo'] = UPLOAD_URL.'/'.$logo['save_path'].$logo['save_name'];
 		//吧主
 		$map['weiba_id'] = $weiba_id;
 		$map['level'] = array('in','2,3');
@@ -575,7 +577,8 @@ class GroupAction extends Action {
 			$weibaList = D('weiba')->where($map)->findPage(10);
 			if($weibaList['data']){
 				foreach($weibaList['data'] as $k=>$v){
-					$weibaList['data'][$k]['logo'] = getImageUrlByAttachId($v['logo']);
+					$logo = D('attach')->where('attach_id='.$v['logo'])->find();
+					$weibaList['data'][$k]['logo'] = UPLOAD_URL.'/'.$logo['save_path'].$logo['save_name'];
 				}
 				$weiba_ids = getSubByKey($weibaList['data'], 'weiba_id');
 				$this->_assignFollowState($weiba_ids);
@@ -689,7 +692,8 @@ class GroupAction extends Action {
 	private function _weiba_recommend($limit){
 		$weiba_recommend = D('weiba')->where('recommend=1 and is_del=0')->limit($limit)->findAll();
 		foreach($weiba_recommend as $k=>$v){
-			$weiba_recommend[$k]['logo'] = getImageUrlByAttachId($v['logo']);
+			$logo = D('attach')->where('attach_id='.$v['logo'])->find();
+			$weiba_recommend[$k]['logo'] = UPLOAD_URL.'/'.$logo['save_path'].$logo['save_name'];
 		}
 		$weiba_ids = getSubByKey($weiba_recommend, 'weiba_id');
 		$this->_assignFollowState($weiba_ids);
@@ -719,7 +723,8 @@ class GroupAction extends Action {
 	private function _weibaOrder(){
 		$weiba_order = D('weiba')->where('is_del=0')->order('follower_count desc,thread_count desc')->limit(10)->findAll();
 		foreach($weiba_order as $k=>$v){
-			$weiba_order[$k]['logo'] = getImageUrlByAttachId($v['logo']);
+			$logo = D('attach')->where('attach_id='.$v['logo'])->find();
+			$weiba_order[$k]['logo'] = UPLOAD_URL.'/'.$logo['save_path'].$logo['save_name'];
 		}
 		//dump($weiba_order);exit;
 		$this->assign('weiba_order',$weiba_order);

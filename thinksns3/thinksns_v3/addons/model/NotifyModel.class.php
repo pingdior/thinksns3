@@ -10,7 +10,7 @@
 class NotifyModel extends Model {
 
 	protected $tableName = 'notify_node';
-	protected $fields = array(0=>'id',1=>'node',2=>'nodeinfo',3=>'appname',4=>'content_key',5=>'title_key',6=>'send_email',7=>'send_message',8=>'type');
+	protected $fields = array(0=>'id',1=>'node',2=>'nodeinfo',3=>'appname',4=>'content_key',5=>'title_key',6=>'send_email',7=>'send_message');
 
 	protected $_config = array();			// 配置字段
 
@@ -68,8 +68,8 @@ class NotifyModel extends Model {
 	 */
 	public function cleanCache() {
 		model('Cache')->rm('notify_node');
-		//更新语言包
-		model('Lang')->initSiteLang();
+		// TODO:先不生成文件
+		model('Lang')->createCacheFile('public', 0);
 	}
 
 	/**
@@ -79,8 +79,6 @@ class NotifyModel extends Model {
 	 */
 	public function saveTpl($data) {
 		foreach($data['lang'] as $k => $v) {
-			if(empty($k)) continue;
-			
 			$m['key'] = $k;
 			model('Lang')->where($m)->save($v);
 		}
@@ -236,15 +234,14 @@ class NotifyModel extends Model {
 		$s['appname'] = t($data['appname']);
 		$s['is_send'] = $s['sendtime'] = 0;
 		$s['title'] = t($data['title']);
-		$body = html_entity_decode($data['body']);
-		$site = model('Xdata')->get('admin_Config:site');
-		$s['body']= '<style>a.email_btn,a.email_btn:link,a.email_btn:visited{background:#0F8CA8;padding:5px 10px;color:#fff;width:80px;text-align:center;}</style><div style="width:540px;border:#0F8CA8 solid 2px;margin:0 auto"><div style="color:#bbb;background:#0f8ca8;padding:5px;overflow:hidden;zoom:1"><div style="float:right;height:15px;line-height:15px;padding:10px 0;display:none">2012年07月15日</div>
+		$body = h($data['body']);
+		$s['body']= '<div style="width:540px;border:#0F8CA8 solid 2px;margin:0 auto"><div style="color:#bbb;background:#0f8ca8;padding:5px;overflow:hidden;zoom:1"><div style="float:right;height:15px;line-height:15px;padding:10px 0;display:none">2012年07月15日</div>
 					<div style="float:left;overflow:hidden;position:relative"><a><img style="border:0 none" src="'.$GLOBALS['ts']['site']['logo'].'"></a></div></div>
 					<div style="background:#fff;padding:20px;min-height:300px;position:relative">		<div style="font-size:14px;">			
 						            	<p style="padding:0 0 20px;margin:0;font-size:12px">'.$body.'</p>
 						            </div></div><div style="background:#fff;">
 			            <div style="text-align:center;height:18px;line-height:18px;color:#999;padding:6px 0;font-size:12px">若不想再收到此类邮件，请点击<a href="'.U('public/Account/notify').'" style="text-decoration:none;color:#3366cc">设置</a></div>
-			            <div style="line-height:18px;text-align:center"><p style="color:#999;font-size:12px">'.$site['site_footer'].'</p></div>
+			            <div style="line-height:18px;text-align:center"><p style="color:#999;font-size:12px">&copy;2012 ZhishiSoft All Rights Reserved.</p></div>
 			        </div></div>';
 		$s['ctime'] = time();
 		model('Mail')->send_email($s['email'],$s['title'],$s['body']);

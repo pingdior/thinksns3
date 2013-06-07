@@ -140,6 +140,7 @@ class CommentModel extends Model {
         }else{
             $add['is_audit'] = 1;
         }
+
         if($res = $this->add($add)) {
             //添加楼层信息
             $storeyCount = $this->where('row_id='.$data['row_id'].' and comment_id<'.$res)->count();
@@ -159,8 +160,6 @@ class CommentModel extends Model {
         	// 被评论内容的“评论统计数”加1，同时可检测出app，table，row_id的有效性
             $pk = D($add['table'])->getPk();
             D($add['table'])->setInc('comment_count', "`{$pk}`={$add['row_id']}", 1);
-            //兼容旧版本app
-            D($add['table'])->setInc('commentCount', "`{$pk}`={$add['row_id']}", 1);
             D($add['table'])->setInc('comment_all_count', "`{$pk}`={$add['row_id']}", 1);
         	// 给应用UID添加一个未读的评论数 原作者
         	if($GLOBALS['ts']['mid'] != $add['app_uid'] && $add['app_uid'] != '') {
@@ -181,7 +180,7 @@ class CommentModel extends Model {
                 $author = model('User')->getUserInfo($GLOBALS['ts']['mid']);
                 $config['name'] = $author['uname'];
                 $config['space_url'] = $author['space_url']; 
-                $config['face'] = $author['avatar_small'];
+                $config['face'] = $author['avatar_middle'];
 	        	$sourceInfo = model('Source')->getSourceInfo($add['table'], $add['row_id'], $forApi, $add['app']);
                 $config['content'] = parse_html($add['content']);
                 $config['ctime'] = date('Y-m-d H:i:s',time());
@@ -274,17 +273,8 @@ class CommentModel extends Model {
            	foreach($_comments as $_c_k => $_c_v) {
                 foreach($_c_v as $_c_v_k => $_c_v_v) {
                     // 应用表格“评论统计”统一使用comment_count字段名
-                	$field = D($_c_k)->getPK();
-                	if(empty($field)){
-                		$field = $_c_k.'_id';
-                	}
-                    D($_c_k)->setDec('comment_count', "`{$field}`={$_c_v_k}", count($_c_v_v));
-                    //兼容旧app评论
-                    D($_c_k)->setDec('commentCount', "`{$field}`={$_c_v_k}", count($_c_v_v));
-                    //dump(D($_c_k)->getLastSql());
-                    if ($app_name == 'feed') {
-                        model($_c_k)->cleanCache($_c_v_k);
-                    }
+                    D($_c_k)->setDec('comment_count', "`{$_c_k}_id`={$_c_v_k}", count($_c_v_v));
+                    model($_c_k)->cleanCache($_c_v_k);
                 }
             }
 

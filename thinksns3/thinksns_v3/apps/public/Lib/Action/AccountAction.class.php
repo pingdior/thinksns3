@@ -112,7 +112,7 @@ class AccountAction extends Action
 			// 修改用户昵称
 			$uname = t($_POST['uname']);
 			$oldName = t($_POST['old_name']);
-			$save['uname'] = filter_keyword($uname);
+			$save['uname'] = $uname;
 			$res = model('Register')->isValidName($uname, $oldName);
 			if(!$res) {
 				$error = model('Register')->getLastError();
@@ -140,9 +140,8 @@ class AccountAction extends Action
 		!empty($tagIds) && $tagIds = explode(',', $tagIds);
 		$rowId = intval($_REQUEST['user_row_id']);
 		if(!empty($rowId)) {
-			$registerConfig = model('Xdata')->get('admin_Config:register');
-			if(count($tagIds) > $registerConfig['tag_num']) {
-				return $this->ajaxReturn(null, '最多只能设置'.$registerConfig['tag_num'].'个标签', false);
+			if(count($tagIds) > 10) {
+				return $this->ajaxReturn(null, '最多只能设置10个标签', false);
 			}
 			model('Tag')->setAppName('public')->setAppTable('user')->updateTagData($rowId, $tagIds);
 		}
@@ -595,9 +594,6 @@ class AccountAction extends Action
     	$res = D('user_verified')->where('uid='.$this->mid)->delete();
     	$res2 = D('user_group_link')->where('uid='.$this->mid.' and user_group_id='.$verified_group_id)->delete();
     	if($res && $res2){
-    		//清除权限组 用户组缓存
-    		model('Cache')->rm('perm_user_'.$this->mid);
-    		model('Cache')->rm('user_group_'.$this->mid);
     		model('Notify')->sendNotify($this->mid,'public_account_delverify');
     		echo 1;
     	}else{

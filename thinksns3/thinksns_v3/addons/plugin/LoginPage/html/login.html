@@ -59,7 +59,6 @@ slideIt();
 
 });
 </script>
-<div id="body-b">
 <div class="logo-bg"><div class="logo"><a href=""><img src="<php>if($logo['logo']){</php>{$logo['logo']}<php>}elseif($site_logo){</php>{$site_logo}<php>}else{</php>__APP__/image/logo-b.png<php>}</php>" /></a><span><php>if($logo['login_top_title']){</php>{$logo['login_top_title']}<php>}else{</php>{$site_slogan}<php>}</php></span></div></div>
 <div class="login-c">
     <div class="login-top">
@@ -94,7 +93,7 @@ slideIt();
             <div id="js_login_input" style="display:none" class="error-box"></div>
         <ul>
            <li class="input">
-              <label id="email">帐号：</label>
+              <label id="email">邮箱：</label>
               <input type="text" id="account_input" onfocus="focuslogin(1)" onblur="blurlogin(1)" name="login_email" class="text"/>
            </li>
            <li class="input">
@@ -140,7 +139,7 @@ slideIt();
               </volist>
               </ul>
           </div> 
-          <div class="right-box clearfix">
+          <div class="active-user attention clearfix">
               <h3>{$user.user_title}</h3>
               <ul>
               <volist name="userlist" id="user">
@@ -201,7 +200,6 @@ slideIt();
       {$GLOBALS.ts.site.site_footer}
     </p>
   </div>
-</div>
 </div>
 <eq name='GLOBALS.ts.site.site_online_count' value='1'>
     <script src="{:SITE_URL}/online_check.php?uid={$mid}&uname={$user.uname}&mod={:MODULE_NAME}&app={:APP_NAME}&act={:ACTION_NAME}&action=trace"></script>

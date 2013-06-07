@@ -89,8 +89,8 @@ function rcalendar(text, mode, retfunction) { //文本域对象, 模式(dateonly
 			css += "#rdates {width:217px; overflow:hidden;}";
 			css += ".rweek {width:31px; height:20px; padding:4px 0px 4px 0px; float:left; text-align:center; background:#DD4B39; color:#FFFFFF; overflow:hidden;border-top:# C54333 solid 1px}";
 			css += ".rdate {width:31px; height:20px; padding:4px 0px 4px 0px; float:left; text-align:center; overflow:hidden; cursor:pointer;}";
-			css += "#ryears {background:#fff; border:1px solid #ccc; border-top:0px; color:#FFFFFF; text-align:center;_width:50px;}";
-			css += ".ryear {padding:4px 4px 4px 4px; height:20px; width:36px; overflow:hidden; cursor:pointer; font-weight:bold;display:block;}";
+			css += "#ryears {background:#fff; border:1px solid #ccc; border-top:0px; color:#FFFFFF; text-align:center;}";
+			css += ".ryear {padding:4px 4px 4px 4px; height:20px; width:36px; overflow:hidden; cursor:pointer; font-weight:bold;}";
 			css += "#ryear_add {padding:0px; height:12px; width:36px; overflow:hidden; cursor:pointer;}";
 			css += "#rmonths {background:#fff; border:1px solid #ccc; border-top:0px; color:#FFFFFF; font-weight:bold; text-align:center; width:80px; height:81px; overflow:hidden;}";
 			css += ".rmonth {padding:4px 4px 4px 4px; width:26px; height:20px; overflow:hidden; float:left; cursor:pointer;}";
@@ -117,8 +117,8 @@ function rcalendar(text, mode, retfunction) { //文本域对象, 模式(dateonly
 			css += "#rdates {width:217px;overflow:hidden;}";
 			css += ".rweek {width:31px; height:16px;line-height:16px; padding:4px 0px 4px 0px; float:left; text-align:center; background:#DD4B39; color:#FFFFFF; overflow:hidden;border-top:# C54333 solid 1px}";
 			css += ".rdate {width:30px; height:16px;line-height:16px;border-right:#E6E6E6 solid 1px;border-bottom:#E6E6E6 solid 1px; padding:4px 0px 4px 0px; float:left; text-align:center; overflow:hidden; cursor:pointer;}";
-			css += "#ryears {background:#fff; border:1px solid #ccc; border-top:0px; color:#2b2b2b; text-align:center;_width:50px;}";
-			css += ".ryear {padding:6px 0 6px 0; height:16px;line-height:16px; width:50px; overflow:hidden; cursor:pointer;border-top:#E6E6E6 solid 1px;display:block;}";
+			css += "#ryears {background:#fff; border:1px solid #ccc; border-top:0px; color:#2b2b2b; text-align:center;}";
+			css += ".ryear {padding:6px 0 6px 0; height:16px;line-height:16px; width:50px; overflow:hidden; cursor:pointer;border-top:#E6E6E6 solid 1px}";
 			css += "#ryear_add {padding:5px 0; height:16px; line-height:16px;  overflow:hidden; cursor:pointer;background:#f2f2f2}";
 			css += "#rmonths {background:#fff; border:1px solid #ccc; color:#2b2b2b; text-align:center; width:96px;overflow:hidden;}";
 			css += ".rmonth {padding:6px 0 6px 0; width:31px; height:16px;line-height:16px; overflow:hidden; float:left; cursor:pointer;border-bottom:#E6E6E6 solid 1px;border-right:#E6E6E6 solid 1px}";

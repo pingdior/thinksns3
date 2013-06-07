@@ -25,7 +25,6 @@ $menu = array(
 				'缓存配置'				=> U('admin/Home/cacheConfig'),
 				'数据备份'				=> U('admin/Tool/backup'),
 				'在线升级'				=> U('admin/Update/index'),
-				'小工具'				=> U('admin/Tool/index'),					
 			)
 		),
 
@@ -49,7 +48,6 @@ $menu = array(
 	    		// L('PUBLIC_WEIBO_TEMPLATE_SETTING')	=>  U('admin/Apps/setFeedNode'),
 	    		'SEO配置'	=>  U('admin/Config/setSeo'),
 	    		'页面配置同步' => U('admin/Config/updateAdminTab'),
-	    		'UCenter配置' => U('admin/Config/setUcenter'),
 			),
 		),
 
@@ -111,9 +109,5 @@ foreach($app_list as $k=>$v){
 $plugin_list = model('Addon')->getAddonsAdminUrl();
 foreach($plugin_list as $k=>$v){
 	$menu['admin_menu']['extends']['插件管理'][$k] = $v;
-}
-
-if(defined('iswaf_status') && iswaf_status==1){
-	$menu['admin_menu']['index']['首页']['安全防护'] = 'http://www.fanghuyun.com/?do=simple&IDKey='.md5(iswaf_connenct_key);
 }
 return $menu;

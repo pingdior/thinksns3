@@ -284,7 +284,7 @@ class AdminAction extends AdministratorAction {
 		foreach ( $list['data'] as &$v ){
 			$unames = getSubByKey( $userDao->getUserInfoByUids( $v['manager']) , 'uname');
 			$v['manager'] = implode( ',' , $unames );
-			$v['page_name'] = '<a href="'.U('page/Index/index' , array('page' => $v['domain'])).'" target="_blank">'.$v['page_name'].'</a>';
+			$v['page_name'] = '<a href="'.U('page/Diy/index' , array('page' => $v['domain'])).'" target="_blank">'.$v['page_name'].'</a>';
 			$v['DOACTION'] = '<a href="'.U('page/Admin/editPage' , array('id'=>$v['id'] , 'tabHash' => 'addPage') ).'">编辑</a>';
 			$v['DOACTION'] .= ' <a href="#" onclick="diy.deletePage('.$v['id'].')">删除</a>';
 			$v['DOACTION'] .= ' <a href="#" onclick="diy.addManager('.$v['id'].')">添加管理员</a>';

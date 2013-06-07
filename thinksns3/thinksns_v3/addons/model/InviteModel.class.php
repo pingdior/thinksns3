@@ -205,7 +205,7 @@ class InviteModel extends Model
 		!empty($type) && $map['c.type'] = $type;
 		$map['c.is_admin'] = 1;
 		$map['u.is_init'] = 1;
-		$list = D()->table('`'.C('DB_PREFIX').'invite_code` AS c LEFT JOIN `'.C('DB_PREFIX').'user` AS u ON c.receiver_uid = u.uid')
+		$list = D()->table('`'.$this->tablePrefix.'invite_code` AS c LEFT JOIN `'.$this->tablePrefix.$this->tableName.'user` AS u ON c.receiver_uid = u.uid')
 				   ->field('c.*')
 				   ->where($map)
 				   ->order('invite_code_id DESC')

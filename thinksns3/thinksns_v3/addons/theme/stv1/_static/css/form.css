@@ -5,9 +5,9 @@
 button {overflow: visible;white-space: nowrap}
 textarea{resize:none}
 .s-textarea{resize:none;border:#dcdcdc solid 1px;border-top-color:#b5b5b5;padding:4px 4px 0;overflow:hidden;overflow-y:auto;color:#333;line-height:18px}
-.s-textarea-focus{resize:none;border:#ccc solid 1px;border-top-color:#ccc;padding:4px 4px 0;color:#333;;line-height:18px;overflow:hidden;overflow-y:auto;box-shadow:0 0 3px #ccc inset;-moz-box-shadow:0 0 3px #ccc inset;-webkit-box-shadow:0 0 3px #ccc inset}
+.s-textarea-focus{resize:none;border:#4d90fe solid 1px;border-top-color:#4d90fe;padding:4px 4px 0;color:#333;;line-height:18px;overflow:hidden;overflow-y:auto;box-shadow:0 0 3px #ccc inset;-moz-box-shadow:0 0 3px #ccc inset;-webkit-box-shadow:0 0 3px #ccc inset}
 .s-txt{font-size:12px;height:16px;line-height:16px;padding:6px 5px;margin:0 5px 0 0;border:#ccc solid 1px;border-top-color:#ccc;color:#333}
-.s-txt-focus{font-size:12px;height:16px;line-height:16px;padding:6px 5px;margin:0 5px 0 0;border:#ccc solid 1px;border-top-color:#ccc;color:#333;box-shadow:0 0 3px #ccc inset;-moz-box-shadow:0 0 3px #ccc inset;-webkit-box-shadow:0 0 3px #ccc inset}
+.s-txt-focus{font-size:12px;height:16px;line-height:16px;padding:6px 5px;margin:0 5px 0 0;border:#0F8CA8 solid 1px;border-top-color:#0F8CA8;color:#333;box-shadow:0 0 3px #ccc inset;-moz-box-shadow:0 0 3px #ccc inset;-webkit-box-shadow:0 0 3px #ccc inset}
 .s-ck{margin:0 5px 0 0;vertical-align:-2px;_vertical-align:-3px;_marign:0 3px 0 0;}
 .s-radio{margin:0 5px 0 0;} 
 .s-select{font-size:12px;color:#333;background:#fff;padding:2px 2px 2px 5px;margin:0 5px 0 0;border:#b5b5b5 solid 1px;overflow-y:auto;}
@@ -224,6 +224,7 @@ transition: background .2s ease-in;
 .set-item-info{padding:10px 0 0 0;}
 .set-hd h3{font-size:14px;font-weight:700;border-bottom:#EBEBEB solid 1px;padding:0 0 10px;}
 .set-item-title{padding:0 0 10px 0;/*color:#B8B7B7;*/}
+.form-set .btn-green-big,.form-set .btn-green-big span,.set-item-info .btn-green-big span{font-size:12px;}
 .form-set .s-txt, .item-set .s-txt, .form-set .s-txt-focus, .item-set .s-txt-focus{vertical-align:middle}
 .form-set .s-txt, .form-set .s-txt-focus{float:left;width:400px}
 .form-set dd{font-size:12px;padding:0 0 10px 0;overflow:hidden;*zoom:1}

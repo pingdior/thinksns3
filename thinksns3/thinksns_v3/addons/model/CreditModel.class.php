@@ -70,12 +70,7 @@ class CreditModel extends Model {
 	public function getUserCredit($uid) {
 		if (empty ( $uid ))
 			return false;
-
-		$userCredit = S('getUserCredit_'.$uid);
-		if($userCredit!=false){
-			return $userCredit;
-		}
-
+		
 		$userCreditInfo = M ( 'credit_user' )->where ( "uid={$uid}" )->find (); // 用户积分
 		
 		if(!$userCreditInfo){
@@ -113,7 +108,6 @@ class CreditModel extends Model {
 				break;
 			}
 		}
-		S('getUserCredit_'.$uid, $userCredit, 604800);  //缓存一周
 		return $userCredit;
 	}
 	
@@ -160,8 +154,6 @@ class CreditModel extends Model {
 		// 加积分
 		D ( 'credit_user' )->setInc ( 'experience', 'uid=' . $uid, $exp );
 		D ( 'credit_user' )->setInc ( 'score', 'uid=' . $uid, $score );
-		
-		$this->cleanCache($uid);
 	}
 	
 	/**
@@ -228,7 +220,7 @@ class CreditModel extends Model {
 			$res = $creditUserDao->add ( $creditUser );
 		}                                  
 		// 用户进行积分操作后，登录用户的缓存将修改
-		$this->cleanCache($uid);
+		S ( 'S_userInfo_' . $uid, null );
 		// $userLoginInfo = S('S_userInfo_'.$uid);
 		// if(!empty($userLoginInfo)) {
 		// $userLoginInfo['credit']['score']['credit'] = $creditUser['score'];
@@ -277,19 +269,5 @@ class CreditModel extends Model {
 		$data[$d['level'] - 1]['start'] = $d['start'];
 		$data[$d['level'] - 1]['end'] = $d['end'];
 		model('Xdata')->put('admin_Credit:level', $data);
-		
-		//清除用户缓存
-		$users = model('User')->field('uid')->findAll();
-		foreach($users as $user){
-			$this->cleanCache($user['uid']);
-		}
 	}
-	/**
-	 * 清除用户积分缓存
-	 * @return void
-	 */
-	public function cleanCache($uid) {
-		S ( 'S_userInfo_' . $uid, null );
-		S('getUserCredit_'.$uid, NULL);
-	}	
 }

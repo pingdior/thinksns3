@@ -25,7 +25,6 @@ class UploadWidget extends Widget{
         $var['inputname']   = 'attach';
         $var['attachIds']   = '';
         $var['inForm']      =  1;
-        $var['limit'] = empty($data['limit']) ? 0 : intval($data['limit']);
 
         is_array($data) && $var = array_merge($var,$data);
 
@@ -75,6 +74,7 @@ class UploadWidget extends Widget{
         
         $option['attach_type'] = $data['attach_type'];
         $info = model('Attach')->upload($data, $option);
+
         //Addons::hook('widget_upload_after_save', &$info);
 
     	if($info['status']){

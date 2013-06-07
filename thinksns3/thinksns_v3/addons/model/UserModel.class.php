@@ -15,28 +15,30 @@ class UserModel extends Model {
 			4 => 'uname',
 			5 => 'email',
 			6 => 'sex',
-			7 => 'location',
-			8 => 'is_audit',
-			9 => 'is_active',
-			10 => 'is_init',
-			11 => 'ctime',
-			12 => 'identity',
-			13 => 'api_key',
-			14 => 'domain',
-			15 => 'province',
-			16 => 'city',
-			17 => 'area',
-			18 => 'reg_ip',
-			19 => 'lang',
-			20 => 'timezone',
-			21 => 'is_del',
-			22 => 'first_letter',
-			23 => 'intro',
-			24 => 'last_login_time',
-			25 => 'last_feed_id',
-			26 => 'last_post_time',
-			27 => 'search_key',
-			28 => 'invite_code',
+			7 => 'profession',
+			8 => 'age',
+			9 => 'location',
+			10 => 'is_audit',
+			11 => 'is_active',
+			12 => 'is_init',
+			13 => 'ctime',
+			14 => 'identity',
+			15 => 'api_key',
+			16 => 'domain',
+			17 => 'province',
+			18 => 'city',
+			19 => 'area',
+			20 => 'reg_ip',
+			21 => 'lang',
+			22 => 'timezone',
+			23 => 'is_del',
+			24 => 'first_letter',
+			25 => 'intro',
+			26 => 'last_login_time',
+			27 => 'last_feed_id',
+			28 => 'last_post_time',
+			29 => 'search_key',
+			30 => 'invite_code',
 			'_autoinc' => true,
 			'_pk' => 'uid' 
 	);
@@ -55,8 +57,8 @@ class UserModel extends Model {
 		// $table = $this->tablePrefix."user AS u";
 		if (isset ( $_POST )) {
 			$_POST ['uid'] && $map ['uid'] = intval ( $_POST ['uid'] );
-			$_POST ['uname'] && $map ['uname'] = array('LIKE', '%'.t($_POST['uname']).'%');
-			$_POST ['email'] && $map ['email'] = array('LIKE', '%'.t($_POST['email']).'%');
+			$_POST ['uname'] && $map ['uname'] = t ( $_POST ['uname'] );
+			$_POST ['email'] && $map ['email'] = t ( $_POST ['email'] );
 			isset ( $_POST ['is_audit'] ) && $map ['is_audit'] = intval ( $_POST ['is_audit'] );
 			! empty ( $_POST ['sex'] ) && $map ['sex'] = intval ( $_POST ['sex'] );
 			
@@ -749,7 +751,6 @@ class UserModel extends Model {
 			// 用户认证图标
 			$groupIcon = array ();
 			$userGroup = model ( 'UserGroupLink' )->getUserGroupData ( $uid );
-			$user ['api_user_group'] = $userGroup [$uid];
 			$user ['user_group'] = $userGroup [$uid];
 			foreach ( $userGroup [$uid] as $value ) {
 				$groupIcon [] = '<img title="' . $value ['user_group_name'] . '" src="' . $value ['user_group_icon_url'] . '" style="width:auto;height:auto;display:inline;cursor:pointer;" />';
@@ -998,13 +999,13 @@ class UserModel extends Model {
 	 */
 	public function dealUserAppData($uid_array, $type = 'deleteUserAppData') {
 		// 取全部APP信息
-		$appList = model ( 'App' )->where('status=1')->field ( 'app_name' )->findAll ();
+		$appList = model ( 'App' )->field ( 'app_name' )->findAll ();
 		
 		foreach ( $appList as $app ) {
 			$appName = strtolower ( $app ['app_name'] );
 			$className = ucfirst ( $appName );
 			
-			$dao = D ( $className . 'Protocol', $className, false );
+			$dao = D ( $className . 'Protocol', $className );
 			if (method_exists ( $dao, $type )) {
 				$dao->$type ( $uid_array );
 			}

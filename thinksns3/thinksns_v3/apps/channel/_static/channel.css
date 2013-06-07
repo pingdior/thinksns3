@@ -4,8 +4,7 @@
 .channel-user-share .ico-favorites.current{background-position:-219px -99px;width:16px;height:16px;display:inline-block;vertical-align:-4px;*vertical-align:-2px}
 .ico-detail{background-position:-258px -35px;display:inline-block;width:15px;height:15px;cursor:pointer}
 
-
-/*.channel-box .app-title{border-bottom:1px solid #333;padding:20px;background:#fff;}*/
+.channel-box .app-title{border-bottom:1px solid #333;padding:20px;}
 .channel-box .app-title a{color:#666;}
 .channel-box .app-title a:hover,.channel-box .app-title a.current{color:#333;}
 .channel-box .app-title a:hover .ico-feed,.channel-box .app-title a.current .ico-feed{background-position:-672px 0;*cursor:pointer;}
@@ -42,6 +41,15 @@
 .channel-user-share span a:link,.channel-user-share span a:visited{margin:0 5px 0 0;color:#ccc;display:inline-block;cursor:pointer;}
 .channel-user-share a i{margin:0 3px 0 0;}
 .channel-blank{background:#f1f9fb;}
+
+/*频道排行榜*/
+.channel-pic-title h3{font-size:16px;color:#333;font-weight:bold;}
+.weiba-rank-list dl{margin:0 0 0 30px;}
+.weiba-rank-list dt{float:left;}
+.weiba-rank-list dd{margin:0 0 0 40px;}
+.weiba-rank-list dd p{line-height:16px;}
+.weiba-rank-list li{overflow:hidden;*zoom:1;margin:15px 0 0 0;}
+.weiba-rank-list .ico-num{float:left;width:16px;}
 
 
 /*频道列表页*/

@@ -14,7 +14,7 @@
             <img src="__THEME__/image/feedvideoplay.gif" ></a>
         </div>
     </div>
-    <div class="feed_quote" style="display:none;" id="video_show_{$feedid}"> 
+    <div class="feed_quote" style="width:580px;display:none;" id="video_show_{$feedid}"> 
       <div class="q_tit">
         <img class="q_tit_l" onclick="switchVideo({$feedid},'open','{$host}','{$flashvar}')" src="__THEME__/image/zw_img.gif" />
       </div>

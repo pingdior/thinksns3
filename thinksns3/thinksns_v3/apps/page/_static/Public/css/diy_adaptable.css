@@ -38,6 +38,7 @@
 /*	#diy_nav2 a.on,#diy_nav2 a:hover{background:url(../images/bg_a2_on.gif) no-repeat 0 0;}*/
 		
 .diy_content{width:980px; margin:0px auto 0; min-height:60px;height:auto !important; height:60px;overflow:visible;_width:990px;_margin:20px auto 0;}
+*+html .diy_content{padding:60px 0 0 0;}
 .diy_content .font20{font-size:20px;text-align:center;line-height:60px;color:#999;}
 .ui-sortable{background:url(../images/diy-bg.jpg) no-repeat;width:980px;height:60px;}
 .diy_1,.diy_1_1,.diy_1_2,.diy_2_1,.diy_1_1_1,.diy_tab,.diy_1_3,.diy_3_1,.diy_1_2_1{}

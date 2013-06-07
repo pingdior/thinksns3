@@ -19,7 +19,7 @@ class AppsAction extends AdministratorAction
 	
 	private $appStatus = array('0'=>'关闭','1'=>'开启');	//应用状态
 	private $host_type_alias = array(0=>'本地应用',1=>'远程应用');	//托管状态
-	private $RemoteAppURL = '';
+	private $RemoteAppURL = 'http://demo.thinksns.com/t3';
 	public function _initialize(){
 		$this->pageTitle['index'] = L('PUBLIC_INSTALLED_APPLIST');
 		$this->pageTitle['install'] = L('PUBLIC_UNINSTALLED_APPLIST');
@@ -30,7 +30,6 @@ class AppsAction extends AdministratorAction
 		$this->appStatus[1] = L('PUBLIC_OPEN');
 		$this->host_type_alias[0] = L('PUBLIC_LOCAL_APP');
 		$this->host_type_alias[1] = L('PUBLIC_REMOTE_APP');
-		$this->RemoteAppURL = C('TS_UPDATE_SITE');
 		parent::_initialize();
 	}
 	
@@ -47,8 +46,8 @@ class AppsAction extends AdministratorAction
 
 		foreach($listData['data'] as &$v){
 
-			// $v['icon_url'] = empty($v['icon_url']) ? '<img src="'.APPS_URL.'/'.$v['app_name'].'/Appinfo/icon_app.png" >' : "<img src='{$v['icon_url']}'>";
-			$v['icon_url'] = '<img src="'.APPS_URL.'/'.$v['app_name'].'/Appinfo/icon_app.png" >';
+			$v['icon_url'] = empty($v['icon_url']) ? '<img src="'.APPS_URL.'/'.$v['app_name'].'/Appinfo/icon_app.png" >' : "<img src='{$v['icon_url']}'>";
+			
 			!empty($v['author_homepage_url']) && $v['author_name'] = "<a href='{$v['author_homepage_url']}'>{$v['author_name']}</a>";
 			$v['DOACTION'] = "<a href='".U('admin/Apps/preinstall',array('app_name'=>$v['app_name']))."'>".L('PUBLIC_EDIT')."</a>&nbsp;&nbsp;";
 			$v['DOACTION'] .= $v['status'] == 0 
@@ -101,7 +100,7 @@ class AppsAction extends AdministratorAction
 			$this->error(L('PUBLIC_SYSTEM_APP_SELECTINSTALL'));
 
 		$this->pageKeyList = array('app_id','app_name','app_alias','app_entry','description','status','host_type','icon_url','large_icon_url',
-								'admin_entry','statistics_entry','company_name','display_order','version','api_key','secure_key','add_front_top','add_front_applist'
+								'admin_entry','statistics_entry','company_name','display_order','version','api_key','secure_key'
 								);
 
 		if(!empty($install)){
@@ -119,8 +118,6 @@ class AppsAction extends AdministratorAction
 		$this->opt['status'] = $this->appStatus;
 		$this->opt['host_type'] = $this->host_type_alias;
 		$this->opt['add_tonav'] = array(0=>L('PUBLIC_SYSTEMD_FALSE'),1=>L('PUBLIC_SYSTEMD_TRUE'));
-		$this->opt['add_front_top'] = array(0=>L('PUBLIC_SYSTEMD_FALSE'),1=>L('PUBLIC_SYSTEMD_TRUE'));
-		$this->opt['add_front_applist'] = array(0=>L('PUBLIC_SYSTEMD_FALSE'),1=>L('PUBLIC_SYSTEMD_TRUE'));
 		$this->notEmpty = array('app_name','app_alias','app_entry');
 		$this->onsubmit = 'admin.checkAppInfo(this)';
 		$this->displayConfig($info);
@@ -280,9 +277,10 @@ class AppsAction extends AdministratorAction
 			echo json_encode($return);exit();
 		}
 	}
+	
 
 	//在线应用
-/*	function onLineApp(){
+	function onLineApp(){
 		$url = $this->RemoteAppURL.'/index.php?app=public&mod=Tool&act=getAppsOnLineInfo';
 		$list = file_get_contents($url);
 		$list = json_decode($list, true);
@@ -312,7 +310,7 @@ class AppsAction extends AdministratorAction
 		foreach ($list as &$vo){
 			$vo['title'] = '<a href="'.$this->RemoteAppURL.'/index.php?app=develop&mod=Index&act=detail&id='.$vo['develop_id'].'" target="_blank">'.$vo['title'].'</a>';
 			$vo['type'] = $type[$vo['type']];
-			$vo['user'] = '<a href="'.$this->RemoteAppURL.'/index.php?app=public&mod=Profile&act=index&uid='.$vo['uid'].'" target="_blank">'.$vo['user'].'</a>';
+			$vo['user'] = '<a href="'.$this->RemoteAppURL.'/index.php?app=public&mod=Profile&act=index&uid='.$vo['uid'].'" target="_blank">'.getUserName($vo['uid']).'</a>';
 			unset($vo['uid']);
 			$vo['option'] = '<a href="'.$this->RemoteAppURL.'/index.php?app=develop&mod=Index&act=download&id='.$vo['develop_id'].'">下载</a> ';
 			
@@ -333,82 +331,49 @@ class AppsAction extends AdministratorAction
 		
 		$this->allSelected = false;
 		$this->displayList($listData);
-	}*/
-	
-	/**
-	 * 在线应用
-	 * @return void
-	 */
-	public function onLineApp () {
-		// 获取站点域名
-		$host = str_replace('http://', '', SITE_URL);
-		// 验证站点是否登陆
-		$iframeUrl = $this->RemoteAppURL.'/index.php?app=develop&mod=Public&act=getAppStoreHome&h='.base64_encode($host);
-		$this->assign('iframeUrl', $iframeUrl);
-		$this->display();
 	}
 	
-	/**
-	 * 一键安装接口
-	 * @return void
-	 */
-	public function downloadAndInstall () {
-		header("content-Type: text/html; charset=utf-8");
-		// 获取下载地址
+	function downloadAndInstall(){
+		header ( "content-Type: text/html; charset=utf-8" );
+		//获取下载地址
 		$develop_id = intval($_GET['develop_id']);
 		$url = $this->RemoteAppURL.'/index.php?app=public&mod=Tool&act=downloadApp&develop_id='.$develop_id;
 		$info = file_get_contents($url);
 		$info = json_decode($info, true);
-		// 载入下载类
+
 		tsload(ADDON_PATH.'/library/Update.class.php');
 		$updateClass = new Update();
+		
 		//从服务器端下载应用到本地
 		$res = $updateClass->downloadFile($info['packageURL']);
-		if ($res != 1) {
+		if($res!=1){
 			$this->error('下载应用失败，请确认网络是否正常');
 			exit;
 		}
-		// 压缩
+		
+		//压缩
 		$package = explode('/', $info['file']['filename']);
 		$packageName = array_pop($package);
 		$targetDir = $updateClass->downloadPath.'unzip';
-		// 创建目录unzip
-		if (!is_dir($targetDir)) {
-			@mkdir($targetDir, 0777);
-		}
 		$res = $updateClass->unzipPackage($packageName, $targetDir);
-		if ($res != 1) {
+		if($res!=1){
 			$this->error('下载应用解压失败');
 			exit;
 		}
-		// 覆盖代码
+		
+		//覆盖代码
 		switch ($info['type']) {
-			case 3:
-				 // 应用
-				$res = $updateClass->overWrittenFile(APPS_PATH);
-				break;
-			case 2:
-				// 插件
-				$res = $updateClass->overWrittenFile(ADDON_PATH.'/plugin');
-				break;
-			case 1:
-				// 皮肤
-				$res = $updateClass->overWrittenFile(ADDON_PATH.'/theme');
-				break;
+			case 3:  $res = $updateClass->overWrittenFile (APPS_PATH); break; //应用
+			case 2:  $res = $updateClass->overWrittenFile (ADDON_PATH.'/plugin'); break;  //插件
+			case 1:  break;  //TODO
 		}
-		// 安装
+		
+		//安装
 		switch ($info['type']) {
-			case 3:
-				// 应用
-				U('admin/Apps/preinstall', array('app_name'=>$info['app_name'],'install'=>1), true);
-				break;
-			case 2:
-				// 插件
-				U('admin/Addons/index', array('install'=>1), true);
-				break;
-			case 1:
-				U('admin/Apps/onLineApp', true);
-				break;
+			case 3:  U('admin/Apps/preinstall', array('app_name'=>$info['app_name'],'install'=>1), true); break; //应用
+			case 2:  U('admin/Addons/index', array('install'=>1), true); break;  //插件
+			case 1:  break;  //TODO
 		}		
+		
 	}
 }

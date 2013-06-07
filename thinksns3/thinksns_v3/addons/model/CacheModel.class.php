@@ -24,13 +24,7 @@ class CacheModel {
 	 */
 	public function __construct($type = '') {
 		$type = model('Xdata')->get('cacheconfig:cachetype');
-		if($type=='Memcache'){
-			$setting = model('Xdata')->get('cacheconfig:cachesetting');
-			$memhost = explode(':',$setting);
-			C('MEMCACHE_HOST',$memhost[0]);
-			C('MEMCACHE_PORT',$memhost[1]);
-		}
-		//$type = empty($type) ? C('DATA_CACHE_TYPE') : $type;
+// 		$type = empty($type) ? C('DATA_CACHE_TYPE') : $type;
 		!$type && $type = $this->type;
 		$this->type = strtoupper($type);
 		$this->handler = Cache::getInstance($type);
@@ -131,15 +125,6 @@ class CacheModel {
 		$key  = C('DATA_CACHE_PREFIX').$_key;
 		static_cache($key, false);
 		return $this->handler->rm($key);
-	}
-
-	/**
-	 * 清除缓存
-	 * @access public
-	 * @return boolen
-	 */
-	public function clear() {
-		return $this->handler->clear();
 	}
 
 	/**

@@ -10,7 +10,7 @@
    TODO customize this sample style
    Syntax recommendation http://www.fakesay.com
 */
-.changestylepop{background:#fff;width:700px;position: absolute;z-index:998;right: 0px;top:0;overflow: hidden;border: 1px #bbb solid;padding:0px;box-shadow:0 0 5px #888;-webkit-box-shadow:0 0 15px #888;-khmtl-box-shadow:0 0 15px #888;-zom-box-shadow:0 0 15px #888;}
+.changestylepop{background:#fff;width:700px;position: absolute;z-index:998;right: 0px;top:60px;overflow: hidden;border: 1px #bbb solid;padding:0px;box-shadow:0 0 5px #888;-webkit-box-shadow:0 0 15px #888;-khmtl-box-shadow:0 0 15px #888;-zom-box-shadow:0 0 15px #888;_top:20px;}
 .diy{position: absolute;top:35px;left:0;border-top:#ccc solid 1px;margin:0 10px;padding:10px 0;width:200px}
 .diy dd,.diy dt{padding:0 0 5px;*float:left;*zoom:1}
 .openok{position: relative;}
@@ -43,8 +43,9 @@
 .yellow{margin:  6px;-webkit-border-radius: 2px;-moz-border-radius: 2px ;border-radius: 2px;background-color: #CCB085;width: 36px;height: 36px;display: block;float: left;margin-left: 2px;cursor:pointer}
 .pink{margin:  6px;-webkit-border-radius: 2px;-moz-border-radius: 2px ;border-radius: 2px;background-color: #C789C0;width: 36px;height: 36px;display: block;float: left;margin-left: 2px;cursor:pointer}
 .isborder{border: 1px #999999 solid;}
-.templete_enter {background: url(enter.png) -6px 0;display: block;width:24px;height:24px;position: absolute;right: 0px;top:0;z-index:9;} 
-.templete_enter:hover{background: url(enter.png) 0 30px;display: block;width:29px;height:29px;position: absolute;right: 0px;top:0;}
+.templete_enter {background: url(enter.png) -6px 0;display: block;width:24px;height:24px;position: absolute;right: 0px;top:60px;z-index:9;/*-webkit-border-radius: 0px 5px 0px 0px ;-moz-border-radius: 0px 5px 0px 0px ;
+border-radius: 0px 5px 0px 0px;*/_top:20px;} 
+.templete_enter:hover{background: url(enter.png) 0 30px;display: block;width:29px;height:29px;position: absolute;right: 0px;top:60px;_top:20px;}
 
 /*changestyle end*/
 

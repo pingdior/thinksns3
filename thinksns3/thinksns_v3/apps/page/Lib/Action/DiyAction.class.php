@@ -92,7 +92,7 @@ EOT;
 		$parseTag = model ( 'ParseTag' );
 		$map['domain'] = $page;
 		$databaseData = model( 'Page' )->getPageInfo ( $map , 'id,page_name,domain,canvas,manager,status,layout_data,widget_data,guest,seo_title,seo_keywords,seo_description');
-		$this->checkRole ( $databaseData ['manager'], $databaseData );
+		$reuslt = $this->checkRole ( $databaseData ['manager'], $databaseData );
 		
 		$pageData = $parseTag->parseId ( $databaseData ['layout_data'], false );
 		$databaseData['canvas'] = CANVAS_PATH . $databaseData['canvas'];
@@ -140,12 +140,8 @@ EOT;
 			$this->assign ( 'attr', $attr );
 		}
 		//获取Tag名
-		$pop = explode(":", t($_GET['tagName']) );
-		if ( !preg_match( '/^[a-zA-z0-9]+$/i' , $pop[0] ) || !preg_match( '/^[a-zA-z0-9]+$/i' , $pop[1])){
-			$this->error( '对不起，您访问的页面不存在！' );
-		}
-		$popup = basename($pop[0]).'/'.basename($pop[1]);
-		// $popup = str_replace ( ':', "/", $_GET ['tagName'] );
+		$popup = str_replace ( ':', "/", $_GET ['tagName'] );
+
 		$path = SITE_PATH . '/addons/diywidget/Tags/' . $popup . '/popUp.html';
 		$this->assign ( 'id', $_GET ['id'] );
 		$this->assign ( 'index', $_GET ['index'] );
@@ -161,7 +157,7 @@ EOT;
 		$parseTag = model ( 'ParseTag' );
 		$map['domain'] = t ( $_REQUEST ['page'] );
 		$databaseData = D ( 'Page' )->getPageInfo ( $map , 'canvas' );
-		$layout = base64_decode( $_SESSION [ 'layout_' . $_REQUEST ['page'] ] );
+		$layout = $_SESSION [ 'layout_' . $_REQUEST ['page'] ];
 		$content = $this->getLayout ( $layout );
 		$content = $parseTag->parseId ( $content, false );
 		$this->assign( 'page' , $map['domain'] );
@@ -203,14 +199,13 @@ EOT;
 	}
 
 	public function setSession() {
-		echo $_SESSION [ $_POST ['name'] ]  = base64_encode( $_POST ['layout']) ;
+		echo $_SESSION [ $_POST ['name'] ]  = $_POST ['layout'] ;
 	}
 	/**
 	 * 保存模块
 	 */
 	public function saveModel() {
 		$parseTag = model ( 'ParseTag' );
-		$_POST['tagName'] = t( $_POST['tagName'] );
 		$widgetTags = $this->_getTagWidget ( $_POST );
 		if (is_array ( $widgetTags )) {
 			$result ['html'] = $parseTag->parse ( $widgetTags [0], true );
@@ -249,11 +244,6 @@ EOT;
 	function saveLayout() {
 		$page = t ( $_POST ['page'] );
 		$content = $this->getLayout ( $_POST ['layout'] );
-		
-		//权限判断
-		$manager = model('Page')->where("domain='".$page."'")->getField('manager');
-		$this->checkRole( $manager );
-		
 		//对数据进行处理
 		if (empty ( $content )) {
 			$content = null;
@@ -336,8 +326,8 @@ EOT;
 		$page = empty ( $page ) ? "index" : $page;
 		$channel = t ( $_POST ['channel'] );
 
-		$manager = model ( 'Page' )->where ( "domain='".$page."'")->getField('manager');
-		$reuslt = $this->checkRole ( $manager );
+		$databaseData = D ( 'Page' )->getPageInfo ( $page, $channel );
+		$reuslt = $this->checkRole ( $databaseData ['manager'], $databaseData );
 
 		//dump(intval($reuslt['admin']) );
 		echo intval ( $reuslt ['admin'] );
@@ -348,7 +338,6 @@ EOT;
 		$admin = false;
 		$openDiy = false;
 		$userModel = model ( 'UserGroup' );
-		$user = explode( ',' , $user);
 		if (in_array ( $this->mid, $user ) || $userModel->isAdmin ( $this->mid )) {
 			$admin = true;
 		} else {

@@ -27,7 +27,7 @@ class UploadAttachWidget extends Widget{
 		}
 		//获取后台配置，设置的大小不能大于后台配置的上传大小，也不能大于系统支持的大小
 		if(!isset($data['allow_size']) || empty($data['allow_size'])){
-			$attachopt = model('Xdata')->get('admin_Config:attach');
+			$attachopt = model('Xdata')->lget('attach');
 			$attachopt['allow_size'] = ($attachopt['attach_max_size'] <= ini_get("upload_max_filesize"))?$attachopt['attach_max_size']:intval(ini_get("upload_max_filesize"));
 		}
 		$data['allow_size'] = (isset($data['allow_size']) && $data['allow_size']<=$attachopt['allow_size'])?($data['allow_size'])."MB":$attachopt['allow_size'].'MB';

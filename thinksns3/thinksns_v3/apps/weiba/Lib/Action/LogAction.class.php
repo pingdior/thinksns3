@@ -24,7 +24,8 @@ class LogAction extends Action {
 		$this->assign('weiba_id',$weiba_id);
 		$weiba_detail = D('weiba')->where('weiba_id='.$weiba_id)->find();
 		if($weiba_detail['logo']){
-			$weiba_detail['logo_url'] = getImageUrlByAttachId($weiba_detail['logo']);
+			$logo = D('attach')->where('attach_id='.$weiba_detail['logo'])->find();
+			$weiba_detail['logo_url'] = getImageUrl($logo['save_path'].$logo['save_name']);
 		}		
 		$this->assign('weiba_detail',$weiba_detail);
 		$this->display();

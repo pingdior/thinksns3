@@ -25,7 +25,7 @@ class SameUserWidget extends Widget {
 		if ( $var['user'] ){
 			$content = $this->renderFile(dirname(__FILE__)."/userlist.html", $var);
 		} else {
-			$content = '<p class="mb10">暂时还没有相关推荐</p>';
+			$content = '<p>暂时还没有相关推荐</p>';
 		}
 		exit($content);
 	}

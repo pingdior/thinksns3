@@ -1,9 +1,9 @@
 <style type="text/css">
 .s-txt {width:200px;}
 .code-textarea {width:500px;height:200px;}
-.pic-main {margin:0 0 0 0;width: 750px;}
-.pic-main ul {width:750px;list-style:none;}
-.pic-main li {float:left;width:250px;height:33px;text-align:center;line-height:33px}
+.pic-main {margin:0 0 0 0;width: 600px;}
+.pic-main ul {width:600px;list-style:none;}
+.pic-main li {float:left;width:200px;height:33px;text-align:center;line-height:33px}
 
 .pic-size {height:150px;width:200px;} 
 
@@ -23,16 +23,15 @@
   width: 9px;
   height: 8px;
   cursor: pointer;
-  *vertical-align:3px;
-  _vertical-align:4px;
+  _vertical-align:3px;
+  _background:url("__THEME__/image/del.gif") no-repeat 0 0;
 }
 a.ico-close-small:hover {
   background-position: 0 -82px;
   width: 9px;
   height: 8px;
   cursor: pointer;
-  *vertical-align:3px;
-  _vertical-align:4px;
+  _vertical-align: 3px;
 }
 .ml8 {
   margin-left: 8px;
@@ -99,8 +98,8 @@ a.ico-close-small:hover {
     </dl>
     <dl class="lineD" id="pic_form" <neq name="data.display_type" value="3">style="display:none;"</neq>>
       <dt></dt>
-      <dd style="overflow:hidden;*zoom:1;">
-        <div class="pic-main left" id="div_pic_list">
+      <dd>
+        <div class="pic-main" id="div_pic_list">
           <div>
             <ul>
               <li>图片地址</li>
@@ -125,7 +124,7 @@ a.ico-close-small:hover {
           <div class="div_pic_{$i}">
             <ul>
               <li style="height:200px;">
-                <input type="file" name="attach{$i}" onchange="admin.upload({$i}, this)" urlquery="attach_type=ad_image&upload_type=image&thumb=1" />
+                <input type="file" name="attach" onchange="admin.upload({$i}, this)" urlquery="attach_type=ad_image&upload_type=image&thumb=1" />
                 <div id="show_{$i}"><img class="pic-size" src="{$vo.bannerpic}"></div>
                 <input type="hidden" name="banner[]" id="form_{$i}" value="{$vo.banner}" />
               </li>

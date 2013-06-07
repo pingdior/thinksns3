@@ -120,7 +120,6 @@ class SaeTOAuthV2 {
 	 * @ignore
 	 */
 	function accessTokenURL()  { return 'https://api.weibo.com/oauth2/access_token'; }
-	function getTokenInfoURL()  { return 'https://api.weibo.com/oauth2/get_token_info'; }
 	/**
 	 * @ignore
 	 */
@@ -192,37 +191,20 @@ class SaeTOAuthV2 {
 			$params['username'] = $keys['username'];
 			$params['password'] = $keys['password'];
 		} else {
-			return false;//throw new SaeTOAuthException("wrong auth type");
+			throw new SaeTOAuthException("wrong auth type");
 		}
 
 		$response = $this->oAuthRequest($this->accessTokenURL(), 'POST', $params);
 		$token = json_decode($response, true);
 		if ( is_array($token) && !isset($token['error']) ) {
 			$this->access_token = $token['access_token'];
-			if(isset($token['refresh_token']))
-				$this->refresh_token = $token['refresh_token'];
+			//$this->refresh_token = $token['refresh_token'];
 		} else {
-			return false;//throw new SaeTOAuthException("get access token failed." . $token['error']);
+			throw new SaeTOAuthException("get access token failed." . $token['error']);
 		}
 		return $token;
 	}
 
-
-	/**
-	 * access_token接口
-	 *
-	 * 对应API：{@link http://open.weibo.com/wiki/OAuth2/get_token_info OAuth2/get_token_info}
-	 *
-	 * @param string $access_token
-	 * @return array
-	 */
-	function getTokenInfo( $access_token ) {
-		$params = array();
-		$params['access_token'] = $access_token;
-		$response = $this->oAuthRequest($this->getTokenInfoURL(), 'POST', $params);
-		$token = json_decode($response, true);
-		return $token;
-	}
 	/**
 	 * 解析 signed_request
 	 *
@@ -337,22 +319,22 @@ class SaeTOAuthV2 {
 
 		if (strrpos($url, 'http://') !== 0 && strrpos($url, 'https://') !== 0) {
 			$url = "{$this->host}{$url}.{$this->format}";
-		}
+	}
 
-		switch ($method) {
-			case 'GET':
-				$url = $url . '?' . http_build_query($parameters);
-				return $this->http($url, 'GET');
-			default:
-				$headers = array();
-				if (!$multi && (is_array($parameters) || is_object($parameters)) ) {
-					$body = http_build_query($parameters);
-				} else {
-					$body = self::build_http_query_multi($parameters);
-					$headers[] = "Content-Type: multipart/form-data; boundary=" . self::$boundary;
-				}
-				return $this->http($url, $method, $body, $headers);
-		}
+	switch ($method) {
+		case 'GET':
+			$url = $url . '?' . http_build_query($parameters);
+			return $this->http($url, 'GET');
+		default:
+			$headers = array();
+			if (!$multi && (is_array($parameters) || is_object($parameters)) ) {
+				$body = http_build_query($parameters);
+			} else {
+				$body = self::build_http_query_multi($parameters);
+				$headers[] = "Content-Type: multipart/form-data; boundary=" . self::$boundary;
+			}
+			return $this->http($url, $method, $body, $headers);
+	}
 	}
 
 	/**

@@ -6,7 +6,7 @@ $CONFIG['location'] = 'msglist';
 </script>
 <div id="page-wrap">
     <div id="main-wrap">
-      <div id="col" class="content-bg clearfix boxShadow">
+      <div id="col" class="st-grid content-bg">
           <div id="col4" class="main-left">
               <div id="aside" class="pad">
                   <dl class="nav-left mt10 border-no">
@@ -31,7 +31,7 @@ $CONFIG['location'] = 'msglist';
                     <if condition="empty($data)"><div class="note">{:L('PUBLIC_NO_MORE_INFO')}</div></if>
                     <volist name="data" id="vo">
                       <dl class="private-list" id="message_{$vo['list_id']}" model-node='gotoDetail' model-args="id={$vo['list_id']}&type={$vo['type']}">
-                        <php>if(CheckPermission('core_admin','message_del')):</php>
+                        <php>if(CheckPermission('core_normal','message_del')):</php>
                           <a class="ico-close hover right" href="javascript:void(0);" onclick="ui.confirm(this,'{:L('PUBLIC_DIALOGUE_DELETE_CONFIRM')}');return false;" callback="delMessage({$vo['list_id']})"></a>
                         <php>endif;</php>
                           <dt class="face">

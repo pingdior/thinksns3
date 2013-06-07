@@ -387,7 +387,14 @@ class UpdateAction extends AdministratorAction {
 			}
 		}
 	}
-
+	function makeVersionToTxt() {
+		$path = DATA_PATH . '/update';
+		$file = $path . 'versions.php';
+		$res = F ( 'versions', '', $path );
+		// dump($res);
+		$res = json_encode ( $res );
+		echo $res;
+	}
 	function md5File() {
 		ini_set();
 		$res = $this->_md5File ();

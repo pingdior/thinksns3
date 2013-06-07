@@ -5,14 +5,13 @@ class VideoModel {
     }
 
     public function getVideoInfo($link) {
-        $link = t($link);
         $parseLink = parse_url($link);
         if(preg_match("/(youku.com|youtube.com|qq.com|ku6.com|sohu.com|sina.com.cn|tudou.com|yinyuetai.com)$/i", $parseLink['host'], $hosts)) {
             $flashinfo = $this->_video_getflashinfo($link, $hosts[1]);
         }
         if ($flashinfo['flash_url']) {
             //$flashinfo['host']      = $hosts[1];
-            $flashinfo['video_url'] = $link;
+            $flashinfo['video_url']    = $link;
             return $flashinfo;
         }else{
             return false;
@@ -138,9 +137,9 @@ class VideoModel {
             $img[1] = 'data:image/jpeg;base64,'.$base;
         }
 
-        $return['title'] = t($title[1]);
-        $return['flash_url'] = t($flash_url);
-        $return['image_url'] = t($img[1]);
+        $return['title'] = $title[1];
+        $return['flash_url'] = $flash_url;
+        $return['image_url']   = $img[1];
         return $return;
     }
 

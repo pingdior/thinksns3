@@ -14,7 +14,7 @@ core.weibo = {
 		this.loadnew = args.loadnew;		// 是否载入最新
 		this.feed_type = args.feed_type;
 		this.feed_key = args.feed_key;
-		this.firstId = args.firstId;	
+		this.firstId = 0;	
 		this.topic_id = args.topic_id;		// 是否为话题
 		this.gid = args.gid;
 		//this.pre_page = "undefined" == typeof(pre_page) ? 1 :pre_page;//分页用到的前一页
@@ -27,11 +27,11 @@ core.weibo = {
 		} else {	
 			this.canLoading = false;	// 当前是否允许加载
 		}
-		this.startNewLoop();
-//		if($('#feed-lists').length > 0 && this.canLoading){
-//			$('#feed-lists').append("<div class='loading' id='loadMore'>" + L('PUBLIC_LOADING') + "<img src='" + THEME_URL + "/image/load.gif' class='load'></div>");
-//			core.weibo.loadMoreFeed();
-//		}
+
+		if($('#feed-lists').length > 0 && this.canLoading){
+			$('#feed-lists').append("<div class='loading' id='loadMore'>" + L('PUBLIC_LOADING') + "<img src='" + THEME_URL + "/image/load.gif' class='load'></div>");
+			core.weibo.loadMoreFeed();
+		}
 	},
 	// 页底加载微博
 	bindScroll: function() {	
@@ -70,7 +70,7 @@ core.weibo = {
 				if(msg.firstId > 0 && _this.loadnew == 1) {
 					_this.firstId = msg.firstId;
 					// 启动查找最新的loop
-//					_this.startNewLoop();
+					_this.startNewLoop();
 				}
 				$('#loadMore').remove();
 				if(_this.loadCount >= 4) {
@@ -197,7 +197,7 @@ core.weibo = {
 		if("undefined" != typeof(core.uploadFile)) {
 			core.uploadFile.removeParentDiv();
 		}
-		if("undefined" != typeof(core.contribute)) {
+		if("undefined" != typeof core.contribute) {
 			core.contribute.resetBtn();
 		}
 	},
@@ -245,9 +245,6 @@ core.weibo = {
 			}
 			M(_dl);
 		}
-		if("undefined" != typeof(after_publish_weibo)) {
-			after_publish_weibo(feedId);
-		}
 	},
 	// 检验微博内容，obj = 要验证的表单对象，post = 表示是否发布
 	checkNums: function(obj, post) {
@@ -256,13 +253,6 @@ core.weibo = {
 		}
 		// 获取输入框中还能输入的数字个数
 		var strlen = core.getLength(obj.value , true);
-		// 匹配尾部空白符
-		if ($.trim(obj.value) !== '') {
-			var blank = obj.value.match(/\s+$/g);
-			if (blank !== null) {
-				strlen += Math.ceil(blank[0].length / 2);
-			}
-		}
 		var leftNums = initNums - strlen;
 		if(leftNums == initNums && 'undefined' != typeof(post)) {
 			return false;

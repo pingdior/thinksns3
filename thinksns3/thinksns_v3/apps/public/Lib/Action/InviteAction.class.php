@@ -10,16 +10,13 @@ class InviteAction extends Action {
 	private $_invite_config;
 	private $_register_config;
 
-	public function _initialize() {
+	public function _initialize()
+	{
 		// 获取后台配置
 		$this->_register_config = model('Xdata')->get('admin_Config:register');
 		$registerType = $this->_register_config['register_type'];
 		if(!in_array($registerType, array('open', 'invite'))) {
-			if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
-				exit($this->ajaxReturn(null, '您没有邀请权限', 0));
-			} else {
-				exit(redirect(U('public/Index/index')));
-			}
+			exit(redirect(U('public/Index/index')));
 		}
 		$this->_invite_model = model('Invite');
 	}
@@ -49,13 +46,8 @@ class InviteAction extends Action {
 		$this->assign('invite', $userInfo);
 		$this->assign('config', model('Xdata')->get('admin_Config:register'));
 		// 获取后台积分配置
-		$creditRule = model('Credit')->getCreditRules();
-		foreach ($creditRule as $v) {
-			if ($v['name'] === 'core_code') {
-				$applyCredit = abs($v['score']);
-				break;
-			}
-		}
+		$creditRule = model('Credit')->getSetData();
+		$applyCredit = abs($creditRule['core']['code']['score']);
 		$this->assign('applyCredit', $applyCredit);
 		// 后台配置邀请数目
 		$inviteConf = model('Xdata')->get('admin_Config:invite');

@@ -77,7 +77,6 @@ class FollowGroupAction extends Action {
 		} else {
 			$gids = explode(',', $gids);
 			foreach($gids as $gid) {
-				$gid = intval( $gid );
 				$this->_setFollowGroup($gid, $fid, $add);
 			}
 			$res['status'] = 1;
@@ -118,7 +117,7 @@ class FollowGroupAction extends Action {
 	 * @return json 返回操作后的JSON信息数据
 	 */
 	public function saveGroup() {
-		$follow_group_id = intval($_REQUEST['gid']);
+		$follow_group_id = t($_REQUEST['gid']);
 		if(!empty($follow_group_id)) {
 			$save['title'] = t($_REQUEST['title']); 
 			if($save['title'] === '') {

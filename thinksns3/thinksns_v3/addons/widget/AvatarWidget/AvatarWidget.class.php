@@ -12,7 +12,7 @@ class AvatarWidget extends Widget {
      * @param string callback 回调方法
      */
 	public function render($data) {
-		$var['password']   = time();
+		$var['password']   = pkcs5_pad(time());
 		$var['defaultImg'] = 'noavatar/big.jpg';
 		$var['uploadUrl']  = urlencode(U('public/Account/doSaveUploadAvatar')); 
 		// 获取附件配置信息
@@ -30,7 +30,7 @@ class AvatarWidget extends Widget {
 	 * 输出新头像
 	 */
 	public function getflashHtml(){
-		$password   = time();
+		$password   = pkcs5_pad(time());
 		$userinfo   = model('User')->getUserInfo($GLOBALS['ts']['mid']);
 		$defaultImg = $userinfo['avatar_big'];
 		$uploadUrl  = urlencode(U('public/Account/doSaveUploadAvatar')); 

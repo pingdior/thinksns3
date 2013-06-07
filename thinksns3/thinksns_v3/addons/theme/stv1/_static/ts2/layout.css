@@ -30,7 +30,7 @@
 .mainbox_appS{margin-right:280px;_margin-right:280px;background-color:#fff;border-radius:2px 3px 3px 2px;padding:20px}/*文档分享左侧样式*/
 .no_l .mainbox_C{border-left:0 none;padding:20px;}
 .mainbox_Gl{margin-right:330px;_margin-right:320px;background-color:#fff;min-height:580px;border-radius:0 3px 3px 0}
-.right_box h2{font-size:14px;padding:10px 0;display: block;color:#333;clear:both;font-weight:bold}
+.right_box h2{font-size:16px;padding:10px 0;display: block;color:#333;clear:both;font-weight:bold}
 
 .boxspace{background-color:#E4E3E2}
 .boxspace_L{-moz-box-shadow: 1px 1px 3px rgba(0,0,0,.3);-webkit-box-shadow: 1px 1px 3px rgba(0,0,0,.3);box-shadow: 1px 1px 3px rgba(0,0,0,.3);border-radius:3px}
@@ -43,7 +43,7 @@
 .list_square .title{width:57px;height:20px;line-height:20px;overflow:hidden;}
 /*TS 主框架样式*/
 /*.header, .content, .content_share,.login_con, .login_btm, .content_noapp, .o_login,.page_tit{width:980px}*/
-.content_holder{/*padding:0 22px;*/width:960px;margin:0 auto;_margin:20px auto 0;}
+.content_holder{/*padding:0 22px;*/width:960px;margin:0 auto;padding:60px 0 0 0;_padding:20px 0 0 0;}
 .no_bg{background:none;}
 
 /* 右边内容布局 */
@@ -246,10 +246,10 @@ position:relative}
 
 /*成功 | 错误 提示*/
 .Prompt_top, .Prompt_btm, .Prompt_ok, .Prompt_x{background:url(images/message.gif) no-repeat;display:inline-block}
-.Prompt{width:640px;text-align:left;}
-.Prompt_top{background-position:0 0;height:15px;width:100%;display:block;}
-.Prompt_con{border-left:1px solid #E7E7E7;border-right:1px solid #E7E7E7;background:#fff;overflow:hidden;}
-.Prompt_btm{background-position:0 -27px;height:6px;width:100%;overflow:hidden;display:block;}
+.Prompt{width:640px;margin:100px auto 180px;text-align:left;}
+.Prompt_top{background-position:0 0;height:15px;width:100%}
+.Prompt_con{border-left:1px solid #E7E7E7;border-right:1px solid #E7E7E7;background:#fff;overflow:hidden}
+.Prompt_btm{background-position:0 -27px;height:6px;width:100%;overflow:hidden}
 .Prompt_con dl{margin:0 30px;overflow:hidden}
 .Prompt_con dt{font-size:18px;padding:15px 0;border-bottom:1px solid #EEEEEE;font-weight: bold;_height:20px}
 .Prompt_con dd{float:left;display:block;padding:15px;}
@@ -295,7 +295,7 @@ position:relative}
 /*注册流程*/
 .reg_process_on div,.right_list_on div{background:url(images/reg_process_on.gif) no-repeat 0 0}
 /*翻页*/
-.page{padding:15px 0;text-align:center}
+.page{clear:both;padding:15px 0;text-align:center}
 .page a,.page a:visited{background-color:#F6F6F6;border:1px solid #D7D7D7;color:#333333;margin-right:10px;padding:5px 10px;line-height:15px;text-decoration:none}
 .page a:hover {margin-right: 10px;border: 1px solid #9EC4D7;color: #033D5A;	background: #E4EFF5;padding: 5px 10px;text-decoration:none}
 .page a:active{margin-right: 10px;padding: 5px 10px;line-height:15px}
@@ -333,9 +333,11 @@ a.faceicon1:link, a.faceicon1:visited{display:block;float:left;height:17px;margi
 .feed_list{margin:0;}
 /*.feed_list input{margin:1px 0 0 0;_margin:0}*/
 .feedBox .feed_list{margin:0}
+.feed_list li {padding:10px 0;overflow:hidden;*zoom:1}
 .feed_list li.t{background-color:#fbfbfb;padding:5px 0;margin:5px 0;*padding:2px 0;}
 .feed_list .ck{margin:0 5px 0 0;padding:0;vertical-align:middle}
 .feed_list .feed_dpm{border:#ddd solid 2px}
+.feed_list .current{border:#0281CF solid 2px}
 .right_box .userPic img{border:solid 1px #ccc;padding:1px}
 .feed_list li .feed_c{margin-left:60px} 
 .feed_list li .feed_c img{vertical-align: middle}

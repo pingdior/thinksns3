@@ -79,12 +79,4 @@ class CacheWincache extends Cache {
         return wincache_ucache_delete($this->options['prefix'].$name);
     }
 
-    /**
-     * 清除缓存
-     * @access public
-     * @return boolen
-     */
-    public function clear() {
-    	return wincache_ucache_clear();
-    }
 }

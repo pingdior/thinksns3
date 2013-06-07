@@ -56,14 +56,6 @@ class SearchUserWidget extends Widget{
     		$noself = 1;
     	}
     	$list = model('User')->searchUser($key,$follow,10,'','',$noself,'',$type);
-    	foreach ( $list['data'] as $k=>&$v ){
-    		$user = $v;
-    		$v = array();
-    		$v['uid'] = $user['uid'];
-    		$v['uname'] = $user['uname'];
-    		$v['avatar_small'] = $user['avatar_small'];
-    		$v['search_key'] = $user['search_key'];
-    	}
     	$data = $list['data'];
     	$msg = array('status'=>1,'data'=>$data);
     	exit(json_encode($msg));

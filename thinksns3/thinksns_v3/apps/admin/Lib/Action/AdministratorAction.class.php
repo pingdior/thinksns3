@@ -301,7 +301,7 @@ class AdministratorAction extends Action {
      * Enter description here ...
      */
     public function createData(){
-    	$sql = "select * from ".C('DB_PREFIX')."system_data where list = 'pageKey' or list = 'searchPageKey'";
+    	$sql = "select * from ts_system_data where list = 'pageKey' or list = 'searchPageKey'";
     	$list = D('')->query($sql);
     	foreach($list as $v){
     		$v['value'] = unserialize($v['value']);
@@ -314,7 +314,7 @@ class AdministratorAction extends Action {
     		unset($v['id']);
     		$v['value'] = serialize($v['value']);
     		$save = $v;
-    		D('system_data')->where($map)->save($v);
+    		D('')->table('ts_system_data')->where($map)->save($v);
     		echo $v['list'],':',$v['key'],' is OK!<br/>';
     	}
     }
@@ -339,7 +339,7 @@ class AdministratorAction extends Action {
         }
         $data[$key]  = $_POST;
 
-        if(model('Xconfig')->pageKey_lput('searchPageKey',$data)){
+        if(model('Xdata')->lput('searchPageKey',$data)){
         	LogRecord('admin_config','editSearchPagekey',array('name'=>$title,'k1'=>L('PUBLIC_ADMIN_EDIT_PEIZHI')),true);
             $this->success();
         }else{
@@ -368,20 +368,8 @@ class AdministratorAction extends Action {
         if(isset($_POST['site_analytics_code'])){
         	$_POST['site_analytics_code'] = base64_encode($_POST['site_analytics_code']);
         }
-        if(isset($_POST['site_theme_name']) && $_POST['site_theme_name']!=C('THEME_NAME')){
-        	$res = $this->_switchTheme( t($_POST['site_theme_name']) );
-        }
-        if ( $key == 'admin_Config:attach' ){
-        	$exts = explode( ',' , $_POST['attach_allow_extension'] );
-        	$objext = array('gif','png','jpeg','zip','rar','doc','xls','ppt','docx','xlsx','pptx','pdf','jpg');
-        	$_POST['attach_allow_extension'] = implode( ',' , array_intersect($exts, $objext) );
-        } 
-        $result = model('Xdata')->put($key,$_POST);
-        LogRecord('admin_config', 'editDetail', array('name'=>$title, 'k1'=>L('PUBLIC_ADMIN_EDIT_EDTAIL_PEIZHI')), true);       // 保存修改编辑详细数据
-
-        if($res===false){
-        	$this->error(L('PUBLIC_SWITCH_THEME_FAIL'));            // 写config.inc.php文件失败
-        }else if($result) {
+        if(model('Xdata')->put($key,$_POST)) {
+            LogRecord('admin_config', 'editDetail', array('name'=>$title, 'k1'=>L('PUBLIC_ADMIN_EDIT_EDTAIL_PEIZHI')), true);       // 保存修改编辑详细数据
             $this->success();
         } else {
             $this->error(L('PUBLIC_SAVE_FAIL'));            // 保存失败
@@ -430,25 +418,5 @@ class AdministratorAction extends Action {
         $this->assign('pageTab',$this->pageTab);
 		$this->assign('submitAlias',$this->submitAlias);
         parent::display($templateFile,$charset,$contentType);
-    }
-    
-    private function _switchTheme($themeName=''){
-    	if(empty($themeName)){
-    		$themeName= THEME_NAME;
-    	}
-		$file = SITE_PATH.'/config/config.inc.php';
-		if(!is_writable($file)){
-			return false;
-		}
-		$content = file_get_contents($file);
-		$pos = strpos($content, 'THEME_NAME');
-		if($pos===false){
-			$content = str_replace('return array(','return array(
-	\'THEME_NAME\' => \''.$themeName.'\', ', $content);
-		}else{
-			$content = preg_replace('/\'THEME_NAME\'\s*=>\s*\'([0-9a-zA-Z_]+)\'/','\'THEME_NAME\' => \''.$themeName.'\'' , $content);
-		}
-
-		return file_put_contents($file, $content);   	
     }
 }

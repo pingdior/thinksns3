@@ -116,11 +116,14 @@ class CategoryTreeModel extends Model
 			return $this->_MakeTree($pid);
 		}
 		// 全部分类树形结构
-		$list = S('category_cache_'.$this->_talbe);
-		if(!$list) {
+		$list = array();
+		$filename = CONF_PATH.'/'.$this->_talbe.'.php';
+		if(file_exists($filename)) {
+			$list = unserialize(file_get_contents($filename));
+		} else {
 			set_time_limit(0);
 			$list = $this->_MakeTree($pid);
-			S('category_cache_'.$this->_talbe, $list);
+			file_put_contents($filename, serialize($list));
 		}
 
 		return $list;
@@ -155,7 +158,10 @@ class CategoryTreeModel extends Model
 	 */
 	public function remakeTreeCache()
 	{
-		S('category_cache_'.$this->_talbe, null);
+		$filename = CONF_PATH.'/'.$this->_talbe.'.php';
+		if(file_exists($filename)) {
+			unlink($filename);
+		}
 	}
 
 	/**

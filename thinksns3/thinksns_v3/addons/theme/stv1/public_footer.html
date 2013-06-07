@@ -1,6 +1,6 @@
 <div class="footer">
    <div class="login-footer">
-    <php>if(!empty($site_bottom_nav) && $site_bottom_child_nav){</php>
+    <php>if($site_bottom_child_nav){</php>
       <div class="foot clearfix">
          <volist name="site_bottom_nav" id="nv">
          <dl>
@@ -11,7 +11,8 @@
          </dl>
          </volist>
       </div>
-    <php>} else if(!empty($site_bottom_nav)) { </php>
+    <php>}</php>
+    <php>if(!$site_bottom_child_nav){</php>
       <div class="foot foot1 clearfix">
          <volist name="site_bottom_nav" id="nv">
          <dl>
@@ -20,16 +21,18 @@
          </volist>
       </div>
     <php>}</php>
+    <!--  
     <p>
-      <span class="right">Powered By <a href="http://www.thinksns.com" title="开源微博系统,开源微社区" target="_blank">ThinkSNS</a></span>
+      <span class="right">Powered By <a href="http://www.thinksns.com" title="������������������,���������������" target="_blank">ThinkSNS</a></span>
       {$GLOBALS.ts.site.site_footer}
     </p>
+    -->
   </div>
 </div><!--footer end-->
 
 </div><!--page end-->
 {:Addons::hook('public_footer')}
-<!-- 统计代码-->
+<!-- ������������-->
 <div id="site_analytics_code" style="display:none;">
 {$site.site_analytics_code|base64_decode}
 </div>

@@ -9,14 +9,13 @@
         <div class="boxShadow"> 
 	   	   	 <include file="_weiba_header" /> 
            <!-- 微吧帖子中部 -->
-            
+            {:Addons::hook('show_ad_space', array('place'=>'weiba_post_top'))}
 	   	   	   <div class="mb10 clearfix">
 
                  <include file="_right" />
 
                  <div id="col5" class="st-index-main">
                     <div class="extend-foot">
-                        {:Addons::hook('show_ad_space', array('place'=>'weiba_post_top'))}
                         <div class="weiba-sort f9 clearfix">
                             <span>共有{$postList.count}个帖子</span>
                         </div>

@@ -15,16 +15,15 @@ class UserPrivacyModel extends Model {
 	 * @return array 指定用户的隐私设置信息
 	 */
 	public function getUserSet($uid) {
-		$set = $this->_defaultSet();
-		
 		$userPrivacy = $this->where('uid='.$uid)->field('`key`,`value`')->findAll();
 		if($userPrivacy) {
 			foreach($userPrivacy as $k => $v) {
-				$set[$v['key']] = $v['value'];
+				$r[$v['key']] = $v['value'];
 			}
+			return $r;
+		} else {
+			return $this->_defaultSet();
 		}
-		
-		return $set;
 	}
 
 	/**
@@ -42,8 +41,6 @@ class UserPrivacyModel extends Model {
 		$map['uid'] = $uid;
 		$this->where($map)->delete();
 		foreach($data as $key=>$value) {
-			$key = t( $key );
-			$value = intval( $value );
 			$sql[] = "($uid,'{$key}',{$value})";
 		}
 		$sql = "INSERT INTO {$this->tablePrefix}user_privacy (uid,`key`,`value`) VALUES ".implode(',', $sql);
@@ -81,7 +78,7 @@ class UserPrivacyModel extends Model {
 				}
 			}				
 		}
-
+		
 		return $data; 
 	}
 

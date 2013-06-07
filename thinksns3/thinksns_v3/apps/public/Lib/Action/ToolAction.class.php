@@ -142,7 +142,6 @@ class ToolAction extends Action {
 		
 		$info = $dao->getDetailDevelop ( $map ['develop_id'] );
 		$info ['packageURL'] = getAttachUrl($info ['file'] ['filename']);
-		$info['app_name'] = $info['package'];
 		
 		// 记录下载数
 		$dao->where ( $map )->setInc ( 'download_count' );
@@ -150,19 +149,18 @@ class ToolAction extends Action {
 		echo json_encode ( $info );
 	}
 	
-	/**
-	 * 自动获取在线应用列表给本地服务器
-	 * @return JSON 相关的JSON数据
-	 */
-	public function getAppsOnLineInfo () {
-		$type = t($_GET['t']);
-		$id = intval($_GET['id']);
-		if (empty($type) && !in_array($type, array('home', 'application', 'plugin', 'theme', 'detail'))) {
-			$data = array();
-		} else {
-			$data = D('Develop', 'develop')->getAppStore($type, $id);
+	// 自动获取在线应用列表给本地服务器
+	function getAppsOnLineInfo() {
+		$map['status'] = 1;
+		$map ['type'] = array(3,2); // 先只开放应用和插件 TODO
+		$list = D ( 'develop' )->where ( $map )->field ( 'develop_id,title,app_name,version,type,download_count,uid' )->findAll ();
+		foreach ( $list as &$vo ) {
+			$vo ['explain'] = t ( $vo ['explain'] );
+			$vo ['explain'] = mStr ( $vo ['explain'], 100 );
+			$vo ['user'] = getUserName ( $vo ['uid'] );
 		}
-		echo json_encode($data);		
+		
+		echo json_encode ( $list );
 	}
 	
 	// 自动获取升级包信息给本地服务器
@@ -173,24 +171,5 @@ class ToolAction extends Action {
 			unset($result[$k]);
 		}
 		echo json_encode ( $list );
-	}
-
-	/**
-	 * 验证站点是否在官方服务器上注册
-	 * @return JSON 返回相关数据
-	 */
-	public function checkedHost () {
-		$host = t($_GET['h']);
-		$result = D('DevelopRegistration', 'develop')->checked($host);
-		$res = array();
-		if ($result) {
-			$res['status'] = 1;
-			$res['info'] = '验证通过';
-		} else {
-			$res['status'] = 0;
-			$res['info'] = '验证失败';
-		}
-
-		exit(json_encode($res));
-	}
+	}	
 }

@@ -42,30 +42,6 @@ class LoginHooks extends Hooks {
             //'twitter'  => "http://developer.facebook.com",
         );
 
-    //异步提交JS
-    public function public_head(){
-    	echo '<script>function after_publish_weibo(feed_id){
-    	$.post(U("public/Widget/addonsRequest",["addon=Login","hook=ajax_after_publish_weibo"]),{feed_id:feed_id},function(){})
-    }</script>';
-        //判断新浪微博绑定是否过期,每天一次
-                
-        $uid = $_SESSION['mid'];
-        if(!$login = S('user_login_'.$mid)){
-            $login = M ('login')->where("uid='{$uid}' AND type='sina'")->find();
-            S('user_login_'.$mid, $login);
-        }
-        if($login){
-            $this->_loadTypeLogin('sina');
-            $sina = new sina();
-            $return = $sina->getTokenInfo($login['oauth_token']);
-            if(isset($return['create_at']) && isset($return['expire_in']) && ($return['create_at'] + $return['expire_in']) < time()){
-                $url = $sina->getUrl();
-                $text = '<dl class="pop_sync"><dt></dt>您绑定的' . $type . '帐号已过期，请<dd><a class="btn-att-green" href="' . $url . '">重新绑定</a></dd></dl>';
-                echo "<script>ui.box.show({$text}, '绑定帐号')</script>";
-            }
-        }
-    }
-
     //添加个人设置菜单
     public function home_account_tab($param){
         $param['tab_list_security'][] = array('field_key'=>'bind', 'field_name'=>'帐号绑定');
@@ -346,16 +322,9 @@ class LoginHooks extends Hooks {
     }
 
     //发布微博后的操作 - 同步发布信息到社交网站
-    public function ajax_after_publish_weibo() {
-    	set_time_limit(0);
-    	ignore_user_abort(1);
-    	$feedid = intval( $_POST['feed_id'] );
-    	if ( !$feedid ){
-    		return;
-    	}
-    	$feeddata = D( 'FeedData' )->where('feed_id='.$feedid)->getField('feed_data');
-    	$data = unserialize( $feeddata );
-        $id   = $feedid;
+    public function weibo_publish_after($param) {
+        $id   = $param['weibo_id'];
+        $data = $param['post'];
         //如果传递了一次性同步参数?以参数为主:否则以帐号绑定同步设置为主
         $sync = $_POST['sync'];
         $content = $data['content'];
@@ -394,9 +363,6 @@ class LoginHooks extends Hooks {
             $content = getShort($content,130,'..');
             
             foreach($opt as $v){
-                if($v['type']=='location'){
-                    continue;
-                }
                 $this->_loadTypeLogin($v['type']);
                 $v['pic'] = $pic;
                 $v['pic_url'] = $pic_url;
@@ -405,15 +371,15 @@ class LoginHooks extends Hooks {
                 $platform = new $v['type']();
                 switch($data['type']){
                 case 'post':
-                    $syncData = $platform->update ( $content.' '.$feed_url, $v );
+                    $syncData = $platform->update ( $content.$feed_url, $v );
                     break;
                 case 'postimage':
-                    $syncData = $platform->upload ( $content.' '.$feed_url, $v, $pic );
+                    $syncData = $platform->upload ( $content.$feed_url, $v, $pic );
                     //if($is_cloud)
                     //    @unlink($tmp_path.$tmp_file);
                     break;
                 default:
-                    $syncData = $platform->update ( $content.' '.$feed_url, $v );
+                    $syncData = $platform->update ( $content.$feed_url, $v );
                     return;
                 }
                 //记录发的新微博到数据库
@@ -733,7 +699,7 @@ class LoginHooks extends Hooks {
         $data ['email']   = t($_POST['email']);
         $data ['login']   = t($_POST['email']);
         $data ['sex'] = intval ( $userinfo ['sex'] );
-        $data ['reg_ip'] = get_client_ip();
+        $data ['regip'] = get_client_ip();
         $data ['ctime'] = time();
         $data ['login_salt'] = rand(11111,99999);
         $data ['password'] = md5(md5($_POST['passwd']).$data['login_salt']);
@@ -1068,7 +1034,7 @@ class LoginHooks extends Hooks {
         if(!$_POST['open']){
             $data['open'] = array();
         }
-        $_POST && $res = model('AddonData')->lput('login', $data);
+        $res = model('AddonData')->lput('login', $data);
         if ($res) {
             $this->assign('jumpUrl', Addons::adminPage('login_plugin_login'));
         } else {

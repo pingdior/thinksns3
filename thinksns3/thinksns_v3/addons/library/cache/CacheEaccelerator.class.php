@@ -76,14 +76,5 @@ class CacheEaccelerator extends Cache {
      public function rm($name) {
          return eaccelerator_rm($this->options['prefix'].$name);
      }
-     
-     /**
-      * 清除缓存
-      * @access public
-      * @return boolen
-      */
-     public function clear() {
-     	return eaccelerator_clean();
-     }     
 
 }

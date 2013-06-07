@@ -53,7 +53,7 @@ a.add_atn,a.add_atn:visited{color:#fff}
 
 /*按钮*/
 .btn-grey{background-position:0 -260px;width:80px;height:30px;line-height:30px;text-align:center;font-size:14px;color:#666;}
-.btn-green-big,.btn-green-big:hover{background:#C789C0;color:#fff;width:80px;height:30px;line-height:30px;text-align:center;border:none;font-size:12px;border-radius:2px;-webkit-border-radius:2px;-moz-border-radius:2px;-khtml-border-radius:2px;}
+.btn-green-big,.btn-green-big:hover{background:#C789C0;color:#fff;width:80px;height:30px;line-height:30px;text-align:center;border:none;font-size:14px;border-radius:2px;-webkit-border-radius:2px;-moz-border-radius:2px;-khtml-border-radius:2px;}
 .s-login .login-bd .btn-login{font-family:"微软雅黑";font-size:20px;color:#fff;width:140px;height:46px;line-height:46px;margin:-2px 0 0 0;text-align:center;background:#C789C0;border-radius:2px;-webkit-border-radius:2px;-moz-border-radius:2px;-khtml-border-radius:2px;*margin:2px 0 0 0;}
 .btn-grey-small{background-position:0 -164px;width:80px;height:24px;color:#666;line-height:24px;text-align:center;cursor:pointer;}
 .btn-register{background:#C789C0;width:80px;height:30px;font-size:14px;color:#fff;display:block;text-align:center;line-height:30px;border-radius:2px;-webkit-border-radius:2px;-moz-border-radius:2px;-khtml-border-radius:2px;}
@@ -62,7 +62,7 @@ a.add_atn,a.add_atn:visited{color:#fff}
 .btn-att-green,.btn-att-green:hover{background:#C789C0;width:80px;height:14px;line-height:14px;padding:5px 0;font-size:12px;color:#fff;text-align:center;border-radius:2px;-webkit-border-radius:2px;-moz-border-radius:2px;-khtml-border-radius:2px;}
 .btn-copy{background-position:0 -316px;width:140px;height:46px;line-height:46px;}
 .btn-copy span{font-size:16px;color:#fff;text-align:center;display:block;}
-.btn-cancel:hover,.btn-cancel:hover span,.channel-layer .btn-cancel.current,.channel-layer .btn-cancel.current span,.channel-tab-menu .btn-cancel.current,.channel-tab-menu .btn-cancel.current span,.profession-type .btn-cancel.current,.profession-type .btn-cancel.current span{background:#C789C0;font-size:12px;color:#fff;text-align:center;border-radius:2px;-webkit-border-radius:2px;-moz-border-radius:2px;-khtml-border-radius:2px;}
+.btn-cancel:hover,.btn-cancel:hover span,.channel-tab-menu dt .btn-cancel.current,.channel-tab-menu dt .btn-cancel.current span,.channel-layer .btn-cancel.current,.channel-layer .btn-cancel.current span{background:#C789C0;font-size:12px;color:#fff;text-align:center;border-radius:2px;-webkit-border-radius:2px;-moz-border-radius:2px;-khtml-border-radius:2px;}
 .btn-cancel:hover .ico-add-black{background-position:0 -73px}
 .btn-cancel:hover span a.tag{color:#fff;margin:0 5px 0 0;}
 
@@ -97,12 +97,9 @@ a.add_atn,a.add_atn:visited{color:#fff}
 .feed_lists a.notes{height:18px;line-height:18px;display:block;padding:5px 0;margin:10px 0 5px 0;text-align:center;background-color:#f3f3f3;color:#995588;border:1px solid #e5e5e5;}
 
 /*微吧、任务、勋章头部导航*/
-.app-tab-menu li a.current:link,.app-tab-menu li a.current:visited{background:#C789C0;color:#fff;font-weight:bold;position: relative;}
+.find-type .app-tab-menu li a:link.current,.find-type .app-tab-menu li a:visited.current{background:#C789C0;color:#fff;font-weight:bold;position: relative;}
 .triangle{border-color: #C789C0 transparent transparent transparent;border-style: solid;border-width: 6px 6px 0px 6px;width: 0;height: 0;position:absolute;left:40%;bottom:-6px;line-height:0;font-size:0;_border-left-color:#f8f8f8;_border-right-color:#f8f8f8;_filter: chroma( color =#f8f8f8);}
 
 /*排行榜转发按钮*/
 .btn-forward-rank,.btn-forward-rank:hover{width:240px;text-align:center;height:46px;line-height:46px;background:#C789C0;display:inline-block;color:#fff;font-family:"微软雅黑";font-size:16px;}
 
-/*签到*/
-.sign-in{background:#C789C0;width:230px;height:47px;position:relative;margin:0 0 10px 0;border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;}
-.sign-in .date,.sign-in-h .date,.sign-in .week,.sign-in-h .week{color:#C789C0;}

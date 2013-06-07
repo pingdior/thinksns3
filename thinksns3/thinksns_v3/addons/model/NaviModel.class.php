@@ -67,13 +67,17 @@ class NaviModel extends Model {
 		return $bottomNav;
 	}
 
-	public function getBottomChildNav($bottomNav){
-		foreach ($bottomNav as $v){
-			if(isset($v['child']) && !empty($bottomNav)){
-				return true;
+	public function getBottomChildNav(){
+		$map['status'] = 1;
+		$map['position'] = 1;
+		$list = $this->where($map)->order('order_sort ASC')->field('navi_id')->findAll();
+		foreach ($list as $key => $value) {
+			$map['parent_id'] = $value['navi_id'];
+			$child = $this->where($map)->count();
+			if($child){
+				return true; exit;
 			}
 		}
-		return false;
 	}
 	/**
 	 * 清除导航缓存

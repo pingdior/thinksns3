@@ -26,7 +26,8 @@ class FollowWeibaListWidget extends Widget {
 
 	    $var['weibaListCount'] = D('weiba')->where($map)->count();
 		foreach($var['weibaList'] as $k=>$v){
-			$var['weibaList'][$k]['logo'] = getImageUrlByAttachIdByWeiba($v['logo']);
+			$logo = D('attach')->where('attach_id='.$v['logo'])->find();
+			$var['weibaList'][$k]['logo'] = getImageUrl($logo['save_path'].$logo['save_name']);
 		}
 		is_array($data) && $var = array_merge($var, $data);
 		// 渲染模版

@@ -21,11 +21,9 @@
                                 <img src="{$img}" event-node='face_card' uid='{$_follower['fid']}' width="50" height="50"></a></dt>
                             <dd class="person-info">
                                 <div class="info-right  right">
-                                <php>if($mid){</php>
                                 <if condition="$mid neq $_follower['fid']">
                                     <span class="right">{:W('FollowBtn', array('fid'=>$_follower['fid'], 'uname'=>$user_info[$_follower['fid']]['uname'], 'follow_state'=>$follow_state[$_follower['fid']], 'type'=>'normal'))}</span>
                                 </if>
-                                <php>}</php>
                                </div>
                                <div class="info-left">
                                     <p class="hd"><a href="{$user_info[$_follower['fid']]['space_url']}" event-node='face_card' uid='{$_follower['fid']}' style="font-size:14px">{$user_info[$_follower['fid']]['uname']}</a>

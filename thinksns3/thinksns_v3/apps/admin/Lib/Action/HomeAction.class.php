@@ -838,32 +838,27 @@ class HomeAction extends AdministratorAction {
 		if ( $_POST ){
 			$cachetype = t ( $_POST['cachetype'] );
 
-			//已测试通过
+			//检测是否有扩展，检测是否可连接
 			if($cachetype=='Memcache' && !extension_loaded('memcache')){
 				$this->error('无法启用该服务，服务器没有安装Memcache扩展。');
 			}
 
-			//已测试通过
+			if($cachetype=='Redis' && !extension_loaded('Redis')){
+				$this->error('无法启用该服务，服务器没有安装Redis扩展。');
+			}
+
+			if($cachetype=='WinCache' && !function_exists('wincache_ucache_info')){
+				$this->error('无法启用该服务，服务器没有安装WinCache扩展。');
+			}
+
 			if($cachetype=='APC' && !function_exists('apc_cache_info')){
 				$this->error('无法启用该服务，服务器没有安装APC扩展。');
 			}
 
-			//已测试通过
 			if($cachetype=='Xcache' && !function_exists('xcache_info')){
 				$this->error('无法启用该服务，服务器没有安装Xcache扩展。');
 			}
 
-			//没环境测试
-			if($cachetype=='Redis' && !extension_loaded('Redis')){
-				$this->error('无法启用该服务，服务器没有安装Redis扩展。');
-			}
-			
-			//没环境测试
-			if($cachetype=='WinCache' && !function_exists('wincache_ucache_info')){
-				$this->error('无法启用该服务，服务器没有安装WinCache扩展。');
-			}
-			
-			//貌似不靠谱还没搞定
 			if($cachetype=='Eaccelerator' && !function_exists('eaccelerator_get')){
 				$this->error('无法启用该服务，服务器没有安装eAccelerator扩展。');
 			}
@@ -874,16 +869,7 @@ class HomeAction extends AdministratorAction {
 		}
 
 		$this->pageKeyList = array( 'cachetype','cachesetting', 'status' );
-		$this->opt['cachetype'] = array(
-				'File'=>'文件缓存',
-				//'Db'=>'数据库缓存',
-				'Xcache'=>'Xcache',
-				'APC'=>'APC',
-				'Memcache'=>'Memcache',
-				//'Redis'=>'Redis',
-				//'WinCache'=>'WinCache',
-				//'Eaccelerator'=>'Eaccelerator',
-				);
+		$this->opt['cachetype'] = array('File'=>'文件缓存','Db'=>'数据库缓存','Memcache'=>'Memcache','Redis'=>'Redis','WinCache'=>'WinCache','APC'=>'APC','Xcache'=>'Xcache','Eaccelerator'=>'Eaccelerator',);
 		
 		model('Cache')->set('testCacheStatus', '123456789');
 		$status = model('Cache')->get('testCacheStatus');

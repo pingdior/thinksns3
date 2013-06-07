@@ -23,7 +23,7 @@
         <dt>数据库表: </dt>
         <dd>
         <volist name="table" id="vo">
-            <input type="checkbox" name="backup_table[]" value="{$vo.Name}">{$vo.Name} ( {$vo['Data_length']|admin_formatsize} )<br/>
+            <input type="checkbox" name="backup_table[]" value="{$vo.Name}">{$vo.Name} ( {$vo['Data_length']|formatsize} )<br/>
         </volist>
         </dd>
     </dl>

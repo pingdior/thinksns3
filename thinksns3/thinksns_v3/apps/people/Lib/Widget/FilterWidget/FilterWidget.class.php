@@ -57,7 +57,7 @@ class FilterWidget extends Widget
                     }
                     $name = model('Area')->where('area_id='.$pid['pid'])->getField('title');
                     if($name)
-                        $path[] = '<a href="'.U('people/Index/index', array('cid'=>$var['cid'], 'area'=>$pid['pid'], 'sex'=>$var['sex'], 'verify'=>$var['verify'], 'type'=>'area')).'">'.$name.'</a>';
+                        $path[] = '<a href="'.U('people/Index/index', array('cid'=>$var['cid'], 'area'=>$var['area'], 'sex'=>$var['sex'], 'verify'=>$var['verify'], 'type'=>'area')).'">'.$name.'</a>';
 
                     if($pid){
                         $pInfo =  model('Area')->where('area_id='.$var['area'])->find();

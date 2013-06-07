@@ -13,7 +13,7 @@
                     <ul class="clearfix" model-node="login_input">
                         <li class="s-row" style="z-index:100">
                           <div class="input">
-                             <label class="l-login">{:L('PUBLIC_ACCOUNT')}</label>
+                             <label class="l-login">{:L('PUBLIC_EMAIL')}</label>
                              <div>
                                  <input id="account_input" name="login_email" type="text" class="s-txt1" autocomplete="off" />
                                  <div class="txt-list on-changes" style="z-index:999">
@@ -60,12 +60,9 @@
           </div>         
         </div>
       </div>
-      <div id="footer" style="opacity:1;visibility:visible;margin:0;bottom:0;position:absolute;width:100%;height:50px;">
+      <div id="footer" style="opacity:1;visibility:visible;margin:0;bottom:0;position:absolute;width:100%;height:50px;z-index:-1">
             <div class="footer-wrap" style="left:50%;margin-left:-300px;position:absolute;top:0;width:560px;border:none">
-              <p>{$site.site_footer}</p>
-              <volist name='site_top_nav' id='st'>
-                <a href="{$st.url}" target="{$st.target}" style="color:#999">{$st.navi_name}</a>&nbsp;&nbsp;
-              </volist>
+                <p>{$site.site_footer}</p>
             </div>
       </div>
 </div>

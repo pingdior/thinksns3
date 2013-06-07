@@ -6,9 +6,8 @@
  */
 class PassportModel {
 
-	protected $error = null;		// 错误信息
-	protected $success = null;		// 成功信息
-	protected $rel = array();		// 判断是否是第一次登录
+	protected $error = null;				// 错误信息字段
+	protected $rel = array();				// 判断是否是第一次登录
 
 	/**
 	 * 返回最后的错误信息
@@ -17,15 +16,7 @@ class PassportModel {
 	public function getError() {
 		return $this->error;
 	}
-
-	/**
-	 * 返回最后的错误信息
-	 * @return string 最后的错误信息
-	 */
-	public function getSuccess() {
-		return $this->success;
-	}
-
+	
 	/**
 	 * 验证后台登录
 	 * @return boolean 是否已经登录后台
@@ -43,13 +34,12 @@ class PassportModel {
 	 * @return boolean 登录后台是否成功
 	 */
 	public function adminLogin() {
-		if(is_numeric($_POST['uid'])){
-			$map['uid'] = intval($_POST['uid']);
-		}else{
-			$map['email'] = t($_POST['email']);
+		if(md5($_POST['verify']) != $_SESSION['verify']) {
+			$this->error = L('PUBLIC_VERIFY_CODE_ERROR');				// 验证码错误
+			return false;
 		}
-		$login = M('User')->where($map)->find();
-		if($this->loginLocal($login['login'], $_POST['password'])) {
+		$login = isset($_POST['uid']) ? t($_POST['uid']) : t($_POST['email']);
+		if($this->loginLocal($login, $_POST['password'])) {
 			$GLOBALS['ts']['mid'] = $_SESSION['adminLogin'] = intval($_SESSION['mid']); 
 			return true;			
 		} else {
@@ -121,11 +111,12 @@ class PassportModel {
 			return false;
 		}
 
-		if($this->isValidEmail($login)){
-			$map = "(login = '{$login}' or email='{$login}') AND is_del=0";
-		}else{
-			$map = "(login = '{$login}' or uname='{$login}') AND is_del=0";
+		if(is_numeric($login)) {
+			$map['uid'] = $login;
+		} else {
+			$map['login'] = $login;
 		}
+		$map['is_del'] = 0;
 		
 		if(!$user = model('User')->where($map)->find()) {
 			$this->error = L('PUBLIC_ACCOUNT_NOEXIST');			// 帐号不存在
@@ -185,15 +176,7 @@ class PassportModel {
 	 * @param boolean $is_remember_me 是否记录登录状态，默认为false
 	 * @return boolean 是否登录成功
 	 */
-	public function loginLocal($login, $password = null, $is_remember_me = false) {		
-		$res = false;
-		if(UC_SYNC){
-			$res = $this->ucLogin($login, $password, $is_remember_me);
-		    if($res){
-			    return true;
-		    }			
-		}
-
+	public function loginLocal($login, $password = null, $is_remember_me = false) {
 		$user = $this->getLocalUser($login, $password);
 		return $user['uid']>0 ? $this->_recordLogin($user['uid'], $is_remember_me) : false;
 	}
@@ -231,7 +214,7 @@ class PassportModel {
 
 		// 注册cookie
 		if(!$this->getCookieUid() && $is_remember_me ) {
-			$expire = 3600 * 24 * 30;
+			$expire = 3600 * 24 * 365;
 			cookie('TSV3_LOGGED_USER', $this->jiami(C('SECURE_CODE').".{$uid}"), $expire);
 		}
 
@@ -244,7 +227,6 @@ class PassportModel {
 		
 		// 记录登陆日志，首次登陆判断
 		empty($this->rel) && $this->rel	= D('')->table(C('DB_PREFIX').'login_record')->where("uid = ".$uid)->getField('login_record_id');
-		
 		//添加积分
 		model('Credit')->setUserCredit($uid,'user_login');
 
@@ -257,8 +239,6 @@ class PassportModel {
 		$map['ip'] = get_client_ip();
 		$map['ctime'] = time();
 		$map['locktime'] = 0;
-
-		$this->success = '登录成功，努力加载中。。';
 
 		if($this->rel) {
 			D('')->table(C('DB_PREFIX').'login_record')->where("uid = ".$uid)->save($map);
@@ -277,10 +257,6 @@ class PassportModel {
 	public function logoutLocal() {
 		unset($_SESSION['mid'],$_SESSION['SITE_KEY']); // 注销session
 		cookie('TSV3_LOGGED_USER', NULL);	// 注销cookie
-		//UC同步退出
-		if(UC_SYNC){
-			echo $this->ucLogout();
-		}
 	}
 
 	/**
@@ -319,11 +295,6 @@ class PassportModel {
 	 */
 	private function jiami($txt, $key = null) {
 		empty($key) && $key = C('SECURE_CODE');
-		//有mcrypt扩展时
-		if(function_exists('mcrypt_module_open')){
-			return desencrypt($txt, $key);
-		}
-		//无mcrypt扩展时
 		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-=_";
 		$nh = rand(0, 64);
 		$ch = $chars[$nh];
@@ -350,11 +321,6 @@ class PassportModel {
 	 */
 	private function jiemi($txt, $key = null) {
 		empty($key) && $key = C('SECURE_CODE');
-		//有mcrypt扩展时
-		if(function_exists('mcrypt_module_open')){
-			return desdecrypt($txt, $key);
-		}
-		//无mcrypt扩展时
 		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-=_";
 		$ch = $txt[0];
 		$nh = strpos($chars, $ch);
@@ -374,166 +340,5 @@ class PassportModel {
 			$tmp .= $chars[$j];
 		}
 		return base64_decode($tmp);
-	}
-
-	/**
-	 * UC登录或者注册
-	 * @param string $username
-	 * @param string $password
-	 * @param string $is_remember_me 是否记住登录
-	 * @return bool 
-	 */
-	private function ucLogin($username, $password, $is_remember_me) {
-
-		//载入UC客户端SDK
-		include_once SITE_PATH.'/api/uc_client/client.php';
-		
-		//1. 获取UC信息.
-		if($this->isValidEmail($username)){
-			$use_email = true;
-			$uc_login_type = 2;
-		}else{
-			$use_email = false;
-			$uc_login_type = 0;
-		}
-
-		$uc_user = uc_user_login($username,$password,$uc_login_type);
-
-		//2. 已经同步过的直接登录
-		$uc_user_ref = ts_get_ucenter_user_ref('','',$username);
-		if($uc_user_ref['uid'] && $uc_user_ref['uc_uid'] && $uc_user[0] > 0 ){
-			//登录本地帐号
-			$result = $uc_user_ref['uid']>0 ? $this->_recordLogin($uc_user_ref['uid'], $is_remeber_me) : false;
-			if($result){
-				$this->success .= uc_user_synlogin($uc_user[0]);
-				return true;
-			}else{
-				$this->error = '登录失败，请重试';
-				return false;
-			}
-		}
-
-		//3. 关联表无、获取本地帐号信息.
-		$ts_user = $this->getLocalUser($username,$password);
-
-		//4. 关联表无、UC有、本地有的
-		if( $uc_user[0] > 0 && $ts_user['uid'] > 0 ){
-			$result = ts_add_ucenter_user_ref($ts_user['uid'],$uc_user[0],$uc_user[1],$uc_user[3]);
-			if(!$result){
-				$this->error = '用户不存在或密码错误';
-				return false;
-			}
-			//登录本地帐号
-			$result = $this->_recordLogin($ts_user['uid'], $is_remeber_me);
-			if($result){
-				$this->success .= uc_user_synlogin($uc_user[0]);
-				return true;
-			}else{
-				$this->error = '登录失败，请重试';
-				return false;
-			}
-		}
-
-		//5. 关联表无、UC有、本地无的
-		if( $uc_user[0] > 0 && !$ts_user['uid'] ){
-			//写入本地系统
-			$login_salt = rand(11111, 99999);
-			$map['uname'] = $uc_user[1];
-			$map['sex'] = 1;
-			$map['login_salt'] = $login_salt;
-			$map['password'] = md5(md5($uc_user[2]).$login_salt);
-			$map['login'] = $map['email'] = $uc_user[3];
-			$map['reg_ip'] = get_client_ip();
-			$map['ctime'] = time();
-			$map['is_audit'] = 1;
-			$map['is_active'] = 1;
-			$map['first_letter'] = getFirstLetter($uname);
-			//如果包含中文将中文翻译成拼音
-			if ( preg_match('/[\x7f-\xff]+/', $map['uname'] ) ){
-				//昵称和呢称拼音保存到搜索字段
-				$map['search_key'] = $map['uname'].' '.model('PinYin')->Pinyin( $map['uname'] );
-			} else {
-				$map['search_key'] = $map['uname'];
-			}
-			$ts_uid = model('User')->add($map);
-			if(!$ts_uid){
-				$this->error = '本地用户注册失败，请联系管理员';
-				return false;
-			}
-			
-			//写入关联表
-			$result = ts_add_ucenter_user_ref($ts_uid,$uc_user[0],$uc_user[1],$uc_user[3]);
-			if(!$result){
-				$this->error = '用户不存在或密码错误';
-				return false;
-			}
-			
-			// 添加至默认的用户组
-			$registerConfig = model('Xdata')->get('admin_Config:register');
-			$userGroup = empty($registerConfig['default_user_group']) ? C('DEFAULT_GROUP_ID') : $registerConfig['default_user_group'];
-			model('UserGroupLink')->domoveUsergroup($ts_uid, implode(',', $userGroup));
-
-			// 添加双向关注用户
-			$eachFollow = $registerConfig['each_follow'];
-			if(!empty($eachFollow)) {
-				model('Follow')->eachDoFollow($ts_uid, $eachFollow);
-			}
-			
-			// 添加默认关注用户
-			$defaultFollow = $registerConfig['default_follow'];
-			$defaultFollow = array_diff(explode(',', $defaultFollow), explode(',', $eachFollow));
-			if(!empty($defaultFollow)) {
-				model('Follow')->bulkDoFollow($ts_uid, $defaultFollow);
-			}
-
-			//登录本地帐号
-			$result = $this->_recordLogin($ts_uid, $is_remeber_me);
-			if($result){
-				$this->success .= uc_user_synlogin($uc_user[0]);
-				return true;
-			}else{
-				$this->error = '登录失败，请重试';
-				return false;
-			}
-		}
-
-		//6. 关联表无、UC无、本地有
-		if( $uc_user[0] < 0 && $ts_user['uid'] > 0 ){
-			//写入UC
-			$uc_uid = uc_user_register($ts_user['uname'], $password, $ts_user['email'],'','', get_client_ip());
-			if($uc_uid > 0 ){
-				$this->error = 'UC帐号注册失败，请联系管理员';
-				return false;
-			}
-			//写入关联表
-			$result = ts_add_ucenter_user_ref($ts_user['uid'],$uc_uid,$ts_user['uname'],$ts_user['email']);
-			if(!$result){
-				$this->error = '用户不存在或密码错误';
-				return false;
-			}
-			//登录本地帐号
-			$result = $this->_recordLogin($ts_user['uid'], $is_remeber_me);
-			if($result){
-				$this->success .= uc_user_synlogin($uc_uid);
-				return true;
-			}else{
-				$this->error = '登录失败，请重试';
-				return false;
-			}
-		}
-
-		//7. 关联表无、UC无、本地无的
-		$this->error = '用户不存在';
-		return false;
-	}
-
-	/**
-	 * UC注销登录
-	 * @param int $uid
-	 * @return string 退出登录的返回信息 
-	 */
-	private function ucLogout($uid){
-		include_once SITE_PATH.'/api/uc_client/client.php';
-		return uc_user_synlogout();
 	}
 }

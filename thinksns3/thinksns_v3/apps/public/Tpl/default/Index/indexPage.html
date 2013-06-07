@@ -2,13 +2,13 @@
     <div id="page-wrap">
         <div id="feedback" class="feedback-fixed"><a href="{:U('public/Index/feedback')}" target="_blank">{:L('PUBLIC_FEEDBACK')}</a></div>
         <div id="main-wrap">
-            <div id="st-index-grid" class="st-grid boxShadow">
+            <div id="st-index-grid" class="st-grid">
                 <!--左边 -->
                 <include file="__THEME__/public_left" />
-                <div id="col8" class="st-section content-bg">
+                <div id="col8" class="st-section boxShadow content-bg">
                     <!--右边-->
                     <include file="__THEME__/public_right" />
-                    <div id="col5" class="st-index-main">
+                    <div id="col5pub" class="st-index-main">
                     <div class="extend-foot">
                     <!--发布框-->
                     {:W('SendWeibo',array('title'=>$title, 'topicHtml'=>$initHtml))}
@@ -26,19 +26,19 @@
                         </div>
                         <ul>
                             <switch name="type">
+                            	<case value="all">
+                            	<li class="current"><span><a href="{:U('public/Index/indexPage',array('type'=>'all'))}">{:L('PUBLIC_ACTIVITY')}</a></span></li>
+                                <li><span><a href="{:U('public/Index/indexPage',array('type'=>'following'))}">{:L('PUBLIC_ACTIVITY_STREAM')}<i class="arrow-down"></i></a></span></li>
+                                <eq name="isChannelOpen" value="true"><li><span><a href="{:U('public/Index/indexPage',array('type'=>'channel'))}">我关注的频道<i class="arrow-down"></i></a></span></li></eq>
+                                </case>                    	
                                 <case value="following">
+                                <li><span><a href="{:U('public/Index/indexPage',array('type'=>'all'))}">{:L('PUBLIC_ACTIVITY')}</a></span></li>
                                 <li class="current" model-node="myfollow"><span><a href="javascript:void(0);" title="{$groupname}">{$groupname|getShort=###, 4}<i class="arrow-down"></i></a></span></li> 
-                                <li><span><a href="{:U('public/Index/index',array('type'=>'all'))}">{:L('PUBLIC_ACTIVITY')}</a></span></li>
-                                <eq name="isChannelOpen" value="true"><li><span><a href="{:U('public/Index/index',array('type'=>'channel'))}">我关注的频道<i class="arrow-down"></i></a></span></li></eq>
-                                </case>
-                                <case value="all">
-                                <li><span><a href="{:U('public/Index/index')}">{:L('PUBLIC_ACTIVITY_STREAM')}<i class="arrow-down"></i></a></span></li>
-                                <li class="current"><span><a href="{:U('public/Index/index',array('type'=>'all'))}">{:L('PUBLIC_ACTIVITY')}</a></span></li>
-                                <eq name="isChannelOpen" value="true"><li><span><a href="{:U('public/Index/index',array('type'=>'channel'))}">我关注的频道<i class="arrow-down"></i></a></span></li></eq>
+                                <eq name="isChannelOpen" value="true"><li><span><a href="{:U('public/Index/indexPage',array('type'=>'channel'))}">我关注的频道<i class="arrow-down"></i></a></span></li></eq>
                                 </case>
                                 <case value="channel">
-                                <li><span><a href="{:U('public/Index/index')}">{:L('PUBLIC_ACTIVITY_STREAM')}<i class="arrow-down"></i></a></span></li>
-                                <li><span><a href="{:U('public/Index/index',array('type'=>'all'))}">{:L('PUBLIC_ACTIVITY')}</a></span></li>
+                                <li><span><a href="{:U('public/Index/indexPage',array('type'=>'all'))}">{:L('PUBLIC_ACTIVITY')}</a></span></li>
+                                <li><span><a href="{:U('public/Index/indexPage',array('type'=>'following'))}">{:L('PUBLIC_ACTIVITY_STREAM')}<i class="arrow-down"></i></a></span></li>      
                                 <eq name="isChannelOpen" value="true"><li class="current" model-node="mychannel"><span><a href="javascript:;" title="{$channelname}">{$channelname|getShort=###,6}<i class="arrow-down"></i></a></span></li></eq>
                                 </case>
                             </switch>
@@ -47,21 +47,20 @@
                     <div class="mod-feed-tab" id="mod-feed-tab" <php>if(!isset($_GET['feed_type']) && empty($_GET['feed_key'])){</php> style="display:none"<php>}</php> >
                         <ul class="inner-feed-nav">
                             <li <eq name='feed_type' value=''>class="current"</eq>>
-                                <a href="{:U('public/Index/index',array('type'=>$type,'feed_type'=>''))}">{:L('PUBLIC_ALL_STREAM')}</a></li>
+                                <a href="{:U('public/Index/indexPage',array('type'=>$type,'feed_type'=>''))}">{:L('PUBLIC_ALL_STREAM')}</a></li>
                             <li <eq name='feed_type' value='post'>class="current"</eq>>
-                            <a href="{:U('public/Index/index',array('type'=>$type,'feed_type'=>'post'))}">{:L('PUBLIC_ORIGINAL_STREAM')}</a></li>
+                            <a href="{:U('public/Index/indexPage',array('type'=>$type,'feed_type'=>'post'))}">{:L('PUBLIC_ORIGINAL_STREAM')}</a></li>
                             <li <eq name='feed_type' value='repost'>class="current"</eq>>
-                            <a href="{:U('public/Index/index',array('type'=>$type,'feed_type'=>'repost'))}">{:L('PUBLIC_SHARE_STREAM')}</a></li>
+                            <a href="{:U('public/Index/indexPage',array('type'=>$type,'feed_type'=>'repost'))}">{:L('PUBLIC_SHARE_STREAM')}</a></li>
                             <li <eq name='feed_type' value='postimage'>class="current"</eq>>
-                            <a href="{:U('public/Index/index',array('type'=>$type,'feed_type'=>'postimage'))}">{:L('PUBLIC_IMAGE_STREAM')}</a></li>
+                            <a href="{:U('public/Index/indexPage',array('type'=>$type,'feed_type'=>'postimage'))}">{:L('PUBLIC_IMAGE_STREAM')}</a></li>
                             <li <eq name='feed_type' value='postfile'>class="current"</eq>>
-                            <a href="{:U('public/Index/index',array('type'=>$type,'feed_type'=>'postfile'))}">{:L('PUBLIC_FILE_STREAM')}</a></li>
+                            <a href="{:U('public/Index/indexPage',array('type'=>$type,'feed_type'=>'postfile'))}">{:L('PUBLIC_FILE_STREAM')}</a></li>
                             <li <eq name="feed_type" value="postvideo">class="current"</eq>>
-                            <a href="{:U('public/Index/index',array('type'=>$type,'feed_type'=>'postvideo'))}">视频</a></li>
+                            <a href="{:U('public/Index/indexPage',array('type'=>$type,'feed_type'=>'postvideo'))}">视频</a></li>
                         </ul>
                     </div>
                     </div>
-                    {:Addons::hook('home_index_left_feedtop')}
                     <!--feed list-->
                     {:W('FeedList',array('type'=>$type,'feed_type'=>$feed_type,'feed_key'=>$feed_key,'fgid'=>t($_GET['fgid'])))}
                     </div>
@@ -73,9 +72,9 @@
 <div class="layer-group-list" style="display:none" model-node='layer_group_list'>
 <div class="inner">
 <ul>
-    <li><a href="{:U('public/Index/index')}">{:L('PUBLIC_ACTIVITY_STREAM')}</a></li>
+    <li><a href="{:U('public/Index/indexPage')}">{:L('PUBLIC_ACTIVITY_STREAM')}</a></li>
     <volist name='followGroup' id ='f'>
-    <li><a href="{:U('public/Index/index',array('fgid'=>$f['follow_group_id']))}" class='group_title' gid='{$f['follow_group_id']}'>{$f.title}</a></li>
+    <li><a href="{:U('public/Index/indexPage',array('fgid'=>$f['follow_group_id']))}" class='group_title' gid='{$f['follow_group_id']}'>{$f.title}</a></li>
     </volist>
     <li class="line"></li>
     <php> if(count($followGroup) < 10): </php>                                
@@ -88,11 +87,11 @@
 
 <div class="layer-channel-group-list" style="display:none" model-node="layer_channel_group_list">
     <div class="inner">
-        <ul>
-            <li><a href="{:U('public/Index/index',array('type'=>'channel'))}">我关注的频道</a></li>
+        <ul> 
+        	<li><a href="{:U('public/Index/indexPage',array('type'=>'channel'))}">我关注的频道</a></li>
             <volist name='channelGroup' id ='f'>
-            <li><a href="{:U('public/Index/index',array('type'=>'channel','fgid'=>$f['channel_category_id']))}" class="group_title" gid="{$f['channel_category_id']}">{$f.title}</a></li>
-            </volist>
+            <li><a href="{:U('public/Index/indexPage',array('type'=>'channel','fgid'=>$f['channel_category_id']))}" class="group_title" gid="{$f['channel_category_id']}">{$f.title}</a></li>
+            </volist>          
         </ul>
     </div>
 </div>

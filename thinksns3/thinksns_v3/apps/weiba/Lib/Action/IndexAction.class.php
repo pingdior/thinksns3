@@ -31,12 +31,12 @@ class IndexAction extends Action {
 	 */
 	public function weibaList(){
 		$weibaList = D('weiba')->where('is_del=0')->order('recommend desc,follower_count desc,thread_count desc')->findpage(10);
+		$weiba_ids = getSubByKey($weibaList['data'],'weiba_id');
+		$followStatus = D('weiba')->getFollowStateByWeibaids($this->mid,$weiba_ids);
 		foreach($weibaList['data'] as $k=>$v){
-			$logo = D('attach')->where('attach_id='.$v['logo'])->find();
-			$weibaList['data'][$k]['logo'] = getImageUrl($logo['save_path'].$logo['save_name']);
-			$weibaList['data'][$k]['following'] = D('weiba')->getFollowStateByWeibaid($this->mid,$v['weiba_id']);
+			$weibaList['data'][$k]['logo'] = getImageUrlByAttachIdByWeiba($v['logo']);
+			$weibaList['data'][$k]['following'] = $followStatus[$v['weiba_id']]['following'];
 		}
-		
 		//$weiba_ids = getSubByKey($weibaList['data'], 'weiba_id');
 		//$this->_assignFollowState($weiba_ids);
 
@@ -71,7 +71,7 @@ class IndexAction extends Action {
 	 * @return  void
 	 */
 	public function myWeiba(){
-		$map['weiba_id'] = array('in',getSubByKey(D('weiba')->where('is_del=0')->findAll(),'weiba_id'));
+		$map['weiba_id'] = array('in',getSubByKey(D('weiba')->where('is_del=0')->field('weiba_id')->findAll(),'weiba_id'));
 		$map['is_del'] = 0;
 		switch (t($_GET['type'])) {
 			case 'myPost':
@@ -92,7 +92,7 @@ class IndexAction extends Action {
 			default:
 				$myFollow = D('weiba_follow')->where('follower_uid='.$this->mid)->findAll();
 				$map['weiba_id'] = array('in',getSubByKey($myFollow, 'weiba_id'));
-				$postList = D('weiba_post')->where($map)->order('post_time desc')->findpage(20);
+				$postList = D('weiba_post')->where($map)->order('last_reply_time desc')->findpage(20);
 				break;
 		}	
 		// if($postList['nowPage']==1){  //列表第一页加上全局置顶的帖子
@@ -101,8 +101,10 @@ class IndexAction extends Action {
 		// 	!$postList['data'] && $postList['data'] = array();
 		// 	$postList['data'] = array_merge($topPostList,$postList['data']);
 		// }
+		$weiba_ids = getSubByKey($postList['data'], 'weiba_id');
+		$nameArr = $this->_getWeibaName($weiba_ids);
 		foreach($postList['data'] as $k=>$v){
-			$postList['data'][$k]['weiba'] = D('weiba')->where('weiba_id='.$v['weiba_id'])->getField('weiba_name');
+			$postList['data'][$k]['weiba'] = $nameArr[$v['weiba_id']];
 		}
 		$post_uids = getSubByKey($postList['data'], 'post_uid');
 		$reply_uids = getSubByKey($postList['data'], 'last_reply_uid');
@@ -127,8 +129,7 @@ class IndexAction extends Action {
 		if(!$weiba_detail){
 			$this->error('该微吧不存在或已被解散');
 		}
-		$logo = D('attach')->where('attach_id='.$weiba_detail['logo'])->find();
-		$weiba_detail['logo'] = getImageUrl($logo['save_path'].$logo['save_name']);
+		$weiba_detail['logo'] = getImageUrlByAttachIdByWeiba($weiba_detail['logo']);
 		//吧主
 		$map['weiba_id'] = $weiba_id;
 		$map['level'] = array('in','2,3');
@@ -291,7 +292,8 @@ class IndexAction extends Action {
 		$data['content'] = h($_POST['content']);
 		$data['post_uid'] = $this->mid;
 		$data['post_time'] = time();
-		//$data['last_reply_time'] = $data['post_time'];
+		$data['last_reply_uid'] = $this->mid;
+		$data['last_reply_time'] = $data['post_time'];
 		$res = D('weiba_post')->add($data);
 		if($res){
 			D('weiba')->where('weiba_id='.$data['weiba_id'])->setInc('thread_count');
@@ -321,7 +323,9 @@ class IndexAction extends Action {
 		if(D('weiba_favorite')->where('uid='.$this->mid.' AND post_id='.$post_id)->find()){
 			$post_detail['favorite'] = 1;
 		}
+		//$post_detail['content'] = html_entity_decode($post_detail['content']);
 		$this->assign('post_detail',$post_detail);
+		//dump($post_detail);
 		D('weiba_post')->where('post_id='.$post_id)->setInc('read_count');
 		$weiba_name = D('weiba')->where('weiba_id='.$post_detail['weiba_id'])->getField('weiba_name');
 		$this->assign('weiba_id' , $post_detail['weiba_id']);
@@ -346,14 +350,18 @@ class IndexAction extends Action {
 		$map1['post_uid'] = $post_detail['post_uid'];
 		$map1['is_del'] = 0;
 		$otherPost = D('weiba_post')->where($map1)->order('reply_count desc')->limit(5)->findAll();
+		$weiba_ids = getSubByKey($otherPost, 'weiba_id');
+		$nameArr = $this->_getWeibaName($weiba_ids);
 		foreach($otherPost as $k=>$v){
-			$otherPost[$k]['weiba'] = D('weiba')->where('weiba_id='.$v['weiba_id'])->getField('weiba_name');
+			$otherPost[$k]['weiba'] = $nameArr[$v['weiba_id']];
 		}
 		$this->assign('otherPost',$otherPost);
 		//最新10条
 		$newPost = D('weiba_post')->where('is_del=0')->order('post_time desc')->limit(10)->findAll();
+		$weiba_ids = getSubByKey($newPost, 'weiba_id');
+		$nameArr = $this->_getWeibaName($weiba_ids);
 		foreach($newPost as $k=>$v){
-			$newPost[$k]['weiba'] = D('weiba')->where('weiba_id='.$v['weiba_id'])->getField('weiba_name');
+			$newPost[$k]['weiba'] = $nameArr[$v['weiba_id']];
 		}
 		$this->assign('newPost',$newPost);
 		$this->_weibaOrder();
@@ -561,7 +569,6 @@ class IndexAction extends Action {
 		}
 		$currentValue = intval($_POST['currentValue']);
 		$targetValue = intval($_POST['targetValue']);
-		
 		if ( $targetValue == '1' && $type == 1 ){
 			$action = 'weiba_top';
 		} else if( $targetValue == '2' && $type == 1){
@@ -571,12 +578,13 @@ class IndexAction extends Action {
 		} else if ( $type == 3 ){
 			$action = 'weiba_recommend';
 		}
+		$weiba_id = D('weiba_post')->where('post_id='.$post_id)->getField('weiba_id');
 		if ( $targetValue == '0' && $type == 1 ){
-			if ( !CheckWeibaPermission( '' , $post_id , 'weiba_top') && !CheckWeibaPermission( '' , $post_id , 'weiba_global_top') ){
+			if ( !CheckWeibaPermission( '' , $weiba_id , 'weiba_top') && !CheckWeibaPermission( '' , $weiba_id , 'weiba_global_top') ){
 				$this->error( '对不起，您没有权限进行该操作！' );
 			}
 		} else {
-			if ( !CheckWeibaPermission( '' , $post_id , $action) ){
+			if ( !CheckWeibaPermission( '' , $weiba_id , $action) ){
 				$this->error( '对不起，您没有权限进行该操作！' );
 			}
 		}
@@ -621,11 +629,7 @@ class IndexAction extends Action {
 			if($type==2){
 				switch ($targetValue) {
 					case '0':     //取消精华
-							D('log')->writeLog($post_detail['weiba_id'],$this->mid,'将帖子“<a href="'.U('weiba/Index/postDetail',array('post_id'=>$post_id)).'" target="_blank">'.$post_detail['title'].'</a>”取消了精华','posts');
-						
-						//添加积分
-						model('Credit')->setUserCredit($post_detail['post_uid'],'undist_topic');
-
+						D('log')->writeLog($post_detail['weiba_id'],$this->mid,'将帖子“<a href="'.U('weiba/Index/postDetail',array('post_id'=>$post_id)).'" target="_blank">'.$post_detail['title'].'</a>”取消了精华','posts');
 						break;
 					case '1':     //设为精华
 							$config['typename'] = "精华";
@@ -634,26 +638,29 @@ class IndexAction extends Action {
 						
 						//添加积分
 						model('Credit')->setUserCredit($post_detail['post_uid'],'dist_topic');
-
 						break;
 				}
 			}
 			if($type==3){
 				switch ($targetValue) {
 					case '0':     //取消推荐
-							D('log')->writeLog($post_detail['weiba_id'],$this->mid,'将帖子“<a href="'.U('weiba/Index/postDetail',array('post_id'=>$post_id)).'" target="_blank">'.$post_detail['title'].'</a>”取消了推荐','posts');
-						
-						//添加积分
-						model('Credit')->setUserCredit($post_detail['post_uid'],'undist_topic');
-
+						D('log')->writeLog($post_detail['weiba_id'],$this->mid,'将帖子“<a href="'.U('weiba/Index/postDetail',array('post_id'=>$post_id)).'" target="_blank">'.$post_detail['title'].'</a>”取消了推荐','posts');
 						break;
+<<<<<<< HEAD
 					case '1':     //设为推荐
 							$config['typename'] = "推荐";
 							model('Notify')->sendNotify($post_detail['post_uid'], 'weiba_post_set', $config); 
 							D('log')->writeLog($post_detail['weiba_id'],$this->mid,'将帖子“<a href="'.U('weiba/Index/postDetail',array('post_id'=>$post_id)).'" target="_blank">'.$post_detail['title'].'</a>”设为了推荐','posts');
+=======
+					case '1':     
+						//设为推荐
+						$config['typename'] = "推荐";
+						model('Notify')->sendNotify($post_detail['post_uid'], 'weiba_post_set', $config); 
+						D('log')->writeLog($post_detail['weiba_id'],$this->mid,'将帖子“<a href="'.U('weiba/Index/postDetail',array('post_id'=>$post_id)).'" target="_blank">'.$post_detail['title'].'</a>”设为了推荐','posts');
+>>>>>>> origin/FirstUpdate
 						
 						//添加积分
-						model('Credit')->setUserCredit($post_detail['post_uid'],'dist_topic');
+						model('Credit')->setUserCredit($post_detail['post_uid'],'recommend_topic');
 
 						break;
 				}
@@ -670,11 +677,12 @@ class IndexAction extends Action {
 	 */
 	public function search(){
 		$k = t($_REQUEST['k']);
-
 		$this->setTitle( '搜索'.$k );
 		$this->setKeywords( '搜索'.$k );
 		$this->setDescription( '搜索'.$k );
 
+		//微吧推荐
+		$this->_weiba_recommend(9);
 		//微吧排行榜
 		$this->_weibaOrder();
 		$this->assign('nav','search');
@@ -686,6 +694,7 @@ class IndexAction extends Action {
 			}
 			exit;
 		}
+		$_POST['k'] && $_SERVER['QUERY_STRING'] = $_SERVER['QUERY_STRING'].'&k='.$k;
 		$this->assign('searchkey',$k);
 		$map['is_del'] = 0;
 		if($_REQUEST['type'] == '1'){
@@ -697,8 +706,7 @@ class IndexAction extends Action {
 			$weibaList = D('weiba')->where($map)->findPage(10);
 			if($weibaList['data']){
 				foreach($weibaList['data'] as $k=>$v){
-					$logo = D('attach')->where('attach_id='.$v['logo'])->find();
-					$weibaList['data'][$k]['logo'] = getImageUrl($logo['save_path'].$logo['save_name']);
+					$weibaList['data'][$k]['logo'] = getImageUrlByAttachIdByWeiba($v['logo']);
 				}
 				$weiba_ids = getSubByKey($weibaList['data'], 'weiba_id');
 				$this->_assignFollowState($weiba_ids);
@@ -710,15 +718,17 @@ class IndexAction extends Action {
 			$this->display('search_weiba');
 		}else{
 			//搜帖子
-			$map['weiba_id'] = array('in',getSubByKey(D('weiba')->where('is_del=0')->findAll(),'weiba_id'));
+			$map['weiba_id'] = array('in',getSubByKey(D('weiba')->where('is_del=0')->field('weiba_id')->findAll(),'weiba_id'));
 			$map['title'] = array('like','%'.$k.'%');
 			//$where['content'] = array('like','%'.$k.'%');
 			//$where['_logic'] = 'or';
 			//$map['_complex'] = $where;
 			$postList = D('weiba_post')->where($map)->order('post_time desc')->findPage(20);
 			if($postList['data']){
+				$weiba_ids = getSubByKey($postList['data'], 'weiba_id');
+				$nameArr = $this->_getWeibaName($weiba_ids);
 				foreach($postList['data'] as $k=>$v){
-					$postList['data'][$k]['weiba'] = D('weiba')->where('weiba_id='.$v['weiba_id'])->getField('weiba_name');
+					$postList['data'][$k]['weiba'] = $nameArr[$v['weiba_id']];
 				}
 				$post_uids = getSubByKey($postList['data'], 'post_uid');
 				$reply_uids = getSubByKey($postList['data'], 'last_reply_uid');
@@ -830,8 +840,7 @@ class IndexAction extends Action {
 	private function _weiba_recommend($limit=9){
 		$weiba_recommend = D('weiba')->where('recommend=1 and is_del=0')->limit($limit)->findAll();
 		foreach($weiba_recommend as $k=>$v){
-			$logo = D('attach')->where('attach_id='.$v['logo'])->find();
-			$weiba_recommend[$k]['logo'] = getImageUrl($logo['save_path'].$logo['save_name']);
+			$weiba_recommend[$k]['logo'] = getImageUrlByAttachIdByWeiba($v['logo']);
 		}
 		$weiba_ids = getSubByKey($weiba_recommend, 'weiba_id');
 		$this->_assignFollowState($weiba_ids);
@@ -844,12 +853,13 @@ class IndexAction extends Action {
 	 * @return void
 	 */
 	private function _post_recommend($limit){
-		$map['weiba_id'] = array('in',getSubByKey(D('weiba')->where('is_del=0')->findAll(),'weiba_id'));
-		$map['recommend'] = 1;
-		$map['is_del'] = 0;
-		$post_recommend = D('weiba_post')->where($map)->order('recommend_time desc')->limit($limit)->findAll();
+		$db_prefix = C('DB_PREFIX');
+		$sql = "SELECT a.* FROM `{$db_prefix}weiba_post` a, `{$db_prefix}weiba` b WHERE a.weiba_id=b.weiba_id AND ( b.`is_del` = 0 ) AND ( a.`recommend` = 1 ) AND ( a.`is_del` = 0 ) ORDER BY a.recommend_time desc LIMIT ".$limit;
+		$post_recommend = D('weiba_post')->query($sql);
+		$weiba_ids = getSubByKey($post_recommend, 'weiba_id');
+		$nameArr = $this->_getWeibaName($weiba_ids);
 		foreach($post_recommend as $k=>$v){
-			$post_recommend[$k]['weiba'] = D('weiba')->where('weiba_id='.$v['weiba_id'])->getField('weiba_name');
+			$post_recommend[$k]['weiba'] = $nameArr[$v['weiba_id']];
 		}
 		$this->assign('post_recommend',$post_recommend);
 	}
@@ -861,8 +871,7 @@ class IndexAction extends Action {
 	private function _weibaOrder(){
 		$weiba_order = D('weiba')->where('is_del=0')->order('follower_count desc,thread_count desc')->limit(10)->findAll();
 		foreach($weiba_order as $k=>$v){
-			$logo = D('attach')->where('attach_id='.$v['logo'])->find();
-			$weiba_order[$k]['logo'] = getImageUrl($logo['save_path'].$logo['save_name']);
+			$weiba_order[$k]['logo'] = getImageUrlByAttachIdByWeiba($v['logo']);
 		}
 		//dump($weiba_order);exit;
 		$this->assign('weiba_order',$weiba_order);
@@ -906,7 +915,7 @@ class IndexAction extends Action {
 	 * 帖子列表
 	 */
 	private function _postList(){
-		$map['weiba_id'] = array('in',getSubByKey(D('weiba')->where('is_del=0')->findAll(),'weiba_id'));
+		$map['weiba_id'] = array('in',getSubByKey(D('weiba')->where('is_del=0')->field('weiba_id')->findAll(),'weiba_id'));
 		$map['top'] = array('neq',2);
 		$map['is_del'] = 0;
 		$postList = D('weiba_post')->where($map)->order('post_time desc')->findpage(20);
@@ -917,8 +926,11 @@ class IndexAction extends Action {
 			!$postList['data'] && $postList['data'] = array();
 			$postList['data'] = array_merge($topPostList,$postList['data']);
 		}
+		
+		$weiba_ids = getSubByKey($postList['data'], 'weiba_id');
+		$nameArr = $this->_getWeibaName($weiba_ids);
 		foreach($postList['data'] as $k=>$v){
-			$postList['data'][$k]['weiba'] = D('weiba')->where('weiba_id='.$v['weiba_id'])->getField('weiba_name');
+			$postList['data'][$k]['weiba'] = $nameArr[$v['weiba_id']];
 		}
 		//dump($postList);exit;
 		$post_uids = getSubByKey($postList['data'], 'post_uid');
@@ -928,6 +940,18 @@ class IndexAction extends Action {
 		//微吧排行榜
 		$this->_weibaOrder();
 		$this->assign('postList',$postList);
+	}
+	private function _getWeibaName($weiba_ids){
+		$weiba_ids = array_unique($weiba_ids);
+		if(empty($weiba_ids)){
+			return false;
+		}
+		$map['weiba_id'] = array('in', $weiba_ids);
+		$names = D('weiba')->where($map)->field('weiba_id,weiba_name')->findAll();
+		foreach ( $names as $n){
+			$nameArr[$n['weiba_id']] = $n['weiba_name'];
+		}		
+		return $nameArr;
 	}
 	
 }

@@ -10,6 +10,7 @@ class IndexAction extends Action {
 	 * 我的首页 - 微博页面
 	 * @return void
 	 */
+	static $_IMAGELEXIT='original';
 	public function indexPage(){
 		// 安全过滤
 		$d['type'] = t($_GET['type']) ? t($_GET['type']) : 'following';
@@ -72,7 +73,125 @@ class IndexAction extends Action {
 	public function loginWithoutInit(){
 		$this->index();
 	}
-
+	/**
+	 *把日期改成大写，如：七月四日
+	 *created by m@@
+	 */
+	public function ConvertDate($date)
+	{
+		// 首先验证日期是否正确
+		if(!preg_match('/^((\d{1,2})\-(\d{1,2}))$/',$date))
+		{
+			echo 1;
+			die('对不起日期不合法');
+		}
+		// echo $date.'------';
+		$d=explode('-',$date);
+		if($d[0][0]=='0')
+			$m=$d[0][1];
+		else
+			$m=$d[0];
+	
+		if($d[1][0]=='0')
+			$dd=$d[1][1];
+		else
+			$dd=$d[1];
+	
+		// echo $dd.'---'.$m;
+		// 简单的日期验证
+		if($m<1 || $m>12 || $dd<1 || $dd>31 )
+		{
+			echo 2;
+			die('对不起日期不合法');
+		}
+			
+		$array = array('零','一','二','三','四','五','六','七','八','九','十');
+			
+		//  月
+		$month='';
+		if($m<9)
+		{
+			$month=$array[intval($m)].'月 ';
+		}
+		else if($m==10)
+		{
+			$month=' 十月 ';
+		}
+		else
+		{
+			$month=' 十'.$array[$m[1]].'月 ';
+		}
+	
+		// 日
+		$day='';
+	
+		if($dd<9)
+		{
+			$day=$array[intval($dd)];
+		}
+		else if(intval($dd)==10)
+		{
+			$day=' 十 ';
+		}
+		else if($dd[0]==1)
+		{
+			$day= ' 十 '.$array[$dd[1]];
+		}
+		else
+		{
+			$day= $array[$dd[0]].'十'.$array[$dd[1]];
+		}
+		//echo '-----------'.$month.$day;
+		//exit();
+		return  $month.$day;
+	}
+	
+	/**
+	 *把日期改成大写，如：七月四日
+	 *created by m@@
+	 */
+	public function ConvertDateMonth($date)
+	{
+		// 首先验证日期是否正确
+		if(!preg_match('/^(\d{1,2})$/',$date))
+		{
+			echo 1;
+			die('对不起日期不合法');
+		}
+		if($date[0]=='0')
+			$m=$date[1];
+		else
+			$m=$date;
+	
+		// echo $dd.'---'.$m;
+		// 简单的日期验证
+		if($m<1 || $m>12)
+		{
+			echo 2;
+			die('对不起日期不合法');
+		}
+			
+		$array = array('零','一','二','三','四','五','六','七','八','九','十');
+			
+		//  月
+		$month='';
+		if($m<9)
+		{
+			$month=$array[intval($m)].'月 ';
+		}
+		else if($m==10)
+		{
+			$month=' 十月 ';
+		}
+		else
+		{
+			$month=' 十'.$array[$m[1]].'月 ';
+		}
+		//echo $month;
+		//exit();
+		return  $month;
+	}
+	
 	/**
 	 * 我的微博页面
 	 */
@@ -222,7 +341,6 @@ class IndexAction extends Action {
 	/**
 	 * 意见反馈页面
 	 */
-<<<<<<< HEAD
 	public function loadRecommendPersons()
 	{
 		$recDataList = model('UserOfficial')
@@ -495,28 +613,6 @@ class IndexAction extends Action {
 			$this->display();
 		}
 
-		public function loginWithoutInit(){
-			$this->index();
-		}
-
-		/**
-		 * 我的微博页面
-		 */
-		public function myFeed() {
-			// 获取用户统计数目
-			$userData = model('UserData')->getUserData($this->mid);
-			$this->assign('feedCount', $userData['weibo_count']);
-			// 微博过滤内容
-			$feedType = t($_GET['feed_type']);
-			$this->assign('feedType', $feedType);
-			// 是否有返回按钮
-			$this->assign('isReturn', 1);
-			$this->setTitle('我的微博');
-			$this->setKeywords('我的微博');
-			$this->display();
-		}
-
-
 		/**
 		 * 发起活动
 		 */
@@ -562,7 +658,6 @@ class IndexAction extends Action {
 			$this->display();
 			// }
 		}
-=======
 	public function feedback() {
 		$feedbacktype = model('Feedback')->getFeedBackType();
 		$this->assign('type', $feedbacktype);
@@ -577,8 +672,6 @@ class IndexAction extends Action {
 		tsload(ADDON_PATH.'/library/String.class.php');
 		Image::buildImageVerify();
 	}
->>>>>>> origin/FirstUpdate
-
 	/**
 	 * 获取指定用户小名片所需要的数据
 	 * @return string 指定用户小名片所需要的数据

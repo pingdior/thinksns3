@@ -60,10 +60,10 @@
 		<!-- 发起活动 {:U('public/Profile/eventCount',array('uid'=>$user_info[$uid]['uid']))} 
 			参与活动{:U('public/Profile/joinCount',array('uid'=>$user_info[$uid]['uid']))}
 		-->
-		 <li ><a href="#"
+		<li ><a href="{:U('event/Index/personal',array('action'=>'launch'))}"
          <eq name="ACTION_NAME" value="eventCount">class="current"</eq>><span>发起活动</span><strong event-node="eventCount" event-args="uid={$user_info[$uid]['uid']}">{$eventCount|default=0}</a></strong></li>
 
-		 <li class="no-border"><a href="#"
+	 <li class="no-border"><a href="{:U('event/Index/personal',array('action'=>'join'))}"
          <eq name="ACTION_NAME" value="joinCount">class="current"</eq>><span>参与活动</span><strong event-node="joinCount" event-args="uid={$user_info[$uid]['uid']}">{$joinCount|default=0}</a></strong></li>        <!-- <li class="no-border <eq name='current' value='collection'>current</eq>"><a href="{:U('public/Collection/index')}"><span>收藏</span>{$userData.favorite_count|default=0}</a></li> -->
     </ul>
 </div>

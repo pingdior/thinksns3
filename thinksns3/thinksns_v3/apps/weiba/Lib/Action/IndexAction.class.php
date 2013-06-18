@@ -646,22 +646,17 @@ class IndexAction extends Action {
 					case '0':     //取消推荐
 						D('log')->writeLog($post_detail['weiba_id'],$this->mid,'将帖子“<a href="'.U('weiba/Index/postDetail',array('post_id'=>$post_id)).'" target="_blank">'.$post_detail['title'].'</a>”取消了推荐','posts');
 						break;
-<<<<<<< HEAD
 					case '1':     //设为推荐
 							$config['typename'] = "推荐";
 							model('Notify')->sendNotify($post_detail['post_uid'], 'weiba_post_set', $config); 
 							D('log')->writeLog($post_detail['weiba_id'],$this->mid,'将帖子“<a href="'.U('weiba/Index/postDetail',array('post_id'=>$post_id)).'" target="_blank">'.$post_detail['title'].'</a>”设为了推荐','posts');
-=======
 					case '1':     
 						//设为推荐
 						$config['typename'] = "推荐";
 						model('Notify')->sendNotify($post_detail['post_uid'], 'weiba_post_set', $config); 
-						D('log')->writeLog($post_detail['weiba_id'],$this->mid,'将帖子“<a href="'.U('weiba/Index/postDetail',array('post_id'=>$post_id)).'" target="_blank">'.$post_detail['title'].'</a>”设为了推荐','posts');
->>>>>>> origin/FirstUpdate
-						
+						D('log')->writeLog($post_detail['weiba_id'],$this->mid,'将帖子“<a href="'.U('weiba/Index/postDetail',array('post_id'=>$post_id)).'" target="_blank">'.$post_detail['title'].'</a>”设为了推荐','posts');						
 						//添加积分
 						model('Credit')->setUserCredit($post_detail['post_uid'],'recommend_topic');
-
 						break;
 				}
 			}

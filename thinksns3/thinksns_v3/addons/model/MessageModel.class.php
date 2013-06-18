@@ -187,10 +187,21 @@ class MessageModel extends Model {
      */
     public function getUnreadMessageCount($uid, $type) {
         $map['a.member_uid'] = intval($uid);
+        // {m@@
         $map['a.new'] = array('EQ', 2);
+        //$map['a.new'] = array('GT', 0);
+        // }
         $type && $map['b.type'] = array('IN', $type);
         $table = $this->tablePrefix.'message_member AS a LEFT JOIN '.$this->tablePrefix.'message_list AS b ON a.list_id = b.list_id';
+        // {m@@
         $unread = $this->table($table)->where($map)->count();
+        /*$arrayNew = $this->table($table)->where($map)->field('a.new as new')->findAll();
+        foreach ($arrayNew as $cur)
+        {
+        	$unread +=intval($cur['new']);
+        }
+        */
+        // }
         return intval($unread);
     }
 	

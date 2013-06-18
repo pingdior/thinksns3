@@ -496,9 +496,12 @@ class RegisterAction extends Action
 	 */
 	public function step4() {
 		// 未登录
-		empty($_SESSION['mid']) && $this->redirect('public/Passport/login');
+		echo 'step4 into-----------------/n';
+		//exit();
+		//empty($_SESSION['mid']) && $this->redirect('public/Passport/login');
 		$this->appCssList[] = 'login.css';
-
+		echo 'step4 into2-----------------/n';
+		
 		//dump($this->_config);exit;
 		//按推荐用户
 		$related_recommend_user = model('RelatedUser')->getRelatedUserByType(5,8);
@@ -507,11 +510,19 @@ class RegisterAction extends Action
 		if(in_array('tag', $this->_config['interester_rule'])){
 			$related_tag_user = model('RelatedUser')->getRelatedUserByType(4,8);
 			$this->assign('related_tag_user',$related_tag_user);
+			// {
+			var_dump($related_tag_user);
+			echo 'related_tag_user-----------------/n';
+			// }
 		}
 		//按地区
 		if(in_array('area', $this->_config['interester_rule'])){
 			$related_city_user = model('RelatedUser')->getRelatedUserByType(3,8);
 			$this->assign('related_city_user',$related_city_user);
+			// {
+			var_dump($related_city_user);
+			echo 'related_city_user-----------------/n';
+			// }
 		}
 		$userInfo = model('User')->getUserInfo($this->mid);
 		$location = explode(' ', $userInfo['location']);

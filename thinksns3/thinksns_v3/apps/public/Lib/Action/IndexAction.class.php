@@ -66,7 +66,7 @@ class IndexAction extends Action {
 				$this->setTitle(L('PUBLIC_INDEX_INDEX'));
 				$this->setKeywords(L('PUBLIC_INDEX_INDEX'));
 		}
-
+        $this->assign("actionName","indexPage");
 		$this->display();
 	}
 
@@ -610,6 +610,8 @@ class IndexAction extends Action {
 			{
 				$this->assign("recOg",$recommendList['recOg']);
 			}
+			
+			$this->assign("actionName","index");
 			$this->display();
 		}
 

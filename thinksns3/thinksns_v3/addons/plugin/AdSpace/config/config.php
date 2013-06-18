@@ -11,7 +11,7 @@ return array(
 	'home_right_bottom' => array('id'=>'3','name'=>'我的首页右下','key'=>'home_right_bottom','width'=>230),
 
 	'topic_right' => array('id'=>'4','name'=>'话题右下','key'=>'topic_right','width'=>230),
-	'profile_right' => array('id'=>'5','name'=>'主页右下','key'=>'profile_right','width'=>230),
+	'profile_right' => array('id'=>'5','name'=>'主页右下','key'=>'profile_right','width'=>960),
 
 	'weiba_middle' => array('id'=>'11','name'=>'微吧首页中部','key'=>'weiba_middle','width'=>649),
 	'weiba_right' => array('id'=>'12','name'=>'微吧首页右下','key'=>'weiba_right','width'=>230, 'top'=>10),

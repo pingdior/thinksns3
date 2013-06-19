@@ -141,27 +141,34 @@ class RelatedUserModel extends Model {
 		$this->_getExcludeUids($fids);
 		// 用户关联信息
 		$relatedUseInfo = array();
-		for($i = 0; $i < $limit; $i++) {
+		// {{m@@
+		//for($i = 0; $i < $limit; $i++) {
 			switch($type) {
 				case 1:
-					$data = $this->_getRelatedUserFromNew();
+					//$data = $this->_getRelatedUserFromNew();
+					$data = $this->_getRelatedUserFromNew($limit);						
 					break;
 				case 2;
-					$data = $this->_getRelatedUserFromFriend();
+					//$data = $this->_getRelatedUserFromFriend();
+					$data = $this->_getRelatedUserFromFriend($limit);						
 					break;
 				case 3:
-					$data = $this->_getRelatedUserFromCity();
+					//$data = $this->_getRelatedUserFromCity();
+					$data = $this->_getRelatedUserFromCity($limit);					
 					break;
 				case 4:
-					$data = $this->_getRelatedUserFromTag();
+					//$data = $this->_getRelatedUserFromTag();
+					$data = $this->_getRelatedUserFromTag($limit);
 					break;
 				case 5:
-					$data = $this->_getRelatedUserFromRecommend();
+					//$data = $this->_getRelatedUserFromRecommend();
+					$data = $this->_getRelatedUserFromRecommend($limit);
 					break;
 			}
+			//var_dump($relatedUseInfo);
 			$relatedUseInfo = array_merge($relatedUseInfo, $data);
-		}
-		
+		//}
+		// }}
 		return $relatedUseInfo;
 	}
 
@@ -491,13 +498,34 @@ class RelatedUserModel extends Model {
 		}
 		// 获取相同地区的用户
 		$limit = $limit * 10;
-		$sql = "SELECT `uid` FROM `{$this->tablePrefix}user` WHERE `uid` IN (".$recommendUids.") 
-				AND `uid` NOT IN (".implode(',', $this->_exclude_uids).") ".$this->user_sql_where." LIMIT {$limit}";
-		$data = D()->query($sql);
-		//return $data;exit;
+		// {{ m@@
+		//$sql = "SELECT `uid` FROM `{$this->tablePrefix}user` WHERE `uid` IN (".$recommendUids.") 
+		//		AND `uid` NOT IN (".implode(',', $this->_exclude_uids).") ".$this->user_sql_where." LIMIT {$limit}";
+		//$data = D()->query($sql);
+		$uidInCount=0;
+		$uidIns = array();
+		$recUids = explode(',',$recommendUids);
+		foreach($recUids as $recTmp)
+		{
+			$flag = 0;
+			foreach($this->_exclude_uids as $excTmp)
+			{
+				if(strcmp($recTmp,$excTmp)==0)
+				{
+					$flag = 1; break;
+				}
+			}
+			if($flag==0)
+				$uidIns[$uidInCount++] = $recTmp;
+		}
+		// '14,15,17'生成这样的字符串放进查询
+		$endUids = implode(',',$uidIns);
+		$data = D('User')->where('uid in ('.$endUids.') and '.$this->user_sql_where)
+				->limit($limit)
+				->field('uid')
+				->findAll();
+		// }
 		$data = getSubByKey($data, 'uid');
-		
-		$data && $data = array_rand( $data , $num );
 		// 用户基本信息
 		$userInfos = $this->_user_model->getUserInfoByUids($data);
 		// 用户关注状态
@@ -514,7 +542,6 @@ class RelatedUserModel extends Model {
 			$data[$key]['info']['msg'] = '后台推荐用户';
 			$data[$key]['uid'] = $value;
 		}
-
 		return $data;
 	}
 

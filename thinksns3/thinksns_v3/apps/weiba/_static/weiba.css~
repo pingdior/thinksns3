@@ -102,4 +102,4 @@
 
 /*微吧列表*/
 .weiba_name { margin-bottom:15px;}
-.weiba_name a{ font-size:16px;}
+.weiba_name a{ font-size:18px;}

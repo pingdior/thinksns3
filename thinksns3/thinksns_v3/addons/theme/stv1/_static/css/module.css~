@@ -216,8 +216,7 @@ a:hover .contribute{background-position:0 -207px;}
     width: 9px;
 }
 .cGray2, .cGray2:visited, a.cGray2 {
-   font-size:14px;
-   line-height:1.5em;
+    color: #999999;
 }
 
 /*文件列表*/

@@ -524,7 +524,7 @@ ui = window.ui ||{
 		    var list = {
                              comment:{url:U('home/user/comments'),name:"我的评论"},
                              atme:{url:U('home/user/atme'),name:"新@提到我"},
-                             message:{url:U('home/message/index'),name:"新的私信"},
+                             message:{url:U('home/message/index'),name:"个朋友私您"},
                              group_atme:{url:U('group/index/atme'),name:"群内@我的"},
                              group_comment:{url:U('group/index/comment'),name:"群内评论"},
                              group_bbs:{url:U('group/index/bbsNotify'),name:"群内帖子消息"},

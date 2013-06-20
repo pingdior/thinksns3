@@ -155,13 +155,14 @@ return array (
       1 => 'tag',
     ),
     'avoidSubmitByReturn' => '',
-    'interester_recommend' => '1',
+    'interester_recommend' => '1,16,17,18,19',
     'default_follow' => '15',
     'each_follow' => '15',
     'default_user_group' => 
     array (
       0 => '1',
       1 => '2',
+      2 => '6',
     ),
     'welcome_email' => '0',
   ),

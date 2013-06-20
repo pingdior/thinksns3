@@ -475,8 +475,9 @@ class AccountAction extends Action
         if(!$data['usergroup_id']) $data['usergroup_id'] = 5;
        	$data['company'] = t($_POST['company']);	
         $data['realname'] = t($_POST['realname']);
-        $data['idcard'] = t($_POST['idcard']);
+        $data['qq'] = t($_POST['qq']);
         $data['phone'] = t($_POST['phone']);
+        $data['idcard'] = t($_POST['idcard']);
         $data['reason'] = t($_POST['reason']);
         //$data['info'] = t($_POST['info']);
         $data['attach_id'] = t($_POST['attach_ids']);
@@ -488,37 +489,38 @@ class AccountAction extends Action
         $Regx1 = '/^[0-9]*$/';
         $Regx2 = '/^[A-Za-z0-9]*$/';
         $Regx3 = '/^[A-Za-z|\x{4e00}-\x{9fa5}]+$/u';
+        $Regx4 = '/^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/';
 
         if($data['usergroup_id'] == 6){
         	if(strlen($data['company'])==0){
         		//$this->error('企业名称不能为空');
-        		echo '企业名称不能为空';exit;
+        		echo '企业/组织名称不能为空';exit;
         	}
         	if(strlen($data['realname'])==0){
         		//$this->error('法人姓名不能为空');	
-        		echo '法人姓名不能为空';exit;
+        		echo '联系人姓名不能为空';exit;
         	}
         	if(strlen($data['idcard'])==0){
         		//$this->error('营业执照号不能为空');	
-        		echo '营业执照号不能为空';exit;
+        		echo '联系人邮箱不能为空';exit;
         	}
         	if(strlen($data['phone'])==0){
         		//$this->error('联系方式不能为空');
-        		echo '联系方式不能为空';exit;	
+        		echo '联系人手机不能为空';exit;	
         	}
         	if(strlen($data['reason'])==0){
         		//$this->error('认证理由不能为空');
         		echo '认证理由不能为空';exit;	
         	}
         	if(preg_match($Regx3, $data['realname'])==0 || strlen($data['realname'])>30){
-                echo '请输入正确的法人姓名';exit;
+                echo '请输入正确的联系人姓名';exit;
             }  
         	// if(strlen($data['info'])==0){
         	// 	$this->error('认证资料不能为空');	
         	// }
-        	if(preg_match($Regx2, $data['idcard'])==0){
+        	if(preg_match($Regx4, $data['idcard'])==0){
         		//$this->error('请输入正确的营业执照号');	
-        		echo '请输入正确的营业执照号';exit;	
+        		echo '请输入正确的邮箱';exit;	
         	}
         	
         }else{
@@ -528,8 +530,13 @@ class AccountAction extends Action
         	}
         	if(strlen($data['idcard'])==0){
         		//$this->error('身份证号码不能为空');	
-        		echo '身份证号码不能为空';exit;
+        		echo '邮箱不能为空';exit;
 
+        	}
+        	if(strlen($data['qq'])==0){
+        		//$this->error('身份证号码不能为空');
+        		echo 'QQ号码不能为空';exit;
+        	
         	}
         	if(strlen($data['phone'])==0){
         		//$this->error('手机号码不能为空');	
@@ -546,9 +553,13 @@ class AccountAction extends Action
                 //$this->error('请输入正确的姓名格式');
                 echo '请输入正确的姓名格式';exit;
             }  
-        	if(preg_match($Regx2, $data['idcard'])==0 || preg_match($Regx1, substr($data['idcard'],0,17))==0 || strlen($data['idcard'])!==18){
+        	if(preg_match($Regx4, $data['idcard'])==0 ){
         		//$this->error('请输入正确的身份证号码');	
-        		echo '请输入正确的身份证号码';exit;
+        		echo '请输入正确的邮箱';exit;
+        	}
+        	if(strlen($data['qq'])<5 ||strlen($data['qq'])>15 || preg_match($Regx1, $data['qq'])==0){
+        		//$this->error('请输入正确的身份证号码');
+        		echo '请输入正确的QQ号码';exit;
         	}
         	if(strlen($data['phone']) !== 11 || preg_match($Regx1, $data['phone'])==0){
                 //$this->error('请输入正确的手机号码格式');
@@ -566,22 +577,29 @@ class AccountAction extends Action
         // }       
     	if($verifyInfo){
     		$data['verified'] = 0;
-    		$res = D('user_verified')->where('uid='.$verifyInfo['uid'])->save($data);
+    	//	$res = D('user_verified')->where('uid='.$verifyInfo['uid'])->save($data);
+    		$sql="update  ts_user_verified  set  usergroup_id='".$data['usergroup_id']."', user_verified_category_id='".$data['user_verified_category_id'].
+    			 "', company='".$data['company']."', realname='".$data['realname']."', idcard='".$data['idcard']."', phone='".$data['phone']."'".
+    			 ", verified=".$data['verified'].", attach_id='".$data['attach_id']."',reason='".$data['reason']."', qq='".$data['qq']."'  where uid='".$verifyInfo['uid']."'";
+    		
+    		$res =D('user_verified')->execute($sql);
     	}else{
     		$data['uid'] = $this->mid; 
-    		$res = D('user_verified')->add($data);
+    	//	$res = D('user_verified')->add($data);
+    		$sql="insert into ts_user_verified (uid, usergroup_id, user_verified_category_id, company, realname, idcard, phone, attach_id, reason, qq)".
+    		     " values('".$data['uid']."', '".$data['usergroup_id']."', '".$data['user_verified_category_id']."'".
+    				", '".$data['company']."','".$data['realname']."', '".$data['idcard']."', '".$data['phone']."'".
+    				",'".$data['attach_id']."','".$data['reason']."', '".$data['qq']."')";
+    		$res =D('user_verified')->execute($sql);
     	}
         if($res){
-        	//echo '1';
         	model('Notify')->sendNotify($this->mid,'public_account_doAuthenticate');
         	$touid = D('user_group_link')->where('user_group_id=1')->field('uid')->findAll();
 			foreach($touid as $k=>$v){
 				model('Notify')->sendNotify($v['uid'], 'verify_audit');
 			}
-        	//return $this->ajaxReturn(null, '申请成功，请等待审核', 1);
         	echo '1';
         }else{
-        	//$this->error("申请失败");
         	echo '申请失败';exit;
         }
     }

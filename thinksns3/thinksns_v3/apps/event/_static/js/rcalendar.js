@@ -82,7 +82,7 @@ function rcalendar(text, mode, retfunction) { //文本域对象, 模式(dateonly
 		//设置颜色选择框的样式 BEGIN
 		var css = "";
 		if (document.compatMode == "BackCompat" && navigator.userAgent.indexOf("MSIE") != -1) {
-			css += "#rcalendar {width:200px; height:200px; background:#FFFFFF; font-size:12px; font-family:宋体; border:1px solid #999999; padding:4px; overflow:hidden;}";
+			css += "#rcalendar {width:200px; height:200px; background:#FFFFFF; font-size:12px; border:1px solid #999999; padding:4px; overflow:hidden;}";
 			css += "#rcalendar_ym {width:190px; height:14px; overflow:hidden; margin-bottom:4px;}";
 			css += "#rcalendar_y {width:50px; float:left; font-weight:bold; color:#777777; padding-left:2px;}";
 			css += "#rcalendar_m {width:50px; float:left; font-weight:bold; color:#777777;}";
@@ -107,10 +107,10 @@ function rcalendar(text, mode, retfunction) { //文本域对象, 模式(dateonly
 			css += "#rseconds {width:104px; height:54px; overflow:hidden;}";
 			css += ".rsecond {padding:3px 7px 3px 7px; background:#B0B0B0; color:#FFFFFF; height:18px; overflow:hidden; float:left; cursor:pointer;}";
 			css += "#rainic {width:190px; height:11px; padding:0px 3px 0px 3px; overflow:hidden; text-align:right; background:#E0E0E0; margin-top:4px;}";
-			css += "#rainic a, #rainic a:visited, #rainic a:hover {font-size:9px;font-family:Arial; color:#FFFFFF; text-decoration:none;}";
+			css += "#rainic a, #rainic a:visited, #rainic a:hover {font-size:9px;color:#FFFFFF; text-decoration:none;}";
 		}
 		else {//173  17  190
-			css += "#rcalendar {width:190px; height:190px; background:#FFFFFF; font-size:12px; font-family:宋体; border:1px solid #999999; padding:4px; overflow:hidden;}";
+			css += "#rcalendar {width:190px; height:190px; background:#FFFFFF; font-size:12px;  border:1px solid #999999; padding:4px; overflow:hidden;}";
 			css += "#rcalendar_ym {width:190px; height:14px; overflow:hidden; margin-bottom:4px;}";
 			css += "#rcalendar_y {width:48px; float:left; font-weight:bold; color:#777777; padding-left:2px;}";
 			css += "#rcalendar_m {width:50px; float:left; font-weight:bold; color:#777777;}";
@@ -135,7 +135,7 @@ function rcalendar(text, mode, retfunction) { //文本域对象, 模式(dateonly
 			css += "#rseconds {width:104px; height:54px; overflow:hidden;}";
 			css += ".rsecond {padding:3px 7px 3px 7px; background:#B0B0B0; color:#FFFFFF; height:12px; overflow:hidden; float:left; cursor:pointer;}";
 			css += "#rainic {width:184px; height:11px; padding:0px 3px 0px 3px; overflow:hidden; text-align:right; background:#E0E0E0; margin-top:4px;}";
-			css += "#rainic a, #rainic a:visited, #rainic a:hover {font-size:9px;font-family:Arial; color:#FFFFFF; text-decoration:none;}";
+			css += "#rainic a, #rainic a:visited, #rainic a:hover {font-size:9px; color:#FFFFFF; text-decoration:none;}";
 		}
 		try { //IE下可行
 			var style = document.createStyleSheet();

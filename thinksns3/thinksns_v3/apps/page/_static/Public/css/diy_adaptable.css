@@ -165,7 +165,7 @@ a.ico_diydel{ background:url(../images/ico_del.gif) no-repeat 0px 0px; height:16
 	/*博客top列表*/
 	.diy_blog_top{}
 	.diy_blog_top li{padding:10px;border-top:1px solid #ddd; font-size:12px; text-align:left;}
-	.diy_blog_top .diy_gore_img {background:transparent url(../images/gore_icon.gif) no-repeat scroll 0 0;float:left;font-family:"宋体";font-size:16px;font-weight:bold;height:42px;padding-top:3px;text-align:center;width:45px; color:#FF6600}
+	.diy_blog_top .diy_gore_img {background:transparent url(../images/gore_icon.gif) no-repeat scroll 0 0;float:left;font-size:16px;font-weight:bold;height:42px;padding-top:3px;text-align:center;width:45px; color:#FF6600}
 	.diy_blog_top h4{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%; display:block;}
 	.diy_blog_top h4 span{ font-weight: normal; float:right; font-size:12px}
 	.diy_blog_top p{ padding:0; margin:0; font-size:12px; color:#9c9c9c; line-height:25px;}

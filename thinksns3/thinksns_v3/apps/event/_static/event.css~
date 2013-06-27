@@ -21,14 +21,14 @@
 .info .list{float: left; width: auto}
 .info .list ul{margin: 0px; padding: 0px; width: 100%}
 .info .list ul li{clear: both; line-height: 180%}
-.info .list ul li .c1{float: left; font-size:14px; color: #999}
+.info .list ul li .c1{float: left; width: 66px; color: #999}
 .info .list ul li .c2{float: left; width: auto}
 /*全部活动式*/
 .search li{*zoom:;overflow:hidden;padding: 5px; margin-bottom: 5px}
-.search li h3{font-size: 16px;margin:0 0 0px 0;}
-.search li p{margin:0 0 0px 0; padding: 0px}
+.search li h3{font-size: 18px;margin:0 0 15px 0;}
+.search li p{margin:0 0 10px 0; padding: 0px}
 .search li .rmenu{}
-.search li .rmenu a{display: block; line-height: 20px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCCCC; padding-left: 5px; font-size: 12px;}
+.search li .rmenu a{display: block; line-height: 20px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #CCCCCC; padding-left: 5px}
 .search li .rmenu a:hover{color: #fff; background-color: #F37B03; text-decoration: none}
 .rSort{float: right; width: 200px}
 .rSort h4{font-weight: bold; line-height: 25px; font-size: 12px}

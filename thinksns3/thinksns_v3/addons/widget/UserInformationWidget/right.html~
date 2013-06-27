@@ -17,7 +17,7 @@
 			</volist> -->
 			
 			<php>if($isReturn) {</php></div>
-			<div class="home"><i class="ico-home"></i><a href="{:U('public/Index/indexPage')}" class="f3">返回我的首页</a></div>
+			<div class="home"><i class="ico-home"></i><a href="{:U('public/Index/index')}" class="f3">返回我的首页</a></div>
 			<php>}</php>
 		</dd>
 	</dl>
@@ -26,7 +26,7 @@
 		<li><a href="{:U('public/Index/myFeed')}" <eq name="current" value="myfeed">class="current"</eq>><span>微博</span><strong event-node="weibo_count" event-args="uid={$GLOBALS['ts']['mid']}">{$userData.weibo_count|default=0}</strong></a></li>
 		<li><a href="{:U('public/Index/following')}" <eq name="current" value="following">class="current"</eq>><span>关注</span><strong event-node="following_count" event-args="uid={$GLOBALS['ts']['mid']}">{$userData.following_count|default=0}</strong></a></li>
 		<li><a href="{:U('public/Index/eventCount')}" <eq name="current" value="eventCount">class="current"</eq>><span>发起活动</span><strong event-node="eventCount" event-args="uid={$GLOBALS['ts']['mid']}">{$eventCount|default=0}</strong></a></li>
-		<li class="no-border"><a href="{:U('public/Index/joinCount')}" <eq name="current" value="joinCount">class="current"</eq>><span>参与活动</span><strong event-node="joinCount" event-args="uid={$GLOBALS['ts']['mid']}">{$joinCount|default=0}</strong></a></li>
+		<li><a href="{:U('public/Index/joinCount')}" <eq name="current" value="joinCount">class="current"</eq>><span>参与活动</span><strong event-node="joinCount" event-args="uid={$GLOBALS['ts']['mid']}">{$joinCount|default=0}</strong></a></li>
 
 <!--  	<li><a href="{:U('public/Index/follower')}" <eq name="current" value="follower">class="current"</eq>><span>粉丝</span><strong event-node="follower_count" event-args="uid={$GLOBALS['ts']['mid']}">{$userData.follower_count|default=0}</strong></a></li>
 		<li class="no-border "><a href="{:U('public/Collection/index')}" <eq name='current' value='collection'>class="current"</eq>><span>收藏</span><strong event-node="favorite_count" event-args="uid={$GLOBALS['ts']['mid']}">{$userData.favorite_count|default=0}</strong></a></li>

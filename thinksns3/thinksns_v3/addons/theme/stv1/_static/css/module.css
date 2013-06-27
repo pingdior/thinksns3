@@ -113,7 +113,7 @@ a:hover .contribute{background-position:0 -207px;}
 .feed_list .arrow{height: 11px;overflow:hidden;width: 25px;position:absolute;top:-10px;left:10px;}
 .feed_list .type-bg{background:#fff;border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;padding:0 3px;}
 .feed_list .bgcolor_arrow{color:#F2F2F2;}
-.feed_list em.arrline,.feed_list .comment span.downline{display: block;font-family: "SimSun";font-size: 21px;height: 10px;overflow: hidden;_display:none;}	
+.feed_list em.arrline,.feed_list .comment span.downline{display: block;font-size: 21px;height: 10px;overflow: hidden;_display:none;}	
 /*.feed_list .comment span{margin:-9px 0 0;}*/
 .feed_list .comment span.downline{color:#F9FAFA;margin:-9px 0 0;}
 
@@ -258,7 +258,7 @@ a:hover .contribute{background-position:0 -207px;}
 .send_weibo .title a.on,.send_weibo .title a.on:hover{ color:#004499; font-weight:bold; background:url(../image/s_tab_on.gif) no-repeat center bottom;}
 
 .send_weibo .title .num{font-size:12px;color:#ccc;font-weight:normal;}
-.send_weibo .title .num span{ font-family: Constantia,Georgia;font-size: 22px;font-weight: 700;margin: 0 5px;color:#004499;}
+.send_weibo .title .num span{ font-size: 22px;font-weight: 700;margin: 0 5px;color:#004499;}
 .send_weibo .input{position:relative;z-index:9;}
 .send_weibo .s-txt{border: 1px solid #ddd;color: #999;height: 30px;line-height: 30px;padding: 0 4px;width: 98.3%;_width:96.0%}
 .send_weibo .input .input_before .ico-close{position:absolute;right:5px;top:5px}
@@ -405,7 +405,7 @@ a:hover .contribute{background-position:0 -207px;}
 
 .setupTag_list01 {clear: both;margin-top: 6px;overflow: hidden}
 .setupTag_list01 a{display: inline-block;line-height: 20px;padding: 2px 5px;color:#36c}
-.setupTag_list01 a em {font-style:normal;color: #ddd;font-family: Arial;font-weight:700;font-size: 17px;margin-right: 2px;vertical-align: -2px}
+.setupTag_list01 a em {font-style:normal;color: #ddd;font-weight:700;font-size: 17px;margin-right: 2px;vertical-align: -2px}
 .setupTag_list01 a:hover {background-color: #9EC97F;color: #fff;text-decoration: none}
 .setupTag_list01 a:hover em {color: #fff;cursor: pointer;font-size: 17px;font-weight: bold}
 
@@ -437,7 +437,7 @@ a:hover .contribute{background-position:0 -207px;}
 .layer-forward .feed-repeat .input .commoned_list{float:left}
 .layer-forward .feed-repeat textarea{width:455px;height:60px;margin:10px 0 0}
 .layer-forward .feed-repeat .num {color: #B8B7B7;float: right;margin-top: -5px;position: relative;text-align: right}
-.layer-forward .feed-repeat .num span {font-family: Constantia,Georgia;font-size: 22px;font-weight: 700;margin: 0 5px}
+.layer-forward .feed-repeat .num span {font-size: 22px;font-weight: 700;margin: 0 5px}
 
 /*提示删除弹窗*/
 .layer-prompt{padding:15px;text-align:center}
@@ -737,7 +737,7 @@ a:hover .contribute{background-position:0 -207px;}
 
 .item-announcement{}
 .item-announcement img{max-width:920px;overflow:hidden;}
-.item-announcement .hd{color: #535353;font-family: Microsoft YaHei;font-size: 22px;font-weight: 300;padding: 5px 0 10px;}
+.item-announcement .hd{color: #535353;font-size: 22px;font-weight: 300;padding: 5px 0 10px;}
 .item-announcement .mod-announcement{background: none repeat scroll 0 0 #fff;font-size: 14px;padding: 20px;line-height:23px}
 .item-announcement .mod-announcement h4{background:#F1F1F1;border-bottom:1px dashed #DDDDDD;font-weight:700;margin: 0 0 15px;padding: 10px 0;
     text-align: center;}
@@ -816,7 +816,7 @@ a:hover .contribute{background-position:0 -207px;}
 
 /*profession-title*/
 .profession-title{background:#f8f8f8;width:500px;text-align:center;height:30px;line-height:30px;font-size:12px;margin:20px auto 20px;}
-.profession-title em{font-family:Times New Roman;font-size: 20px;font-weight: 700;margin: 0 5px;vertical-align:-2px;}
+.profession-title em{font-size: 20px;font-weight: 700;margin: 0 5px;vertical-align:-2px;}
 .form-set .profession-title{margin:15px auto;}
 
 
@@ -855,7 +855,7 @@ a:hover .contribute{background-position:0 -207px;}
 /*微吧、任务、勋章头部导航*/
 .find-type{background:#f8f8f8;padding:20px;border-bottom:1px solid #ddd;height:26px;_overflow:hidden;}
 /*.app-title{background:#f8f8f8;padding:20px;border-bottom:1px solid #ddd;height:26px;_overflow:hidden;}*/
-.app-title h4{font-size:20px;color:#666;font-family:"微软雅黑";}
+.app-title h4{font-size:20px;color:#666;}
 
 /*.app-tab-menu ul{margin:0 0 0 130px;_position:fixed}*/
 .app-tab-menu li{float:left;color:#414448;}

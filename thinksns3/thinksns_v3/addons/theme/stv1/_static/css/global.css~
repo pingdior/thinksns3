@@ -71,12 +71,12 @@ a.font-orange:link, a.font-orange:visited{color:#f60}
 #col1{width:118px;display:none;}
 #col2{width:220px}
 #col3{width:270px;}
-#col33{width:270px;top: 360px;left: 690px;position: absolute;}
+#col33{width:270px;top: 290px;left: 690px;position: absolute;}
 #col4{width:160px;}
 #col55{width:689px;}
-#col5{width:689px;top: 130px;position: absolute;}
-#col5pro{width:689px;top: 250px;position: absolute;}
-#col5pub{width:689px;top: 60px;position: absolute;}
+#col5{width:689px;top: 68px;position: absolute;}
+#col5pro{width:689px;top: 190px;position: absolute;}
+#col5pub{width:689px;position: absolute;}
 #col6{width:622px}
 #col7{width:800px}
 #co18{width:660px;}
@@ -1642,6 +1642,8 @@ div.lineD_btm{
     width: 231px;
     text-align: justify;
     margin-left: 20px;
+    margin-top: 60px;
+
 }
 /*follow us*/
 #follow-us a{

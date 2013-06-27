@@ -533,7 +533,7 @@ class IndexAction extends Action {
 					weibaPost.content as content,weibaPost.read_count as readCount,
 					weibaPost.post_id as id,eUser.uname as uname,
 					eUser.uid as uid, weibaPost.weiba_id as wId')
-					->limit('0,6')  // 限制最多六条
+					->limit('0,8')  // 限制最多八条
 					->findAll();
 			if ( count($weibaList)>0 )
 			{
@@ -556,6 +556,7 @@ class IndexAction extends Action {
 				}
 				$this->assign('weibaList',$weibaList);
 				//var_dump($weibaList);
+				//echo '---------------------------------------------';
 				//var_dump($orderList);
 				//exit();
 			}
@@ -591,7 +592,10 @@ class IndexAction extends Action {
 			// 设置顺序数组
 			arsort($orderList);
 			$this->assign('orderList',$orderList);
-				
+			//echo '---------------------------------------------';
+			//var_dump($orderList);
+			//exit();
+			
 			// 加载右侧数据
 			$newUserImages = $this->loadRightData();
 			if(count($newUserImages)>0)

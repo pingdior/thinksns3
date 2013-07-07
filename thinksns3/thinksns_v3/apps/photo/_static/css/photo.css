@@ -223,7 +223,7 @@
 .photo-recom li a.pic{position:relative;display: block;width:200px;height:200px;margin:0 0 5px 0;}
 .photo-recom .face{background:#000;height:30px;line-height:30px;opacity:0.8;filter:alpha(opacity=80);-moz-opacity:0.8;position:absolute;bottom:0;left:0;width:100%;}
 .photo-recom .face span{color:#fff;padding:0 0 0 10px;}
-.photo-recom p{line-height:20px;color:#999;}
+.photo-recom p{line-height:20px;color:#999;font-size:12px}
 
 
 .my-photo-info{margin:0 0 20px 0;}

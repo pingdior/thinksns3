@@ -27,6 +27,7 @@
 		<ul id="post_tag_list" class="taglist">
 			<volist name="tags" id="vo">
 		<!-- 	<li rel="{$key}"><a class="tag btn-cancel" href="javascript:;" style="float:left;"><span>{$vo}<i class="ico-close1" title="删除" onclick="return tagsTs.deleteTag({$key})" href="#"></i></span></a></li> -->
+		<!-- 	<li rel="{$key}"><a class="tag btn-cancel" href="javascript:;" style="float:left;"><span>{$vo}<i class="ico-close1" title="删除" onclick="return tagsTs.deleteTag({$key})" href="#"></i></span></a></li>-->
 			</volist>
 		</ul>
 		</div>
@@ -138,6 +139,7 @@ tagsTs.add = function(tagName,tag_only)
 					}
 					if(flag==true){
 						ui.error('每种分类请只选择一种标签！');
+						ui.error('每种分类只允许选择一种标签！');
 						return false;
 					}else{
 						$('#tag_only').val(tagonly_page+","+tag_only);

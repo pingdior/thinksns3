@@ -41,7 +41,7 @@ class TagWidget extends Widget{
         $var['uid'] = $uid;
         $var['selected'] = model('UserCategory')->getRelatedUserInfo($uid);
         !empty($var['selected']) && $var['selectedIds'] = getSubByKey($var['selected'], 'user_category_id');
-        $var['nums'] = count($tags);
+        $var['nums'] = 0;
         $var['categoryTree'] = model('CategoryTree')->setTable('user_category')->getNetworkList();
         foreach($var['categoryTree'] as $key => $value) {
             if(empty($value['child'])) {

@@ -1,5 +1,0 @@
-<?php
-//000000000000e98d07d3f600dec0fde35dda0f38147dx^][‚0E÷Ò´ò>ÕO×@Fµ	PS
-˜önÄß{ræÎBï
-`G¬tBƒ¬DÜ¥"vÃIii¨ªÕØVJ¥%Ü¢fK#;Aµ­šIoèàHò%²¿ÿ¡XOseÅ½Ç'€½&l*4¹~Û¢5®U×QØÌ“È’ÁÖkªmŒÈM2ô„"#Ã@e<K‹8É×Â™äUíN[ÂÉþG—O$‰°êêy|~=¥ösS^.,(q)
-?>

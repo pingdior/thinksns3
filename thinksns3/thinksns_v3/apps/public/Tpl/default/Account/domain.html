@@ -15,16 +15,11 @@
                                 <div class="set-item-info">{:U('public/Profile/index',array('uid'=>$user_domain))}</div>
                                 <p>{:L('PUBLIC_SHORT_DOMAIN_TYPELIMIT')}</p>
                             </div>
-                            <!-- <div class="item-set item-domain">
-                                <div class="item-set-border">
-                                    <h3><i class="ico-ok"></i>您已成功设置个性域名</h3>
-                                    <p>地址为：http://wwww.abc.com/nanzhi</p>
-                                </div>
-                             </div> -->
                         <else />
-                            <form model-node="account_domain" action="{:U('public/Account/doSaveDomain')}" method="post">
+                            <form model-node="account_domain" name="form1" id="form1" action="{:U('public/Account/doSaveDomain')}" method="post">
                                 <div class="item-set item-domain">
-                                    <div class="set-item-info">{:SITE_URL}/@<input event-node="input_text" name="domain" type="text" class="s-txt" /><a event-node="submit_btn" href="#" class="btn-green-big">{:L('PUBLIC_SAVE')}</a>
+                                    <div class="set-item-info">{:SITE_URL}/@<input event-node="input_text" name="domain" type="text" class="s-txt" />
+                                    <a event-node="submit_btn" href="#" class="btn-green-big"><span>{:L('PUBLIC_SAVE')}</span></a>
                                     <input type="text" style="display:none"> 
                                     </div>
                                     <p>{:L('PUBLIC_SHORT_DOMAIN_TYPELIMIT')}</p>
@@ -36,6 +31,14 @@
             </div>
         </div>
     </div>
+    <script>
+    function js_test(){
+    	var truthBeTold = window.confirm("您的域名生成后将不能修改，确认请点【确认】按钮，修改请点击【取消】！");
+    	if (truthBeTold) {
+    		document.getElementById('form1').submit();
+    	}
+    }
+    </script>
     <script src="__THEME__/js/module.form.js"></script>
 <script src="__THEME__/js/account/module.setting.js"></script>
 <include file="__THEME__/public_footer" />

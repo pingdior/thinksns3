@@ -32,28 +32,35 @@ class PassportAction extends Action
 	 * @return void
 	 */
 	public function login(){
-		// 添加样式
-		$this->appCssList[] = 'login.css';
-		if(model('Passport')->isLogged()){
-			U('public/Index/index','',true);
-		}
-
-		// 获取邮箱后缀
-		$registerConf = model('Xdata')->get('admin_Config:register');
-		$this->assign('emailSuffix', explode(',', $registerConf['email_suffix']));
-		$this->assign( 'register_type' , $registerConf['register_type']);
-		$data= model('Xdata')->get("admin_Config:seo_login");
-        !empty($data['title']) && $this->setTitle($data['title']);
-        !empty($data['keywords']) && $this->setKeywords($data['keywords']);
-        !empty($data['des'] ) && $this->setDescription ( $data ['des'] );
 		
-		$login_bg = getImageUrlByAttachId( $this->site ['login_bg'] );
-		if(empty($login_bg))
-			$login_bg = APP_PUBLIC_URL . '/image/body-bg2.jpg';
-        
-        $this->assign('login_bg', $login_bg);
-        
-		$this->display('login');
+		$uid = $_SESSION['mid'];
+		$this->appCssList[] = 'login.css';
+		if($uid!=null && !empty($uid)){
+			U('public/Index/index','',true);
+		}else{
+			// 添加样式
+			if(model('Passport')->isLogged()){
+				U('public/Index/index','',true);
+			}
+			
+			// 获取邮箱后缀
+			$registerConf = model('Xdata')->get('admin_Config:register');
+			$this->assign('emailSuffix', explode(',', $registerConf['email_suffix']));
+			$this->assign( 'register_type' , $registerConf['register_type']);
+			$data= model('Xdata')->get("admin_Config:seo_login");
+			!empty($data['title']) && $this->setTitle($data['title']);
+			!empty($data['keywords']) && $this->setKeywords($data['keywords']);
+			!empty($data['des'] ) && $this->setDescription ( $data ['des'] );
+			
+			$login_bg = getImageUrlByAttachId( $this->site ['login_bg'] );
+			if(empty($login_bg))
+				$login_bg = APP_PUBLIC_URL . '/image/body-bg2.jpg';
+			
+			$this->assign('login_bg', $login_bg);
+			
+			$this->display('login');	
+			
+		}
 	}
 	
 	/**

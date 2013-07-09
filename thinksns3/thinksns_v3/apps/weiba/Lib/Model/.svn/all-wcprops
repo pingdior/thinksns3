@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/myproject/!svn/ver/35/thinksns3/apps/weiba/Lib/Model
+END
+WeibaModel.class.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/myproject/!svn/ver/35/thinksns3/apps/weiba/Lib/Model/WeibaModel.class.php
+END
+WeibaProtocolModel.class.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/myproject/!svn/ver/35/thinksns3/apps/weiba/Lib/Model/WeibaProtocolModel.class.php
+END
+WeibaPostModel.class.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/myproject/!svn/ver/35/thinksns3/apps/weiba/Lib/Model/WeibaPostModel.class.php
+END
+LogModel.class.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/myproject/!svn/ver/35/thinksns3/apps/weiba/Lib/Model/LogModel.class.php
+END
+WeibaReplyModel.class.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/myproject/!svn/ver/35/thinksns3/apps/weiba/Lib/Model/WeibaReplyModel.class.php
+END

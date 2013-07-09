@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/Config
+END
+admin_permissionset.html
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/Config/admin_permissionset.html
+END
+editSeo.html
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/Config/editSeo.html
+END
+editArea.html
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/Config/editArea.html
+END
+admin_permission.html
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/Config/admin_permission.html
+END
+admin_credit.html
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/Config/admin_credit.html
+END
+invite_email.html
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/Config/invite_email.html
+END
+permissiongroup.html
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/Config/permissiongroup.html
+END
+area.html
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/Config/area.html
+END
+notify.html
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/Config/notify.html
+END
+notifytpl.html
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/Config/notifytpl.html
+END
+admin_creditlevel.html
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/Config/admin_creditlevel.html
+END
+sendNotifyEmail.html
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/Config/sendNotifyEmail.html
+END
+admin_feed.html
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/Config/admin_feed.html
+END
+invite_link.html
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/myproject/!svn/ver/35/thinksns3/apps/admin/Tpl/default/Config/invite_link.html
+END

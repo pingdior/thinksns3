@@ -2151,7 +2151,7 @@ class PHPMailer {
   * @param string $name Parameter Name
   * @param mixed $value Parameter Value
   * NOTE: will not work with arrays, there are no arrays to set/reset
-  * @todo Should this not be using __set() magic function?
+  * @todo 
   */
   public function set($name, $value = '') {
     try {

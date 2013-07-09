@@ -1,7 +1,6 @@
 ALTER TABLE `ts_app` ADD COLUMN `add_front_top`  tinyint(1) NULL DEFAULT 1 AFTER `child_menu`;
 ALTER TABLE `ts_app` ADD COLUMN `add_front_applist`  tinyint(1) NULL DEFAULT 1 AFTER `add_front_top`;
 ALTER TABLE `ts_feed` ADD COLUMN `digg_count`  int(11) NULL DEFAULT 0 AFTER `comment_all_count`;
-ALTER TABLE `ts_user_verified` ADD COLUMN `qq`  varchar(20) NULL DEFAULT '' AFTER `realname`;	
 CREATE INDEX `status_id` ON `ts_app`(`app_id`, `status`) ;
 CREATE INDEX `uid` ON `ts_credit_user`(`uid`) ;
 CREATE TABLE `ts_feed_digg` (

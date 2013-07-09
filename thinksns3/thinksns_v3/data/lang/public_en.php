@@ -1040,6 +1040,7 @@ return array(
 Label class does not exist
 Label class does not exist',
 '_XML_TAG_ERROR_'=>'Label error',
+'PUBLIC_APPNAME_CHANNEL'=>'Channel',
 'NOTIFY_GIFT_SEND_TITLE'=>'',
 'FEEDBACK'=>'Feedback',
 'NOTIFY'=>'Notice',
@@ -1103,5 +1104,7 @@ Label class does not exist',
 'NOTIFY_SITELIST_APPROVE_TITLE'=>'',
 'NOTIFY_SITELIST_DENY_CONTENT'=>'',
 'NOTIFY_SITELIST_DENY_TITLE'=>'',
-'PUBLIC_APPNAME_EVENT'=>'Vote'
+'PUBLIC_APPNAME_EVENT'=>'Vote',
+'DIGG_MESSAGE_CONTENT'=>'',
+'DIGG_MESSAGE_TITLE'=>''
 );

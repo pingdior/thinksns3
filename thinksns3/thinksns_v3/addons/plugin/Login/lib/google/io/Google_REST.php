@@ -115,7 +115,6 @@ class Google_REST {
       $uriTemplateParser = new URI_Template_Parser($requestUrl);
       $requestUrl = $uriTemplateParser->expand($uriTemplateVars);
     }
-    //FIXME work around for the the uri template lib which url encodes
     // the @'s & confuses our servers.
     $requestUrl = str_replace('%40', '@', $requestUrl);
 

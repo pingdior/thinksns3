@@ -1039,6 +1039,7 @@ return array(
 '_CACHE_WRITE_ERROR_'=>'缓存写入错误',
 '_TAGLIB_NOT_EXIST_'=>'标签类不存在',
 '_XML_TAG_ERROR_'=>'标签错误',
+'PUBLIC_APPNAME_CHANNEL'=>'频道',
 'NOTIFY_GIFT_SEND_TITLE'=>'',
 'FEEDBACK'=>'信息反馈',
 'NOTIFY'=>'通知',
@@ -1102,5 +1103,7 @@ return array(
 'NOTIFY_SITELIST_APPROVE_TITLE'=>'',
 'NOTIFY_SITELIST_DENY_CONTENT'=>'您提交的站点被拒绝',
 'NOTIFY_SITELIST_DENY_TITLE'=>'',
-'PUBLIC_APPNAME_EVENT'=>'活动'
+'PUBLIC_APPNAME_EVENT'=>'活动',
+'DIGG_MESSAGE_CONTENT'=>'{user} 赞了你的微博:<br/>{content} <a href="{sourceurl}&digg=1" target=‘_blank‘>去看看>></a>',
+'DIGG_MESSAGE_TITLE'=>'{user} 赞了你的微博'
 );

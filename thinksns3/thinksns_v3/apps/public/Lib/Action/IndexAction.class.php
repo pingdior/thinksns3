@@ -506,7 +506,6 @@ class IndexAction extends Action {
 						$r['chinaDateM'] = $this->ConvertDateMonth($dateM);
 						$r['dateD']=$dateD;
 						//echo $r['chinaDate'];
-
 						$r['attachPath']='';
 						if($r['coverId']==0) continue;
 						foreach($resultCoverId as &$p) {
@@ -542,7 +541,13 @@ class IndexAction extends Action {
 				{
 					$orderList['weiba'.$i]=$er['rTime'];
 					$i++;
-					if(mb_strlen($er['content'],'utf8')>$lengInPara)
+					//$contentPreStr=preg_replace('<img.+alt>','',$er['content']);
+					//$contentPreStr=preg_replace('<="" />','',$contentPreStr);
+						
+					$er['content']='';
+					//$er['content']=$contentPreStr;
+					//echo '-------<img kdjaig alt>-------'.$er['content'].'--------';
+					/*if(mb_strlen($er['content'],'utf8')>$lengInPara)
 					{
 						$maxCount = mb_strlen($er['content'],'utf8');
 						$maxCount = $maxCount>$lengInTotal?$lengInTotal:$maxCount;
@@ -550,10 +555,12 @@ class IndexAction extends Action {
 						$er['content']='';
 						$er['content']=mb_substr($temp,0,$lengInPara,'utf8').'<br />'.mb_substr($temp,$lengInPara,$maxCount,'utf8');
 					}
+					 */
 					$Weiba = D('Weiba','weiba')->getWeibaById($er['wId']);
 					$er['wName'] = $Weiba['weiba_name'];
 					$er['wPicUrl'] = $Weiba['pic_url'];
 				}
+				//exit();
 				$this->assign('weibaList',$weibaList);
 				//var_dump($weibaList);
 				//echo '---------------------------------------------';

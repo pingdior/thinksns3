@@ -123,7 +123,7 @@ class RegisterAction extends Action
 
 		$email = t($_POST['email']);
 		$uname = t($_POST['uname']);
-		$sex = 1 == $_POST['sex'] ? 1 : 2;
+//		$sex = 1 == $_POST['sex'] ? 1 : 2;
 
 		if(!$this->_register_model->isValidName($uname)) {
 			$this->error($this->_register_model->getLastError());
@@ -147,7 +147,7 @@ class RegisterAction extends Action
 		}
 		
 		$map['uname'] = $uname;
-		$map['sex'] = $sex;
+//		$map['sex'] = $sex;
 		$map['login_salt'] = $login_salt;
 		$map['password'] = md5(md5($password).$login_salt);
 		$map['login'] = $map['email'] = $email;
@@ -229,7 +229,7 @@ class RegisterAction extends Action
 		$inviteCode = t($_POST['invate_key']);
 		$email = t($_POST['email']);
 		$uname = t($_POST['uname']);
-		$sex = 1 == $_POST['sex'] ? 1 : 2;
+//		$sex = 1 == $_POST['sex'] ? 1 : 2;
 		$password = trim($_POST['password']);
 		$repassword = trim($_POST['repassword']);
 
@@ -256,7 +256,7 @@ class RegisterAction extends Action
 
 		$login_salt = rand(11111, 99999);
 		$map['uname'] = $uname;
-		$map['sex'] = $sex;
+//		$map['sex'] = $sex;
 		$map['login_salt'] = $login_salt;
 		$map['password'] = md5(md5($password).$login_salt);
 		$map['login'] = $map['email'] = $email;

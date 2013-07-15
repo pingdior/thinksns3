@@ -258,7 +258,7 @@ K.options = {
 		'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
 		'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
 		'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
-		'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
+		'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak', 
 		'anchor', 'link', 'unlink', '|', 'about'
 	],
 	noDisableItems : ['source', 'fullscreen'],
@@ -5616,7 +5616,7 @@ _plugin('core', function(K) {
 			return img[0].className == 'ke-anchor';
 		});
 	};
-	_each('link,image,flash,media,anchor'.split(','), function(i, name) {
+	_each('link,image,flash,media,anchor'.split(','), function(i, name) { 
 		var uName = name.charAt(0).toUpperCase() + name.substr(1);
 		_each('edit,delete'.split(','), function(j, val) {
 			self.addContextmenu({

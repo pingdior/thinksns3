@@ -106,7 +106,7 @@
 .upload .clue_btm { height: 5px; display: block; width: 100%}
 .upload ul { float: left; width: 450px}
 .upload li { clear: both; overflow: hidden; display:table; display:inline-block; width: 100%; margin-bottom: 10px}
-.upload li .c1 { width: 85px; float: left; line-height: 20px;}
+.upload li .c1 { width: 85px; float: left; line-height: 20px;font-size: 12px;}
 .upload li .c2 { margin-left:85px;}
 .upload li .c2 .rank {  }
 .upload .edit_list { width: 810px; clear:both}
@@ -208,7 +208,7 @@
 /*创建相册弹窗*/
 .pop_create_album{width:460px;text-align:left;padding:15px;}
 .pop_create_album dt,.pop_create_album dd{padding:10px 0 0 0;*zoom:1;}
-.pop_create_album label{width:60px;display:block;float:left;line-height:28px;}
+.pop_create_album label{width:60px;display:block;float:left;line-height:28px;font-size: 12px;}
 .pop_create_album .s-txt{width:380px;}
 .pop_create_album .s-textarea{width:380px;height:60px;}
 

@@ -962,9 +962,7 @@ a.top_stick:hover{background-position:-51px 0;text-decoration:none}
 .person-info .person-info-t .person-icon img{display:block;width:100px;height:100px;}
 .person-info .person-info-t .btn-green-small{margin:0 5px 0 0;}
 .person-info .person-info-t p span .arrow-down{margin:0 0 0 2px;}
-
-
-.person-info .person-info-b li{float:left;width:56px;border-right:1px solid #ccc;font-size:14px;text-align:center;}
+.person-info .person-info-b .end li{float:left;width:56px;font-size:14px;text-align:center;}
 
 
 
@@ -976,7 +974,7 @@ a.top_stick:hover{background-position:-51px 0;text-decoration:none}
 .person-info-face{float: left;}
 .person-info-face img{width:180px;height:180px;}
 
-
+.person-info .person-info-b li{float:left;width:56px;border-right:1px solid #ccc;font-size:14px;text-align:center;}
 
 .right-box h3,.hot-topic h3,.tag-lists h3,.weather h3,.right-list h3{padding-bottom:15px;font-size:14px;font-weight:bold;}
 .right-box li{float:left;display:block;margin:0 26px 15px 0;padding:0;_margin:0 19px 15px 0;}
@@ -1553,8 +1551,8 @@ div.lineD_btm{
 }
 
 .title-fasion{
- font-size:16px;   
- line-height:120%;
+ font-size:14px;   
+ line-height:22px;
 }
 
 .indexActivity .e1module-title{
@@ -1568,7 +1566,7 @@ div.lineD_btm{
 	font-weight:bold;
 	font-size:12px;
 	text-align: center;
-	line-height:110%;
+	line-height:1.2em;
     padding-top: 4px;
     padding-bottom: 2px;
 }
@@ -1628,9 +1626,18 @@ div.lineD_btm{
 /*右侧==================*/
 .indexActivity .title{
     font-size: 14px;
-    line-height: 44px;
+    margin-top: 20px;
+    margin-bottom: 10px;
     font-weight: bold;
 }
+
+.indexActivity .titleRight{
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
 .indexActivity .more{
     color: #999;
     font-size: 12px;
@@ -1642,8 +1649,6 @@ div.lineD_btm{
     width: 231px;
     text-align: justify;
     margin-left: 20px;
-    margin-top: 60px;
-
 }
 /*follow us*/
 #follow-us a{

@@ -26,12 +26,12 @@
 		<div class="tag-lists">
 		<ul id="post_tag_list" class="taglist">
 			<volist name="tags" id="vo">
-			<li rel="{$key}"><a class="tag btn-cancel" href="javascript:;" style="float:left;"><span>{$vo}<i class="ico-close1" title="删除" onclick="return tagsTs.deleteTag({$key})" href="#"></i></span></a></li>
+		<!--  	<li rel="{$key}"><a class="tag btn-cancel" href="javascript:;" style="float:left;"><span>{$vo}<i class="ico-close1" title="删除" onclick="return tagsTs.deleteTag({$key})" href="#"></i></span></a></li>-->
 			</volist>
 		</ul>
 		</div>
 		<div id="post-tag-input-holder" class="add-tag">
-			<input class="post-tag-input" style="width:{$width}" id="post_tag_input" type="text" value="" onfocus="if(this.value == '')this.value='';" onblur="if(this.value == '') this.value='';" />
+			<input class="post-tag-input" readOnly="true" style="width:{$width}" id="post_tag_input" type="text" value="" onfocus="if(this.value == '')this.value='';" onblur="if(this.value == '') this.value='';" />
 		</div>
 	</div>
         </div></dd>
@@ -137,7 +137,7 @@ tagsTs.add = function(tagName,tag_only)
 						}
 					}
 					if(flag==true){
-						ui.error('您好酷，每类只允许选择一种标签哦！');
+						ui.error('每种分类请只选择一种标签！');
 						return false;
 					}else{
 						$('#tag_only').val(tagonly_page+","+tag_only);
@@ -185,12 +185,19 @@ tagsTs.deleteTag = function(tagId,only)
 	if(tagonly_page!=null){
 		var array =tagonly_page.split(",");
 		for (var i=0 ; i< array.length ; i++)
-		{	
+		{		
 			if(parseInt(array[i])==only){
 				if(i==0){
-					tagonly_page=tagonly_page.replace(only+",","");
-					$('#tag_only').val(tagonly_page);
-					continue;
+					if(array.length>1){
+						tagonly_page=tagonly_page.replace(only+",","");
+						$('#tag_only').val(tagonly_page);
+						continue;
+					}else{
+						tagonly_page=tagonly_page.replace(only,"");
+						$('#tag_only').val(tagonly_page);
+						continue;
+					}
+
 				}else{
 					tagonly_page=tagonly_page.replace(","+only,"");
 					$('#tag_only').val(tagonly_page);

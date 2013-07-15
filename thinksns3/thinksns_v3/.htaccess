@@ -168,8 +168,4 @@ RewriteRule ^/?app/group/([0-9]+)/bbs/([0-9]+)/?$                       index.ph
 RewriteRule ^/?app/group/([0-9]+)/file/?$                               index.php?app=group&mod=Dir&act=index&gid=$1&%{QUERY_STRING} [L]
 RewriteRule ^/?app/group/([0-9]+)/file/upload/?$                        index.php?app=group&mod=Dir&act=upload&gid=$1&%{QUERY_STRING} [L]
 RewriteRule ^/?app/group/([0-9]+)/member/?$                             index.php?app=group&mod=Member&act=index&gid=$1&%{QUERY_STRING} [L]
-<<<<<<< HEAD
 </IfModule>
-=======
-</IfModule>
->>>>>>> origin/FirstUpdate

@@ -97,7 +97,7 @@ class AccountAction extends Action
 	public function doSaveProfile() {
 		$res = true;
 		// 保存用户表信息
-// 		if(!empty($_POST['sex'])) {
+ 		if(!empty($_POST['city_ids'])) {
 // 			$save['sex']  = 1 == intval($_POST['sex']) ? 1 : 2;
 		//	$save['lang'] = t($_POST['lang']);
 			$save['intro'] = t($_POST['intro']);
@@ -132,7 +132,7 @@ class AccountAction extends Action
 				$feed_ids = getSubByKey($user_feeds, 'feed_id');
 				model('Feed')->cleanCache($feed_ids,$this->mid);
 			}
-// 		}
+ 		}
 		// 保存用户资料配置字段
 		(false !== $res) && $res = $this->_profile_model->saveUserProfile($this->mid, $_POST);
 		// 保存用户标签信息

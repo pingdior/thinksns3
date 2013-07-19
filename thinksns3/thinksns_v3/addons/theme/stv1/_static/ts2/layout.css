@@ -13,7 +13,7 @@
 .user_app a:hover{text-decoration:none;}
 .user_app .user_follow strong{font-size:12px;font-family:Arial, Helvetica, sans-serif;color:#fff}
 .user_app .userinfo .user_name p{line-height:20px;margin:0;color:#507FA5;width:70px;white-space:nowrap;padding:0 5px 0 0;overflow:hidden;}
- body {font-size:14px;color:#333;}
+/* body {font-size:14px;color:#333;}*/
 .page_home{background:#BEE3FD url(images/body_bg.jpg) no-repeat center top;_padding:0;}
 .wrap{padding:57px 0 0 0;}
 .top_holder{z-index:99999999;position:fixed;_position:absolute;width:100%;min-width:1000px;background:url(images/ip_nav_bg.gif) repeat-x 0 top;left:0;top:0;height:53px}
